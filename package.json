@@ -1,0 +1,19 @@
+{
+  "name": "whimsical",
+  "version": "0.0.1",
+  "description": "A low code editor across technology stacks",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/gaofeiyu/whimsical.git"
+  },
+  "author": "feiyu.gao@gmail.com",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/gaofeiyu/whimsical/issues"
+  },
+  "homepage": "https://github.com/gaofeiyu/whimsical#readme"
+}
