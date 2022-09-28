@@ -1,7 +1,3 @@
 **/node_modules/*
-config/*
-scripts/*
-ecosystem.config.js
-server.js
 **/dist/*
 **/public/*
