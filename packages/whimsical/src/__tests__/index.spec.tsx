@@ -1,6 +1,6 @@
 import { test, expect } from 'vitest';
 import renderer from 'react-test-renderer';
-import App from '../App';
+import App from '../pages/playground';
 
 function toJson(component: renderer.ReactTestRenderer) {
   const result = component.toJSON();
