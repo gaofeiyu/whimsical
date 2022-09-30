@@ -5,7 +5,7 @@ export type CanvasEditLayerProps = {
 };
 
 const CanvasEditLayer = () => {
-  return <div>画布编辑层</div>;
+  return <div className="absolute top-0 left-0 w-full h-full">画布编辑层</div>;
 };
 
 CanvasEditLayer.displayName = 'CanvasEditLayer';

@@ -5,7 +5,7 @@ export type LayoutProps = {
 };
 
 const Layout = (props: LayoutProps) => {
-  return <>{props.children}</>;
+  return <div className="flex flex-col w-full h-full">{props.children}</div>;
 };
 
 Layout.displayName = 'Layout';

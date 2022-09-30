@@ -1,0 +1,22 @@
+import React from 'react';
+import PanelTitle from './PanelTitle';
+
+export type PanelProps = {
+  title?: string;
+  className?: string;
+  children?: string | React.ReactElement | React.ReactElement[];
+};
+
+const Panel = (props: PanelProps) => {
+  const { title, className = '' } = props;
+  return (
+    <div className={`flex flex-col justify-start w-full h-full border m-[-1px] ${className}`}>
+      <PanelTitle title={title} />
+      <div>{props.children}</div>
+    </div>
+  );
+};
+
+Panel.displayName = 'Panel';
+
+export default Panel;

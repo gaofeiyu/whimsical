@@ -3,15 +3,15 @@ import CanvasEditLayer from '../CanvasEditLayer';
 import CanvasRenderLayer from '../CanvasRenderLayer';
 import CanvasToolbar from '../CanvasToolbar';
 
-export type CanvasPanleProps = {
+export type CanvasPanelProps = {
   children?: React.ReactElement | React.ReactElement[];
 };
 
-const CanvasPanle = () => {
+const CanvasPanel = () => {
   return (
-    <div>
+    <div className="flex flex-auto flex-col">
       <CanvasToolbar></CanvasToolbar>
-      <div>
+      <div className="flex-auto relative">
         <CanvasEditLayer></CanvasEditLayer>
         <CanvasRenderLayer></CanvasRenderLayer>
       </div>
@@ -19,6 +19,6 @@ const CanvasPanle = () => {
   );
 };
 
-CanvasPanle.displayName = 'CanvasPanle';
+CanvasPanel.displayName = 'CanvasPanel';
 
-export default CanvasPanle;
+export default CanvasPanel;

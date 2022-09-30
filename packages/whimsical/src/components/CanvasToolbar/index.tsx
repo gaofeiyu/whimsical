@@ -1,5 +1,5 @@
 const CanvasToolbar = () => {
-  return <>画布工具栏</>;
+  return <div className="h-8">画布工具栏</div>;
 };
 
 CanvasToolbar.displayName = 'CanvasToolbar';

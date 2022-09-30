@@ -1,8 +1,8 @@
-import CanvasPanle from '../../components/CanvasPanle';
+import CanvasPanel from '../../components/CanvasPanel';
 import Content from '../../components/Content';
 import Header from '../../components/Header';
 import Layout from '../../components/Layout';
-import SettingPanle from '../../components/SettingPanle';
+import SettingPanel from '../../components/SettingPanel';
 import Sidebar from '../../components/Sidebar';
 
 const Playground = () => {
@@ -11,8 +11,8 @@ const Playground = () => {
       <Header></Header>
       <Content>
         <Sidebar></Sidebar>
-        <CanvasPanle></CanvasPanle>
-        <SettingPanle></SettingPanle>
+        <CanvasPanel></CanvasPanel>
+        <SettingPanel></SettingPanel>
       </Content>
     </Layout>
   );
