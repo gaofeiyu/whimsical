@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useMemo, useState } from 'react';
 import PanelTitle from './PanelTitle';
 
 export type PanelProps = {
@@ -9,9 +9,22 @@ export type PanelProps = {
 
 const Panel = (props: PanelProps) => {
   const { title, className = '' } = props;
+  const [pushpin, setPushpin] = useState(false);
+
+  const pushpinClassName = useMemo(() => {
+    return pushpin ? 'absolute' : '';
+  }, [pushpin]);
+
   return (
-    <div className={`flex flex-col justify-start w-full h-full border m-[-1px] ${className}`}>
-      <PanelTitle title={title} />
+    <div
+      className={`${pushpinClassName} flex flex-col justify-start w-full h-full border m-[-1px] ${className}`}
+    >
+      <PanelTitle
+        title={title}
+        onChange={(pushpinStatus) => {
+          setPushpin(pushpinStatus);
+        }}
+      />
       <div>{props.children}</div>
     </div>
   );

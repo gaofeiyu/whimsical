@@ -7,6 +7,7 @@ import {
   PieChartOutlined,
 } from '@ant-design/icons';
 import Panel from '../Panel';
+import { useState } from 'react';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -34,16 +35,27 @@ const items: MenuItem[] = [
 ];
 
 const Sidebar = () => {
+  const [selectKey, setSelectKey] = useState('1');
+  const [showPanel, setShowPanel] = useState(true);
   return (
     <div className="flex">
       <Menu
         className="h-full"
-        defaultSelectedKeys={['1']}
+        defaultSelectedKeys={[selectKey]}
         mode="inline"
         items={items}
         inlineCollapsed={true}
+        onClick={({ key }) => {
+          if (!showPanel) {
+            setShowPanel(true);
+          }
+          if (key === selectKey && showPanel) {
+            setShowPanel(false);
+          }
+          setSelectKey(key);
+        }}
       />
-      <Panel title="标题示例">test</Panel>
+      {showPanel ? <Panel title="标题示例">{selectKey}</Panel> : null}
     </div>
   );
 };
