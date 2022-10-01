@@ -55,7 +55,7 @@ const Sidebar = () => {
           setSelectKey(key);
         }}
       />
-      {showPanel ? <Panel title="标题示例">{selectKey}</Panel> : null}
+      {showPanel ? <Panel title={selectKey}>{selectKey}</Panel> : null}
     </div>
   );
 };
