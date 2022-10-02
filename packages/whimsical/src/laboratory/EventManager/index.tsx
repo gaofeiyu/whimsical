@@ -1,6 +1,6 @@
 import { Button } from 'antd';
 import React, { useCallback } from 'react';
-import { editorObservable } from '../../events';
+import { EDITOR_EVENTS$ } from '../../events';
 
 export type EventManagerProps = {
   children?: React.ReactElement | React.ReactElement[];
@@ -8,7 +8,7 @@ export type EventManagerProps = {
 
 const EventManager = () => {
   const handleClick = useCallback(() => {
-    editorObservable.next(null);
+    EDITOR_EVENTS$.emit('triggerButton');
   }, []);
   return <Button onClick={handleClick}>事件触发</Button>;
 };

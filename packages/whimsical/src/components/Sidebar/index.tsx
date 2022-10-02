@@ -7,7 +7,8 @@ import {
   PieChartOutlined,
 } from '@ant-design/icons';
 import Panel from '../Panel';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { EDITOR_EVENTS$ } from '../../events';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -37,6 +38,17 @@ const items: MenuItem[] = [
 const Sidebar = () => {
   const [selectKey, setSelectKey] = useState('1');
   const [showPanel, setShowPanel] = useState(true);
+
+  useEffect(() => {
+    const triggerButton = EDITOR_EVENTS$.on('triggerButton', () => {
+      console.log('Sidebar trigger editorObservable');
+    });
+
+    return () => {
+      triggerButton();
+    };
+  }, []);
+
   return (
     <div className="flex">
       <Menu

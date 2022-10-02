@@ -2,7 +2,8 @@ import React, { useEffect } from 'react';
 import CanvasEditLayer from '../CanvasEditLayer';
 import CanvasRenderLayer from '../CanvasRenderLayer';
 import CanvasToolbar from '../CanvasToolbar';
-import { editorObservable } from '../../events';
+import { EDITOR_EVENTS$ } from '../../events';
+import { ConsoleSqlOutlined } from '@ant-design/icons';
 
 export type CanvasPanelProps = {
   children?: React.ReactElement | React.ReactElement[];
@@ -10,11 +11,13 @@ export type CanvasPanelProps = {
 
 const CanvasPanel = () => {
   useEffect(() => {
-    editorObservable.subscribe({
-      next: () => {
-        console.log('CanvasPanel trigger editorObservable');
-      },
+    const triggerButton = EDITOR_EVENTS$.on('triggerButton', () => {
+      console.log('CanvasPanel trigger editorObservable');
     });
+
+    return () => {
+      triggerButton();
+    };
   }, []);
   return (
     <div className="flex flex-auto flex-col">
