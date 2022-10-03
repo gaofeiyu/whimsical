@@ -22,6 +22,8 @@ export default class HistoryManagement {
 
   private EVENTS$: EventManagement;
 
+  private currentHistoryIndex: number;
+
   constructor(props: HistoryManagementProps) {
     const { eventInstance } = props;
     this.eventInstance = eventInstance;
@@ -33,8 +35,7 @@ export default class HistoryManagement {
   }
 
   createEvent() {
-    this.EVENTS$.createEvent('add');
-    this.EVENTS$.createEvent('back');
+    this.EVENTS$.createEvent('change');
   }
 
   record() {
@@ -49,7 +50,8 @@ export default class HistoryManagement {
               eventName: subjectName,
               executed: true,
             });
-            this.EVENTS$.emit('add');
+            this.EVENTS$.emit('change');
+            this.currentHistoryIndex = this.historyList.length - 1;
             console.log('trigger subjectName', this.historyList);
           },
         })
@@ -58,25 +60,22 @@ export default class HistoryManagement {
   }
 
   back(step = 1) {
-    const changeHistory = this.historyList.slice(-step);
-    changeHistory.forEach((item) => {
-      item.executed = false;
-    });
-    this.EVENTS$.emit('back');
+    this.goto(this.historyList.length - step);
   }
 
-  backTo(index?: number) {
+  goto(index: number) {
     if (typeof index === 'undefined') return;
-    this.back(this.historyList.length - index - 1);
+    const [start, end] = [this.currentHistoryIndex + 1, index + 1].sort((a, b) => a - b);
+    const changeHistory = this.historyList.slice(start, end);
+    changeHistory.forEach((item) => {
+      item.executed = !item.executed;
+    });
+    this.currentHistoryIndex = index;
+    this.EVENTS$.emit('change');
   }
 
   onChange(cb) {
-    const addEvent = this.EVENTS$.on('add', cb);
-    const backEvent = this.EVENTS$.on('back', cb);
-    return () => {
-      addEvent();
-      backEvent();
-    };
+    return this.EVENTS$.on('change', cb);
   }
 
   getRecord() {

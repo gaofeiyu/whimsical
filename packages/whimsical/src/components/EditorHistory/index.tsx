@@ -7,8 +7,8 @@ const EditorHistory = () => {
   const [history] = useHistory(EDITOR_HISTORY);
   console.log('EditorHistory history', history);
 
-  const onBack = useCallback((index) => {
-    EDITOR_HISTORY.backTo(index);
+  const handleGoto = useCallback((index) => {
+    EDITOR_HISTORY.goto(index);
   }, []);
 
   return (
@@ -17,9 +17,9 @@ const EditorHistory = () => {
         return (
           <Button
             key={item.id}
-            disabled={!item.executed}
+            type={item.executed ? 'text' : 'default'}
             onClick={() => {
-              onBack(index);
+              handleGoto(index);
             }}
           >
             {item.eventName}
