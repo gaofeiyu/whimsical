@@ -3,7 +3,6 @@ import CanvasEditLayer from '../CanvasEditLayer';
 import CanvasRenderLayer from '../CanvasRenderLayer';
 import CanvasToolbar from '../CanvasToolbar';
 import { EDITOR_EVENTS$ } from '../../events';
-import { ConsoleSqlOutlined } from '@ant-design/icons';
 
 export type CanvasPanelProps = {
   children?: React.ReactElement | React.ReactElement[];
