@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import CanvasEditLayer from '../CanvasEditLayer';
 import CanvasRenderLayer from '../CanvasRenderLayer';
 import CanvasToolbar from '../CanvasToolbar';
-import { EDITOR_EVENTS$ } from '../../events';
+import { EDITOR_EVENTS$ } from '../../editor-flow';
 
 export type CanvasPanelProps = {
   children?: React.ReactElement | React.ReactElement[];
@@ -10,7 +10,7 @@ export type CanvasPanelProps = {
 
 const CanvasPanel = () => {
   useEffect(() => {
-    const triggerButton = EDITOR_EVENTS$.on('triggerButton', () => {
+    const triggerButton = EDITOR_EVENTS$.on('triggerButton2', () => {
       console.log('CanvasPanel trigger editorObservable');
     });
 

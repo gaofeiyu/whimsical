@@ -8,7 +8,8 @@ import {
 } from '@ant-design/icons';
 import Panel from '../Panel';
 import { useEffect, useState } from 'react';
-import { EDITOR_EVENTS$ } from '../../events';
+import { EDITOR_EVENTS$ } from '../../editor-flow';
+import EditorHistory from '../EditorHistory';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -40,7 +41,7 @@ const Sidebar = () => {
   const [showPanel, setShowPanel] = useState(true);
 
   useEffect(() => {
-    const triggerButton = EDITOR_EVENTS$.on('triggerButton', () => {
+    const triggerButton = EDITOR_EVENTS$.on('triggerButton1', () => {
       console.log('Sidebar trigger editorObservable');
     });
 
@@ -67,7 +68,11 @@ const Sidebar = () => {
           setSelectKey(key);
         }}
       />
-      {showPanel ? <Panel title={selectKey}>{selectKey}</Panel> : null}
+      {showPanel ? (
+        <Panel title={selectKey}>
+          <EditorHistory></EditorHistory>
+        </Panel>
+      ) : null}
     </div>
   );
 };

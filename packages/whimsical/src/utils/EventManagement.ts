@@ -22,7 +22,6 @@ export default class EventManagement {
     return this.eventStore.get(name);
   }
   on(name, cb) {
-    // const observable = new Observable();
     const eventItem = this.eventStore.get(name).subscribe({
       next: cb,
     });
