@@ -1,7 +1,6 @@
 import { Button } from 'antd';
 import React, { useCallback, useState } from 'react';
-import { editorStore } from '../../store/editorActions';
-import { EDITOR_EVENTS$ } from '../../editor-flow';
+import { EDITOR_STATE, EDITOR_EVENTS$ } from '../../editor-flow';
 
 export type StoreManagerProps = {
   children?: React.ReactElement | React.ReactElement[];
@@ -10,8 +9,16 @@ export type StoreManagerProps = {
 const StoreManager = () => {
   const [count, setCount] = useState(0);
   const handleClick = useCallback(() => {
-    console.log(count);
-    editorStore.changePageDSLKey(`${count}`);
+    EDITOR_STATE.setState({
+      editorState: {
+        key: count,
+      },
+      pageDSL: {
+        storage: {
+          editor: true,
+        },
+      },
+    });
     setCount(count + 1);
 
     EDITOR_EVENTS$.emit('triggerStateChange');

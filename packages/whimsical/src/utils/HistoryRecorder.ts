@@ -1,20 +1,25 @@
 import { useEffect, useState } from 'react';
 import { Subscription } from 'rxjs';
 import EventManagement from './EventManagement';
+import StateManagement from '../store/StateManagement';
 import uuid from './uuid';
 
-export type HistoryManagementProps = {
+export type HistoryRecorderProps = {
   eventInstance: EventManagement;
+  storeInstance: StateManagement;
 };
 
 export type HistoryItemType = {
   id: string;
   eventName: string;
   executed: boolean;
+  stateSnapshot?: unknown;
 };
 
-export default class HistoryManagement {
+export default class HistoryRecorder {
   private eventInstance: EventManagement;
+
+  private storeInstance: StateManagement;
 
   private subscribeStore: Map<string, Subscription>;
 
@@ -24,9 +29,10 @@ export default class HistoryManagement {
 
   private currentHistoryIndex: number;
 
-  constructor(props: HistoryManagementProps) {
-    const { eventInstance } = props;
+  constructor(props: HistoryRecorderProps) {
+    const { eventInstance, storeInstance } = props;
     this.eventInstance = eventInstance;
+    this.storeInstance = storeInstance;
     this.subscribeStore = new Map();
     this.historyList = [];
     this.EVENTS$ = new EventManagement();
@@ -45,13 +51,16 @@ export default class HistoryManagement {
         subjectName,
         subject.subscribe({
           next: () => {
+            this.historyList.splice(this.currentHistoryIndex + 1);
             this.historyList.push({
               id: uuid(),
               eventName: subjectName,
               executed: true,
+              stateSnapshot: this.storeInstance.getState(),
             });
             this.EVENTS$.emit('change');
             this.currentHistoryIndex = this.historyList.length - 1;
+            console.log('--- this.storeInstance.getState ---', this.storeInstance.getState());
             console.log('trigger subjectName', this.historyList);
           },
         })
@@ -71,6 +80,7 @@ export default class HistoryManagement {
       item.executed = !item.executed;
     });
     this.currentHistoryIndex = index;
+    this.storeInstance.setState(this.historyList[index].stateSnapshot);
     this.EVENTS$.emit('change');
   }
 
@@ -84,8 +94,8 @@ export default class HistoryManagement {
 }
 
 export const useHistory = (
-  HistoryInstance: HistoryManagement
-): [Array<HistoryItemType>, HistoryManagement] => {
+  HistoryInstance: HistoryRecorder
+): [Array<HistoryItemType>, HistoryRecorder] => {
   const [historyList, setList] = useState<Array<HistoryItemType>>([]);
   const [, componentUpdate] = useState({});
   useEffect(() => {

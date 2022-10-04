@@ -1,4 +1,4 @@
-import { useHistory } from '../../utils/HistoryManagement';
+import { useHistory } from '../../utils/HistoryRecorder';
 import { EDITOR_HISTORY } from '../../editor-flow';
 import { Button } from 'antd';
 import { useCallback } from 'react';
