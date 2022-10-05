@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { Subscription } from 'rxjs';
 import EventManagement from './EventManagement';
-import StateManagement from '../store/StateManagement';
+import StateManagement from './StateManagement';
 import uuid from './uuid';
 
 export type HistoryRecorderProps = {

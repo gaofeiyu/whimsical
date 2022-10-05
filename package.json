@@ -11,13 +11,11 @@
   "scripts": {
     "build": "lerna run build",
     "clean": "lerna clean --yes",
-    "dev": "lerna exec --scope whimsical -- pnpm run dev",
-    "dev:shared": "lerna exec --scope whimsical-shared -- pnpm run dev",
+    "dev": "lerna exec --scope whimsical -- pnpm dev",
+    "dev:shared": "lerna exec --scope whimsical-shared -- pnpm dev",
     "publish:canary": "lerna publish --canary --yes",
     "publish:release": "lerna publish --yes",
-    "test": "vitest",
-    "test:ui": "vitest --ui",
-    "coverage": "vitest run --coverage"
+    "test": "lerna exec --scope whimsical -- pnpm test"
   },
   "repository": {
     "type": "git",

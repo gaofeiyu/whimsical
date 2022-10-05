@@ -1,4 +1,4 @@
-import { action, isObservableObject, makeObservable, observable, toJS } from 'mobx';
+import { action, makeObservable, observable, toJS } from 'mobx';
 
 export default class StateManagement {
   private editorState: any;

@@ -1,4 +1,4 @@
-import StateManagement from '../store/StateManagement';
+import StateManagement from '../utils/StateManagement';
 import EventManagement from '../../src/utils/EventManagement';
 import HistoryRecorder from '../utils/HistoryRecorder';
 
