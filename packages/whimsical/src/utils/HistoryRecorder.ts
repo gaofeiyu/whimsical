@@ -6,7 +6,7 @@ import uuid from './uuid';
 
 export type HistoryRecorderProps = {
   eventInstance: EventManagement;
-  storeInstance: StateManagement;
+  storeInstance?: StateManagement<unknown>[];
 };
 
 export type HistoryItemType = {
@@ -19,7 +19,7 @@ export type HistoryItemType = {
 export default class HistoryRecorder {
   private eventInstance: EventManagement;
 
-  private storeInstance: StateManagement;
+  private storeInstance: StateManagement<unknown>[];
 
   private subscribeStore: Map<string, Subscription>;
 
@@ -30,7 +30,7 @@ export default class HistoryRecorder {
   private currentHistoryIndex: number;
 
   constructor(props: HistoryRecorderProps) {
-    const { eventInstance, storeInstance } = props;
+    const { eventInstance, storeInstance = [] } = props;
     this.eventInstance = eventInstance;
     this.storeInstance = storeInstance;
     this.subscribeStore = new Map();
@@ -44,6 +44,22 @@ export default class HistoryRecorder {
     this.EVENTS$.createEvent('change');
   }
 
+  registerStore<T>(storeInstance) {
+    this.storeInstance.push(storeInstance as StateManagement<T>);
+  }
+
+  generateStateSnapshot() {
+    return this.storeInstance.map((item) => {
+      return item.getState();
+    });
+  }
+
+  snapshotToState(snapshot) {
+    this.storeInstance.forEach((item, index) => {
+      return item.setState(snapshot[index]);
+    });
+  }
+
   record() {
     const eventStore = this.eventInstance.getEvents();
     eventStore.forEach((subject, subjectName) => {
@@ -51,16 +67,17 @@ export default class HistoryRecorder {
         subjectName,
         subject.subscribe({
           next: () => {
-            this.historyList.splice(this.currentHistoryIndex + 1);
-            this.historyList.push({
+            const newHistory = {
               id: uuid(),
               eventName: subjectName,
               executed: true,
-              stateSnapshot: this.storeInstance.getState(),
-            });
+              stateSnapshot: this.generateStateSnapshot(),
+            };
+            this.historyList.splice(this.currentHistoryIndex + 1);
+            this.historyList.push(newHistory);
             this.EVENTS$.emit('change');
             this.currentHistoryIndex = this.historyList.length - 1;
-            console.log('--- this.storeInstance.getState ---', this.storeInstance.getState());
+            console.log('--- this.storeInstance.getState ---', newHistory);
             console.log('trigger subjectName', this.historyList);
           },
         })
@@ -80,7 +97,7 @@ export default class HistoryRecorder {
       item.executed = !item.executed;
     });
     this.currentHistoryIndex = index;
-    this.storeInstance.setState(this.historyList[index].stateSnapshot);
+    this.snapshotToState(this.historyList[index].stateSnapshot);
     this.EVENTS$.emit('change');
   }
 

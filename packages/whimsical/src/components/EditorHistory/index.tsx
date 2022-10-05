@@ -1,14 +1,14 @@
 import { useHistory } from '../../utils/HistoryRecorder';
-import { EDITOR_HISTORY } from '../../editor-flow';
+import { EditorHistory as EditorHistoryRecorder } from '../../editor-flow';
 import { Button } from 'antd';
 import { useCallback } from 'react';
 
 const EditorHistory = () => {
-  const [history] = useHistory(EDITOR_HISTORY);
+  const [history] = useHistory(EditorHistoryRecorder);
   console.log('EditorHistory history', history);
 
   const handleGoto = useCallback((index) => {
-    EDITOR_HISTORY.goto(index);
+    EditorHistoryRecorder.goto(index);
   }, []);
 
   return (

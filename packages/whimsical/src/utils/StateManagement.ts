@@ -1,33 +1,25 @@
 import { action, makeObservable, observable, toJS } from 'mobx';
 
-export default class StateManagement {
-  private editorState: any;
-  private pageDSL: any;
-  constructor() {
-    this.editorState = {
-      key: '1',
-    };
-    this.pageDSL = {
-      storage: {
-        editor: true,
-      },
-    };
-    makeObservable<StateManagement, string>(this, {
-      editorState: observable,
-      pageDSL: observable,
+export type StateManagementProps<T> = {
+  state: T;
+};
+
+export default class StateManagement<T> {
+  private state: T;
+  constructor(props?: StateManagementProps<T>) {
+    const { state } = props;
+    this.state = state;
+    makeObservable<StateManagement<T>, string>(this, {
+      state: observable,
       setState: action,
     });
   }
 
   getState() {
-    return {
-      editorState: toJS(this.editorState),
-      pageDSL: toJS(this.pageDSL),
-    };
+    return toJS(this.state);
   }
 
   setState(newState) {
-    this.editorState = newState.editorState;
-    this.pageDSL = newState.pageDSL;
+    this.state = newState;
   }
 }
