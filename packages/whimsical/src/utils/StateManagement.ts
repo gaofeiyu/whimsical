@@ -1,4 +1,4 @@
-import { action, makeObservable, observable, toJS } from 'mobx';
+import { action, makeObservable, observable, toJS, set } from 'mobx';
 
 export type StateManagementProps<T> = {
   state: T;
@@ -16,10 +16,14 @@ export default class StateManagement<T> {
   }
 
   getState() {
+    return this.state;
+  }
+
+  getStateOfRaw() {
     return toJS(this.state);
   }
 
   setState(newState) {
-    this.state = newState;
+    set(this.state, newState);
   }
 }

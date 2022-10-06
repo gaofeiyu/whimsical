@@ -23,7 +23,7 @@ const CanvasPanel = observer(() => {
   return (
     <div className="flex flex-auto flex-col">
       <CanvasToolbar></CanvasToolbar>
-      <div>EditorState: {JSON.stringify(EditorState.getState())}</div>
+      <div>EditorState: {JSON.stringify(EditorState.getStateOfRaw())}</div>
       <div className="flex-auto relative hidden">
         <CanvasEditLayer></CanvasEditLayer>
         <CanvasRenderLayer></CanvasRenderLayer>

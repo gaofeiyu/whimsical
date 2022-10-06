@@ -50,7 +50,7 @@ export default class HistoryRecorder {
 
   generateStateSnapshot() {
     return this.storeInstance.map((item) => {
-      return item.getState();
+      return item.getStateOfRaw();
     });
   }
 
