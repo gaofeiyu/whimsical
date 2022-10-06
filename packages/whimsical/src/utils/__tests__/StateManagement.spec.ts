@@ -1,35 +1,37 @@
 import { describe, test, expect, beforeEach } from 'vitest';
 import StateManagement from '../StateManagement';
 
-type EditorStateType = {
+type StateType = {
   key: number;
 };
 
 describe('StateManagement', () => {
-  let EditorState: StateManagement<EditorStateType>;
+  let State: StateManagement<StateType>;
   beforeEach(() => {
-    EditorState = new StateManagement<EditorStateType>({
+    State = new StateManagement<StateType>({
       state: {
         key: 0,
       },
     });
-    expect(EditorState.getStateOfRaw().key).toBe(0);
+    expect(State.getStateOfRaw().key).toBe(0);
   });
 
   test('state & getState', () => {
-    const state = EditorState.getState();
+    const state = State.getState();
     expect(state.key).toBe(0);
-    EditorState.setState({
+    State.setState({
       key: 1,
     });
-    expect(EditorState.getState()).toBe(state);
+    expect(State.getState()).toBe(state);
     state.key = state.key + 1;
-    expect(EditorState.getStateOfRaw().key).toBe(2);
+    expect(State.getStateOfRaw().key).toBe(2);
+    expect(state.key).toBe(2);
   });
 
   test('state & getStateOfRaw', () => {
-    const stateRaw = EditorState.getStateOfRaw();
+    const stateRaw = State.getStateOfRaw();
     stateRaw.key = stateRaw.key + 1;
-    expect(EditorState.getState().key).toBe(0);
+    expect(State.getState().key).toBe(0);
+    expect(stateRaw.key).toBe(1);
   });
 });
