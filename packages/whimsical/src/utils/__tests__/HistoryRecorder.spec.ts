@@ -31,19 +31,23 @@ describe('StateManagement', () => {
     HistoryInstance.registerStore(State);
   });
 
-  test('Base', () => {
-    EVENTS$.emit(eventName);
-    const recordItemFirst = HistoryInstance.getRecord()[0];
-    expect(recordItemFirst.eventName).toBe(eventName);
-    expect(recordItemFirst.stateSnapshot[0]).toEqual(State.getStateOfRaw());
-    State.setState({
-      key: 1,
-    });
-    EVENTS$.emit(eventName);
-    const recordItemSecond = HistoryInstance.getRecord()[1];
-    expect(recordItemSecond.stateSnapshot[0]).toEqual(State.getStateOfRaw());
-    HistoryInstance.goto(0);
-    expect(recordItemFirst.executed).toBe(true);
-    expect(recordItemSecond.executed).toBe(false);
-  });
+  test('Base', () =>
+    new Promise((done) => {
+      EVENTS$.emit(eventName);
+      const recordItemFirst = HistoryInstance.getRecord()[0];
+      HistoryInstance.onChange(() => {
+        done(null);
+      });
+      expect(recordItemFirst.eventName).toBe(eventName);
+      expect(recordItemFirst.stateSnapshot[0]).toEqual(State.getStateOfRaw());
+      State.setState({
+        key: 1,
+      });
+      EVENTS$.emit(eventName);
+      const recordItemSecond = HistoryInstance.getRecord()[1];
+      expect(recordItemSecond.stateSnapshot[0]).toEqual(State.getStateOfRaw());
+      HistoryInstance.goto(0);
+      expect(recordItemFirst.executed).toBe(true);
+      expect(recordItemSecond.executed).toBe(false);
+    }));
 });

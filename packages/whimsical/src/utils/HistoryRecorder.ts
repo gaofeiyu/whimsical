@@ -77,8 +77,6 @@ export default class HistoryRecorder {
             this.historyList.push(newHistory);
             this.EVENTS$.emit('change');
             this.currentHistoryIndex = this.historyList.length - 1;
-            console.log('--- this.storeInstance.getState ---', newHistory);
-            console.log('trigger subjectName', this.historyList);
           },
         })
       );

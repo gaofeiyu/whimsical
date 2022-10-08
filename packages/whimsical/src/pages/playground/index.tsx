@@ -1,5 +1,7 @@
 import { autorun } from 'mobx';
 import { useEffect } from 'react';
+import { DndProvider } from 'react-dnd';
+import { HTML5Backend } from 'react-dnd-html5-backend';
 import CanvasPanel from '../../components/CanvasPanel';
 import Content from '../../components/Content';
 import Header from '../../components/Header';
@@ -22,14 +24,16 @@ const Playground = () => {
     };
   }, []);
   return (
-    <Layout>
-      <Header></Header>
-      <Content>
-        <Sidebar></Sidebar>
-        <CanvasPanel></CanvasPanel>
-        <SettingPanel></SettingPanel>
-      </Content>
-    </Layout>
+    <DndProvider backend={HTML5Backend}>
+      <Layout>
+        <Header></Header>
+        <Content>
+          <Sidebar></Sidebar>
+          <CanvasPanel></CanvasPanel>
+          <SettingPanel></SettingPanel>
+        </Content>
+      </Layout>
+    </DndProvider>
   );
 };
 

@@ -4,6 +4,7 @@ import CanvasEditLayer from '../CanvasEditLayer';
 import CanvasRenderLayer from '../CanvasRenderLayer';
 import CanvasToolbar from '../CanvasToolbar';
 import { EDITOR_EVENTS$, EditorState } from '../../editor-flow';
+import { Container } from '../../out-compontents/Card/Container';
 
 export type CanvasPanelProps = {
   children?: React.ReactElement | React.ReactElement[];
@@ -24,6 +25,7 @@ const CanvasPanel = observer(() => {
     <div className="flex flex-auto flex-col">
       <CanvasToolbar></CanvasToolbar>
       <div>EditorState: {JSON.stringify(EditorState.getStateOfRaw())}</div>
+      <Container></Container>
       <div className="flex-auto relative hidden">
         <CanvasEditLayer></CanvasEditLayer>
         <CanvasRenderLayer></CanvasRenderLayer>
