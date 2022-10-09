@@ -106,6 +106,7 @@ importers:
       '@vitejs/plugin-react': ^2.1.0
       antd: ^4.23.3
       autoprefixer: ^10.4.12
+      dnd-core: ^16.0.1
       mobx: ^6.6.2
       mobx-react-lite: ^3.4.0
       postcss: ^8.4.14
@@ -121,6 +122,7 @@ importers:
       '@react-rxjs/core': 0.10.3_react@18.2.0+rxjs@7.5.7
       '@react-rxjs/utils': 0.9.5_huhahxrznniymw3vi46m2vbrla
       antd: 4.23.3_biqbaboplfbrettd7655fr4n2y
+      dnd-core: 16.0.1
       mobx: 6.6.2
       mobx-react-lite: 3.4.0_qrr2ojv4n7h7ey2xj7njerqqr4
       react: 18.2.0
