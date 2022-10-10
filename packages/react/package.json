@@ -1,6 +1,6 @@
 {
   "name": "whimsical-react",
-  "version": "0.0.1",
+  "version": "0.0.1-alpha.0",
   "main": "dist/CReact.umd.js",
   "module": "dist/CReact.es.js",
   "types": "dist/types/src/index.d.ts",
