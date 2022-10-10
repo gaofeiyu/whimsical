@@ -2,6 +2,7 @@ import { autorun } from 'mobx';
 import { useEffect } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { components } from 'whimsical-react';
 import CanvasPanel from '../../components/CanvasPanel';
 import Content from '../../components/Content';
 import Header from '../../components/Header';
@@ -19,6 +20,7 @@ const Playground = () => {
         editorStore.pageDSL.key
       );
     });
+    console.log(components);
     return () => {
       ar();
     };

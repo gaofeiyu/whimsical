@@ -1,14 +1,14 @@
 {
   "name": "whimsical-shared",
   "version": "0.0.1",
-  "type": "module",
+  "license": "MIT",
+  "main": "dist/index.umd.js",
+  "module": "dist/index.es.js",
+  "types": "dist/types/index.d.ts",
   "scripts": {
-    "dev": "vite",
-    "build": "tsc && vite build",
-    "preview": "vite preview"
+    "build": "rimraf -rf dist/{lib,types} && tsc --emitDeclarationOnly && vite build"
   },
   "devDependencies": {
-    "typescript": "^4.6.4",
-    "vite": "^3.1.0"
+    "rimraf": "^3.0.2"
   }
 }

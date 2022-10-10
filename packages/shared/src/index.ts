@@ -1,3 +1,1 @@
-export default {
-  shared: 'test',
-};
+export * from './types/component-declare';
