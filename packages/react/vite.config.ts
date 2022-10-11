@@ -1,17 +1,15 @@
-import { defineConfig, createServer } from 'vite';
+import { createServer, defineConfig, InlineConfig } from 'vite';
 import path from 'path';
-import base from './vite.base.config';
+import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
-  const baseConfig = base();
-  let serverConfig = {};
-  let build = {};
-  if (command === 'build' && mode === 'component-dev') {
-    build = {
-      sourcemap: true,
-    };
-    serverConfig = {
+  const env = JSON.stringify(process.env.NODE_ENV || 'production');
+  let entryPath = 'packages/src/index.tsx';
+  let libName = 'WReact';
+
+  if (command === 'build' && mode === 'dev') {
+    const serverConfig: InlineConfig = {
       configFile: false,
       root: path.resolve(__dirname, 'dist'),
       server: {
@@ -26,11 +24,48 @@ export default defineConfig(({ command, mode }) => {
     })();
   }
 
+  if (command === 'build' && mode === 'editor') {
+    entryPath = 'packages/src/editor.tsx';
+    libName = 'WReactEditor';
+  }
+
+  if (command === 'build' && mode === 'engine') {
+    entryPath = 'packages/src/engine.tsx';
+    libName = 'WReactEngine';
+  }
+  console.log(env);
+
   return {
-    ...baseConfig,
+    define: {
+      'process.env.NODE_ENV': env,
+    },
+    resolve: {
+      alias: {
+        packages: path.resolve(__dirname, 'packages'),
+      },
+    },
+    plugins: [react()],
     build: {
-      ...baseConfig.build,
-      build,
+      lib: {
+        entry: path.resolve(__dirname, entryPath),
+        name: 'WReact',
+        formats: ['umd', 'es'],
+        fileName: (format) => {
+          return `${libName}.${format}.js`;
+        },
+      },
+      rollupOptions: {
+        // 确保外部化处理那些你不想打包进库的依赖
+        external: ['react', 'react-dom'],
+        output: {
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+          },
+        },
+      },
+      emptyOutDir: false,
+      sourcemap: env !== 'production',
     },
   };
 });

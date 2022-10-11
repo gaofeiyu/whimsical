@@ -5,10 +5,10 @@
   "module": "dist/CReact.es.js",
   "types": "dist/types/src/index.d.ts",
   "scripts": {
-    "dev": "vite",
+    "dev": "vite build --mode dev --watch",
     "build": "rimraf -rf dist && tsc && vite build && pnpm build:engine",
     "build:engine": "vite build --config vite.engine.config.ts",
-    "dev-component": "vite build --mode component-dev --watch"
+    "dev-component": "vite build --mode serve"
   },
   "dependencies": {
     "axios": "0.27.2",
