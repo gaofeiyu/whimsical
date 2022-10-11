@@ -9,13 +9,12 @@
   "description": "A low code editor across technology stacks",
   "main": "index.js",
   "scripts": {
-    "build": "lerna run build",
+    "build": "pnpm --filter=whimsical* run build",
     "clean": "lerna clean --yes",
-    "dev": "lerna exec --scope whimsical -- pnpm dev",
-    "dev:shared": "lerna exec --scope whimsical-shared -- pnpm dev",
+    "dev": "pnpm --filter=whimsical run dev",
     "publish:canary": "lerna publish --canary --yes",
     "publish:release": "lerna publish --yes",
-    "test": "lerna exec --scope whimsical -- pnpm test"
+    "test": "lerna run --parallel test"
   },
   "repository": {
     "type": "git",
@@ -71,10 +70,15 @@
     "vitepress": "1.0.0-alpha.17",
     "vitest": "^0.23.4"
   },
-  "pnpm": {
-    "overrides": {
-      "whimsical-shared": "workspace:*",
-      "whimsical-react": "workspace:*"
-    }
+  "dependencies": {
+    "whimsical": "workspace:*",
+    "whimsical-shared": "workspace:*",
+    "whimsical-react": "workspace:*"
+  },
+
+  "workspaces": {
+    "packages": [
+      "packages/*"
+    ]
   }
 }
