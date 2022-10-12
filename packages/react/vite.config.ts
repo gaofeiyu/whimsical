@@ -5,7 +5,7 @@ import react from '@vitejs/plugin-react';
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   const env = JSON.stringify(process.env.NODE_ENV || 'production');
-  let entryPath = 'packages/src/index.tsx';
+  let entryPath = 'src/index.tsx';
   let libName = 'WReact';
 
   if (command === 'build' && mode === 'dev') {
@@ -25,15 +25,14 @@ export default defineConfig(({ command, mode }) => {
   }
 
   if (command === 'build' && mode === 'editor') {
-    entryPath = 'packages/src/editor.tsx';
+    entryPath = 'src/editor.tsx';
     libName = 'WReactEditor';
   }
 
   if (command === 'build' && mode === 'engine') {
-    entryPath = 'packages/src/engine.tsx';
+    entryPath = 'src/engine.tsx';
     libName = 'WReactEngine';
   }
-  console.log(env);
 
   return {
     define: {

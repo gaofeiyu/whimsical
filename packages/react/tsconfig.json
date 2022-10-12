@@ -28,7 +28,7 @@
     "strictNullChecks": true,
     "sourceMap": true
   },
-  "include": ["packages", "example"],
+  "include": ["src", "example"],
   "exclude": ["node_modules"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }

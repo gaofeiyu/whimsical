@@ -1,14 +1,22 @@
 {
   "name": "whimsical-react",
   "version": "0.0.1-alpha.0",
-  "main": "dist/CReact.umd.js",
-  "module": "dist/CReact.es.js",
+  "main": "dist/WReact.umd.js",
+  "module": "dist/WReact.es.js",
   "types": "dist/types/src/index.d.ts",
+  "type": "module",
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "import": "./dist/WReact.es.js",
+      "require": "./dist/WReact.umd.js"
+    }
+  },
   "scripts": {
-    "dev": "vite build --mode dev --watch",
-    "build": "rimraf -rf dist && tsc && vite build && pnpm build:engine",
-    "build:engine": "vite build --config vite.engine.config.ts",
-    "dev-component": "vite build --mode serve"
+    "dev": "cross-env NODE_ENV=development vite build --mode dev --watch",
+    "build": "rimraf -rf dist && tsc && vite build && pnpm build:editor && pnpm build:engine",
+    "build:engine": "vite build --mode engine",
+    "build:editor": "vite build --mode editor"
   },
   "dependencies": {
     "axios": "0.27.2",

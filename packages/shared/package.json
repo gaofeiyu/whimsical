@@ -5,6 +5,13 @@
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
   "types": "dist/types/index.d.ts",
+  "files": ["dist"],
+  "exports": {
+    ".": {
+      "import": "./dist/index.es.js",
+      "require": "./dist/index.umd.js"
+    }
+  },
   "scripts": {
     "build": "rimraf -rf dist/{lib,types} && tsc --emitDeclarationOnly && vite build"
   },
