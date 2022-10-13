@@ -1,24 +1,18 @@
-import { PushpinOutlined, PushpinFilled, CloseOutlined } from '@ant-design/icons';
+import { CloseOutlined } from '@ant-design/icons';
 
 export type PanelTitleProps = {
   title?: string;
-  pushpin?: boolean;
-  onChange?: (pushpinStatus: boolean) => void;
+  onClose?: () => void;
 };
 
 const PanelTitle = (props: PanelTitleProps) => {
-  const { pushpin = false, onChange = () => null } = props;
+  const { onClose = () => null } = props;
   return (
     <div className="flex text-base px-2 py-1 whitespace-nowrap">
       <div>{props.title}</div>
 
       <div className="flex flex-1 justify-end items-center">
-        {pushpin ? (
-          <PushpinFilled onClick={() => onChange(false)} />
-        ) : (
-          <PushpinOutlined onClick={() => onChange(true)} />
-        )}
-        <CloseOutlined />
+        <CloseOutlined onClick={onClose} />
       </div>
     </div>
   );

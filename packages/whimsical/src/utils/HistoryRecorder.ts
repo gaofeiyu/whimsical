@@ -104,14 +104,14 @@ export default class HistoryRecorder {
   }
 
   getRecord() {
-    return this.historyList;
+    return this.historyList || [];
   }
 }
 
 export const useHistory = (
   HistoryInstance: HistoryRecorder
 ): [Array<HistoryItemType>, HistoryRecorder] => {
-  const [historyList, setList] = useState<Array<HistoryItemType>>([]);
+  const [historyList, setList] = useState<Array<HistoryItemType>>(HistoryInstance.getRecord());
   const [, componentUpdate] = useState({});
   useEffect(() => {
     const clear = HistoryInstance.onChange(() => {

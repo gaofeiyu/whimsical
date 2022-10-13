@@ -10,6 +10,7 @@ import Panel from '../Panel';
 import { useEffect, useState } from 'react';
 import { EDITOR_EVENTS$ } from '../../editor-flow';
 import EditorHistory from '../EditorHistory';
+import ComponentList from '../../widgets/ComponentList';
 
 type MenuItem = Required<MenuProps>['items'][number];
 
@@ -51,7 +52,7 @@ const Sidebar = () => {
   }, []);
 
   return (
-    <div className="flex">
+    <div className="flex relative">
       <Menu
         className="h-full"
         defaultSelectedKeys={[selectKey]}
@@ -69,8 +70,8 @@ const Sidebar = () => {
         }}
       />
       {showPanel ? (
-        <Panel title={selectKey}>
-          <EditorHistory></EditorHistory>
+        <Panel title={selectKey} onClose={() => setShowPanel(false)}>
+          {selectKey === '1' ? <ComponentList /> : <EditorHistory></EditorHistory>}
         </Panel>
       ) : null}
     </div>
