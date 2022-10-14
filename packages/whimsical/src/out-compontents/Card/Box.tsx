@@ -26,6 +26,7 @@ export const Box: FC<BoxProps> = function Box({ name }) {
     item: { name },
     end: (item, monitor) => {
       const dropResult = monitor.getDropResult<DropResult>();
+      console.log(dropResult);
       if (item && dropResult) {
         alert(`You dropped ${item.name} into ${dropResult.name}!`);
       }

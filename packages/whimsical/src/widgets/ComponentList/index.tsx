@@ -1,27 +1,45 @@
-import { memo, useContext } from 'react';
-import { IComponentDeclare } from 'whimsical-shared';
+import { memo, useContext, useMemo } from 'react';
+import { IComponentDeclare, IWNode } from 'whimsical-shared';
 import { EditorContext } from '../../pages/playground/EditorContext';
 import ComponentListItem from './Item';
+
+type convertDeclareToNodeProps = { declare: IComponentDeclare; id?: string };
+
+const convertDeclareToNode = (props: convertDeclareToNodeProps): IWNode => {
+  const { declare, id = 'NEW_NODE' } = props;
+  return {
+    name: declare.name,
+    type: declare.type,
+    id,
+  };
+};
 
 const ComponentList = () => {
   const { componentsDeclare } = useContext(EditorContext);
   const componentNameList = Object.keys(componentsDeclare || {});
 
-  console.log(componentsDeclare);
+  const nodeTemplates: IWNode[] = useMemo(() => {
+    return componentNameList.map((componentName) => {
+      const declare: IComponentDeclare = componentsDeclare[componentName];
+      const template = convertDeclareToNode({
+        declare,
+      });
+      return template;
+    });
+  }, [componentsDeclare]);
+
   return (
-    <div className="component-lib">
-      <div className="dslList">
-        {componentNameList.map((componentName, index) => {
-          const componentDeclare: IComponentDeclare = componentsDeclare[componentName];
-          return (
-            <ComponentListItem
-              name={`${componentDeclare.name} ${componentDeclare.cname}`}
-              key={componentName}
-              nodeFragment={componentDeclare}
-            />
-          );
-        })}
-      </div>
+    <div className="flex items-center">
+      {componentNameList.map((componentName, index) => {
+        const componentDeclare: IComponentDeclare = componentsDeclare[componentName];
+        return (
+          <ComponentListItem
+            name={`${componentDeclare.name} ${componentDeclare.cname}`}
+            key={componentName}
+            nodeFragment={nodeTemplates[index]}
+          />
+        );
+      })}
     </div>
   );
 };

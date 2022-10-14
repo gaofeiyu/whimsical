@@ -13,6 +13,7 @@
     }
   },
   "scripts": {
+    "dev": "tsc && vite build --mode dev --watch",
     "build": "rimraf -rf dist/{lib,types} && tsc --emitDeclarationOnly && vite build"
   },
   "devDependencies": {

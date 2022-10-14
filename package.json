@@ -12,6 +12,7 @@
     "build": "pnpm --filter=whimsical* run build",
     "clean": "lerna clean --yes",
     "dev": "pnpm --filter=whimsical run dev",
+    "dev:shared": "pnpm --filter=whimsical-shared run dev",
     "publish:canary": "lerna publish --canary --yes",
     "publish:release": "lerna publish --yes",
     "test": "lerna run --parallel test"
