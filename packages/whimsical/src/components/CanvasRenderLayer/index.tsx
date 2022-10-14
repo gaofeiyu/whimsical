@@ -5,7 +5,7 @@ export type CanvasRenderLayerProps = {
 };
 
 const CanvasRenderLayer = () => {
-  return <div className="absolute top-0 left-0 w-full h-full">画布渲染层</div>;
+  return <div className="absolute top-0 left-0 w-full h-full hidden">画布渲染层</div>;
 };
 
 CanvasRenderLayer.displayName = 'CanvasRenderLayer';

@@ -1,13 +1,31 @@
-import React from 'react';
+import { ReactElement } from 'react';
+import { useDrop } from 'react-dnd';
 
-export type CanvasEditLayerProps = {
-  children?: React.ReactElement | React.ReactElement[];
+type Props = {
+  children?: ReactElement;
 };
 
-const CanvasEditLayer = () => {
-  return <div className="absolute top-0 left-0 w-full h-full">画布编辑层</div>;
+const EditorLayer = (props: Props) => {
+  const [{ canDrop, isOver }, drop] = useDrop(() => ({
+    accept: 'NODE_FRAGMENT',
+    drop: (item, monitor) => {
+      console.log('drop item', item);
+      if (!monitor.didDrop()) {
+        console.log('drop item', item);
+      }
+    },
+    collect: (monitor) => ({
+      isOver: monitor.isOver(),
+      canDrop: monitor.canDrop(),
+    }),
+  }));
+
+  return (
+    <div ref={drop} className="w-full h-full border">
+      请拖拽组件到区域中
+      {props.children}
+    </div>
+  );
 };
 
-CanvasEditLayer.displayName = 'CanvasEditLayer';
-
-export default CanvasEditLayer;
+export default EditorLayer;
