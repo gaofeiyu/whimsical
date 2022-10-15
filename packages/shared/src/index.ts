@@ -1,2 +1,3 @@
-export * from './types/component-declare';
-export * from './types/schema';
+export * from './types';
+export * from './typeof';
+export * from './ergodicNode';

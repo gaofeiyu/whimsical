@@ -1,5 +1,11 @@
+import logo from '../../assets/whimsical-light.svg';
 const Header = () => {
-  return <div className="w-screen h-9 text-lg font-bold border-b">Whimsical</div>;
+  return (
+    <div className="flex items-center w-screen h-10 text-lg font-bold border-b">
+      <img className="w-9 h-9 mx-4" src={logo} />
+      Whimsical
+    </div>
+  );
 };
 
 Header.displayName = 'Header';

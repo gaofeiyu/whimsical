@@ -1,6 +1,7 @@
 import StateManagement from '../utils/StateManagement';
 import EventManagement from '../../src/utils/EventManagement';
 import HistoryRecorder from '../utils/HistoryRecorder';
+import WTreeNode from 'src/core/WNode';
 
 export const EDITOR_EVENTS$ = new EventManagement();
 
@@ -18,12 +19,12 @@ export const EditorState = new StateManagement<EditorStateType>({
   },
 });
 
-export const PageDSLState = new StateManagement({
-  state: {
-    storage: {
-      editor: true,
-    },
-  },
+export const PageDSLState = new StateManagement<WTreeNode | null>({
+  state: null,
+});
+
+export const WTreeNodeState = new StateManagement<WTreeNode | null>({
+  state: null,
 });
 
 export const EditorHistory = new HistoryRecorder({

@@ -1,7 +1,7 @@
 import { action, makeObservable, observable, toJS, set } from 'mobx';
 
 export type StateManagementProps<T> = {
-  state: T;
+  state?: T;
 };
 
 export default class StateManagement<T> {

@@ -10,16 +10,21 @@ import Layout from '../../components/Layout';
 import SettingPanel from '../../components/SettingPanel';
 import Sidebar from '../../components/Sidebar';
 import { editorStore } from '../../store/editorActions';
-import { EditorContext } from './EditorContext';
+import { EditorContext, IEditorContext } from './EditorContext';
+import WTreeNode from '../../core/WNode';
+import { wNodeMock } from '../../mock/wNode';
 
 const { componentsDeclare } = libConfig;
 
-const editorContextValue = {
+const editorContextValue: IEditorContext = {
   componentsDeclare,
 };
 
 const Playground = () => {
   useEffect(() => {
+    const wTreeNode = new WTreeNode(wNodeMock);
+    console.log('create wTreeNode', wTreeNode);
+    editorContextValue.wTreeNode = wTreeNode;
     const ar = autorun(function () {
       console.log(
         'Completed %s of %s items',

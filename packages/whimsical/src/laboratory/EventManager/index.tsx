@@ -1,6 +1,7 @@
 import { Button } from 'antd';
 import { observer } from 'mobx-react-lite';
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext } from 'react';
+import { EditorContext } from '../../pages/playground/EditorContext';
 import { EDITOR_EVENTS$, PageDSLState } from '../../editor-flow';
 
 export type EventManagerProps = {
@@ -8,7 +9,8 @@ export type EventManagerProps = {
 };
 
 const TestState1 = observer(() => {
-  console.log('rerender TestState1');
+  const context = useContext(EditorContext);
+  console.log('rerender TestState1', context);
   return (
     <div className="flex flex-auto flex-col">
       <div>PageDSLState: {JSON.stringify(PageDSLState.getStateOfRaw())}</div>
