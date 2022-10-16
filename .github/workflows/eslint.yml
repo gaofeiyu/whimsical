@@ -39,10 +39,10 @@ jobs:
           node-version: 16
           cache: 'pnpm'
 
+      - run: pnpm install
+
       - name: Install ESLint
-        run: |
-          pnpm install
-          pnpm add @microsoft/eslint-formatter-sarif@2.1.7
+        run: pnpm add @microsoft/eslint-formatter-sarif@2.1.7
 
       - name: Run ESLint
         run: npx eslint .
