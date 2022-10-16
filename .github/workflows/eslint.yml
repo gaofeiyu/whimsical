@@ -30,11 +30,19 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
+      - name: Install pnpm
+        uses: pnpm/action-setup@v2
+
+      - name: Set node version to 16
+        uses: actions/setup-node@v2
+        with:
+          node-version: 16
+          cache: 'pnpm'
+
       - name: Install ESLint
         run: |
-          npm install pnpm@7.12.2
-          npx pnpm add eslint@8.10.0
-          npx pnpm add @microsoft/eslint-formatter-sarif@2.1.7
+          pnpm add eslint@8.10.0
+          pnpm add @microsoft/eslint-formatter-sarif@2.1.7
 
       - name: Run ESLint
         run: npx eslint .
