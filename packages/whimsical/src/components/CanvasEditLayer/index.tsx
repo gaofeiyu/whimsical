@@ -4,6 +4,7 @@ import WTreeNode from '../../core/WNode';
 import uuid from '../../utils/uuid';
 import { EditorContext } from '../../pages/playground/EditorContext';
 import { IWNode, ergodicNode, IErgodicNode } from 'whimsical-shared';
+import { EDITOR_EVENTS$ } from '../../editor-flow';
 
 type Props = {
   children?: ReactElement;
@@ -47,8 +48,8 @@ const EditorLayer = (props: Props) => {
           })
         );
         const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(wTreeNode);
+
         setWidgetResult(treeNode[0].value);
-        console.log(treeNode);
       }
     },
     collect: (monitor) => ({
@@ -62,7 +63,17 @@ const EditorLayer = (props: Props) => {
       const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(editorContext.wTreeNode);
       setWidgetResult(treeNode[0].value);
     }
-  }, []);
+
+    const history = EDITOR_EVENTS$.on('history:goto', () => {
+      if (editorContext.wTreeNode) {
+        const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(editorContext.wTreeNode);
+        setWidgetResult(treeNode[0].value);
+      }
+    });
+    return () => {
+      history();
+    };
+  }, [editorContext.wTreeNode]);
 
   return (
     <div ref={drop} className="w-full h-full border">

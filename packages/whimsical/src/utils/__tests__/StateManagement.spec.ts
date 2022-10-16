@@ -9,29 +9,27 @@ describe('StateManagement', () => {
   let State: StateManagement<StateType>;
   beforeEach(() => {
     State = new StateManagement<StateType>({
-      state: {
-        key: 0,
-      },
+      key: 0,
     });
-    expect(State.getStateOfRaw().key).toBe(0);
+    expect(State.serialize().key).toBe(0);
   });
 
   test('state & getState', () => {
-    const state = State.getState();
+    const state = State.state;
     expect(state.key).toBe(0);
-    State.setState({
+    State.from({
       key: 1,
     });
-    expect(State.getState()).toBe(state);
+    expect(State.state).toBe(state);
     state.key = state.key + 1;
-    expect(State.getStateOfRaw().key).toBe(2);
+    expect(State.serialize().key).toBe(2);
     expect(state.key).toBe(2);
   });
 
-  test('state & getStateOfRaw', () => {
-    const stateRaw = State.getStateOfRaw();
+  test('state & serialize', () => {
+    const stateRaw = State.serialize();
     stateRaw.key = stateRaw.key + 1;
-    expect(State.getState().key).toBe(0);
+    expect(State.state.key).toBe(0);
     expect(stateRaw.key).toBe(1);
   });
 });

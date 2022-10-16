@@ -13,7 +13,7 @@ const TestState1 = observer(() => {
   console.log('rerender TestState1', context);
   return (
     <div className="flex flex-auto flex-col">
-      <div>PageDSLState: {JSON.stringify(PageDSLState.getStateOfRaw())}</div>
+      <div>PageDSLState: {JSON.stringify(PageDSLState.serialize())}</div>
     </div>
   );
 });

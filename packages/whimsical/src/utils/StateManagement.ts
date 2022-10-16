@@ -5,25 +5,21 @@ export type StateManagementProps<T> = {
 };
 
 export default class StateManagement<T> {
-  private state: T;
-  constructor(props?: StateManagementProps<T>) {
-    const { state } = props;
+  state: T;
+
+  constructor(state: T) {
     this.state = state;
     makeObservable<StateManagement<T>, string>(this, {
       state: observable,
-      setState: action,
+      from: action,
     });
   }
 
-  getState() {
-    return this.state;
-  }
-
-  getStateOfRaw() {
+  serialize() {
     return toJS(this.state);
   }
 
-  setState(newState) {
+  from(newState: T) {
     set(this.state, newState);
   }
 }

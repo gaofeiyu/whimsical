@@ -20,9 +20,7 @@ describe('StateManagement', () => {
     const stateMock = {
       key: 0,
     };
-    State = new StateManagement<StateType>({
-      state: stateMock,
-    });
+    State = new StateManagement<StateType>(stateMock);
     EVENTS$ = new EventManagement();
     EVENTS$.createEvent(eventName);
     HistoryInstance = new HistoryRecorder({
@@ -39,13 +37,13 @@ describe('StateManagement', () => {
         done(null);
       });
       expect(recordItemFirst.eventName).toBe(eventName);
-      expect(recordItemFirst.stateSnapshot[0]).toEqual(State.getStateOfRaw());
-      State.setState({
+      expect(recordItemFirst.stateSnapshot[0]).toEqual(State.serialize());
+      State.from({
         key: 1,
       });
       EVENTS$.emit(eventName);
       const recordItemSecond = HistoryInstance.getRecord()[1];
-      expect(recordItemSecond.stateSnapshot[0]).toEqual(State.getStateOfRaw());
+      expect(recordItemSecond.stateSnapshot[0]).toEqual(State.serialize());
       HistoryInstance.goto(0);
       expect(recordItemFirst.executed).toBe(true);
       expect(recordItemSecond.executed).toBe(false);

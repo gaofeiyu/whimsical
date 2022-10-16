@@ -1,7 +1,8 @@
-import { observable, makeObservable, action } from 'mobx';
+import { observable, makeObservable, action, toJS } from 'mobx';
 import { isArray, IWNode } from 'whimsical-shared';
 import uuid from '../../utils/uuid';
 import { resetNodesParent } from './resetNodesParent';
+import { EDITOR_EVENTS$ } from '../../editor-flow';
 
 const WTreeNodeCache = new Map<string, WTreeNode>();
 class WTreeNode implements IWNode {
@@ -36,7 +37,7 @@ class WTreeNode implements IWNode {
     }
 
     if (node) {
-      this.create(node);
+      this.from(node);
     }
 
     makeObservable<WTreeNode, string>(this, {
@@ -54,29 +55,43 @@ class WTreeNode implements IWNode {
     return this === this.root;
   }
 
-  create(node: IWNode): WTreeNode {
+  create(node: IWNode, parent?: WTreeNode) {
+    return new WTreeNode(node, parent);
+  }
+
+  from(node: IWNode): WTreeNode {
     if (!node) return;
+    const { id, name, children, ...props } = node;
 
-    if (node.id && node.id !== this.id) {
+    if (id && id !== this.id) {
       WTreeNodeCache.delete(this.id);
-      WTreeNodeCache.set(node.id, this);
-      this.id = node.id;
+      WTreeNodeCache.set(id, this);
+      this.id = id;
     }
 
-    if (node.name) {
-      this.name = node.name;
+    if (name) {
+      this.name = name;
     }
 
-    this.props = {
-      ...node.props,
-    };
+    this.props = props;
 
-    if (node.children) {
+    if (children) {
       this.children =
-        node.children?.map?.((node) => {
+        children?.map?.((node) => {
           return new WTreeNode(node, this);
         }) || [];
     }
+  }
+
+  serialize(): IWNode {
+    return {
+      id: this.id,
+      name: this.name,
+      children: this.children.map((treeNode) => {
+        return treeNode.serialize();
+      }),
+      ...toJS(this.props),
+    };
   }
 
   getParentByDepth(depth = 0) {
@@ -110,6 +125,7 @@ class WTreeNode implements IWNode {
     const newNodes = this.resetNodesParent(nodes, this);
     if (!newNodes.length) return [];
     this.children = newNodes.concat(this.children);
+    EDITOR_EVENTS$.emit('node:prepend');
     return newNodes;
   }
 

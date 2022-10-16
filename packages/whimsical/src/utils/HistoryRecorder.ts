@@ -25,8 +25,6 @@ export default class HistoryRecorder {
 
   private historyList: Array<HistoryItemType>;
 
-  private EVENTS$: EventManagement;
-
   private currentHistoryIndex: number;
 
   constructor(props: HistoryRecorderProps) {
@@ -35,13 +33,13 @@ export default class HistoryRecorder {
     this.storeInstance = storeInstance;
     this.subscribeStore = new Map();
     this.historyList = [];
-    this.EVENTS$ = new EventManagement();
     this.createEvent();
     this.record();
   }
 
   createEvent() {
-    this.EVENTS$.createEvent('change');
+    this.eventInstance.createEvent('history:add');
+    this.eventInstance.createEvent('history:goto');
   }
 
   registerStore<T>(storeInstance) {
@@ -50,19 +48,20 @@ export default class HistoryRecorder {
 
   generateStateSnapshot() {
     return this.storeInstance.map((item) => {
-      return item.getStateOfRaw();
+      return item.serialize();
     });
   }
 
   snapshotToState(snapshot) {
     this.storeInstance.forEach((item, index) => {
-      return item.setState(snapshot[index]);
+      return item.from(snapshot[index]);
     });
   }
 
   record() {
     const eventStore = this.eventInstance.getEvents();
     eventStore.forEach((subject, subjectName) => {
+      if (subjectName === 'history:add' || subjectName === 'history:goto') return;
       this.subscribeStore.set(
         subjectName,
         subject.subscribe({
@@ -75,7 +74,7 @@ export default class HistoryRecorder {
             };
             this.historyList.splice(this.currentHistoryIndex + 1);
             this.historyList.push(newHistory);
-            this.EVENTS$.emit('change');
+            this.eventInstance.emit('history:add');
             this.currentHistoryIndex = this.historyList.length - 1;
           },
         })
@@ -96,11 +95,17 @@ export default class HistoryRecorder {
     });
     this.currentHistoryIndex = index;
     this.snapshotToState(this.historyList[index].stateSnapshot);
-    this.EVENTS$.emit('change');
+    this.eventInstance.emit('history:goto');
   }
 
   onChange(cb) {
-    return this.EVENTS$.on('change', cb);
+    const add = this.eventInstance.on('history:add', cb);
+    const goto = this.eventInstance.on('history:goto', cb);
+
+    return () => {
+      add();
+      goto();
+    };
   }
 
   getRecord() {

@@ -9,10 +9,8 @@ export type StoreManagerProps = {
 const StoreManager = () => {
   const [count, setCount] = useState(0);
   const handleClick = useCallback(() => {
-    EditorState.setState({
-      editorState: {
-        key: count,
-      },
+    EditorState.from({
+      key: count,
     });
     setCount(count + 1);
 

@@ -13,6 +13,7 @@ import { editorStore } from '../../store/editorActions';
 import { EditorContext, IEditorContext } from './EditorContext';
 import WTreeNode from '../../core/WNode';
 import { wNodeMock } from '../../mock/wNode';
+import { EditorHistory } from '../../editor-flow';
 
 const { componentsDeclare } = libConfig;
 
@@ -25,6 +26,7 @@ const Playground = () => {
     const wTreeNode = new WTreeNode(wNodeMock);
     console.log('create wTreeNode', wTreeNode);
     editorContextValue.wTreeNode = wTreeNode;
+    EditorHistory.registerStore<WTreeNode>(wTreeNode);
     const ar = autorun(function () {
       console.log(
         'Completed %s of %s items',
