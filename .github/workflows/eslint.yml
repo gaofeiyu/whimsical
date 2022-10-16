@@ -31,7 +31,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run ESLint
-        run: npx eslint --ext .jsx,.ts,.tsx packages
+        run: npx eslint packages --ext .jsx,.ts,.tsx
           --format @microsoft/eslint-formatter-sarif
           --output-file eslint-results.sarif
         continue-on-error: true
