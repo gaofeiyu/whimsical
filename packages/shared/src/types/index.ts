@@ -1,2 +1,2 @@
-export * from './component-declare';
+export * from './component';
 export * from './schema';

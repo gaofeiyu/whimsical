@@ -1,3 +1,28 @@
+// 组件库相关静态资源配置
+export type ComponentLibInfoResourceType = {
+  dep?: {
+    css?: [];
+    sctript?: [];
+  };
+  pro?: {
+    css?: [];
+    sctript?: [];
+  };
+  editor?: {
+    css?: [];
+    sctript?: [];
+  };
+  other?: {
+    css?: [];
+    sctript?: [];
+  };
+};
+
+export type ComponentLibInfoType = {
+  name: string;
+  resource?: ComponentLibInfoResourceType;
+};
+
 // 组件DSL描述
 export interface IComponentDeclare {
   // 组件名称

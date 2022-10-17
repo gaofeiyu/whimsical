@@ -1,11 +1,27 @@
-import React from 'react';
+import { ReactElement, createRef, useEffect, useState } from 'react';
+import Sandbox, { createSandbox } from './Sandbox';
 
 export type CanvasRenderLayerProps = {
-  children?: React.ReactElement | React.ReactElement[];
+  children?: ReactElement | ReactElement[];
 };
 
 const CanvasRenderLayer = () => {
-  return <div className="absolute top-0 left-0 w-full h-full hidden">画布渲染层</div>;
+  const renderSandbox = createRef<HTMLIFrameElement>();
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (renderSandbox.current && !ready) {
+      setReady(true);
+      createSandbox({
+        renderSandbox: renderSandbox.current,
+        componentInfo: { name: 'test', resource: {} },
+      }).then((lib) => {
+        // code
+      });
+    }
+  }, [renderSandbox, ready]);
+
+  return <Sandbox ref={renderSandbox} />;
 };
 
 CanvasRenderLayer.displayName = 'CanvasRenderLayer';
