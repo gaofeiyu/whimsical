@@ -20,7 +20,7 @@ export const EditorState = new StateManagement<EditorStateType>({
 
 export const PageDSLState = new StateManagement<WTreeNode | null>(null);
 
-export const WTreeNodeState = new StateManagement<WTreeNode | null>(null);
+export const ComponentState = new StateManagement<WTreeNode | null>(null);
 
 export const EditorHistory = new HistoryRecorder({
   eventInstance: EDITOR_EVENTS$,

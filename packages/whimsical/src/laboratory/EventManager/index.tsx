@@ -1,7 +1,7 @@
 import { Button } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, { useCallback, useContext } from 'react';
-import { EditorContext } from '../../pages/playground/EditorContext';
+import { WorkbenchContext } from '../../pages/playground/context';
 import { EDITOR_EVENTS$, PageDSLState } from '../../editor-flow';
 
 export type EventManagerProps = {
@@ -9,7 +9,7 @@ export type EventManagerProps = {
 };
 
 const TestState1 = observer(() => {
-  const context = useContext(EditorContext);
+  const context = useContext(WorkbenchContext);
   console.log('rerender TestState1', context);
   return (
     <div className="flex flex-auto flex-col">

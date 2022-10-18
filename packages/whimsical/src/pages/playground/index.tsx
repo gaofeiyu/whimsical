@@ -1,58 +1,72 @@
-import { autorun } from 'mobx';
-import { useEffect } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { components, libConfig } from 'whimsical-react';
 import CanvasPanel from '../../components/CanvasPanel';
 import Content from '../../components/Content';
 import Header from '../../components/Header';
 import Layout from '../../components/Layout';
 import SettingPanel from '../../components/SettingPanel';
 import Sidebar from '../../components/Sidebar';
-import { editorStore } from '../../store/editorActions';
-import { EditorContext, IEditorContext } from './EditorContext';
+import { WorkbenchContext } from './context';
 import WTreeNode from '../../core/WNode';
-import { wNodeMock } from '../../mock/wNode';
+import { wNodeMock, componentInfoMock } from '../../mock/wNode';
 import { EditorHistory } from '../../editor-flow';
-
-const { componentsDeclare } = libConfig;
-
-const editorContextValue: IEditorContext = {
-  componentsDeclare,
-};
+import Workbench, { IWorkbenchProps } from '../../core/Workbench';
+import LibManager from '../../core/LibManager';
+import { loadStatic } from 'whimsical-shared';
 
 const Playground = () => {
-  useEffect(() => {
-    const wTreeNode = new WTreeNode(wNodeMock);
-    console.log('create wTreeNode', wTreeNode);
-    editorContextValue.wTreeNode = wTreeNode;
-    EditorHistory.registerStore<WTreeNode>(wTreeNode);
-    const ar = autorun(function () {
-      console.log(
-        'Completed %s of %s items',
-        editorStore.dataSource.storage.editor,
-        editorStore.pageDSL.key
-      );
-    });
-    console.log(components);
-    return () => {
-      ar();
-    };
+  const workbenchProps = useRef<IWorkbenchProps>();
+  const [, forceUpdate] = useState({});
+  const workbench = useMemo(() => {
+    if (workbenchProps.current) {
+      return new Workbench(workbenchProps.current);
+    }
+    return null;
   }, []);
-  return (
-    <EditorContext.Provider value={editorContextValue}>
-      <Layout>
-        <Header></Header>
+  useEffect(() => {
+    const libInfo: LibManager = new LibManager({
+      ...componentInfoMock,
+    });
 
-        <DndProvider backend={HTML5Backend}>
-          <Content>
-            <Sidebar></Sidebar>
-            <CanvasPanel></CanvasPanel>
-            <SettingPanel></SettingPanel>
-          </Content>
-        </DndProvider>
-      </Layout>
-    </EditorContext.Provider>
+    loadStatic({
+      resource: libInfo.resource,
+      ignoreResource: ['dep', 'component', 'other'],
+    }).then(() => {
+      console.log(libInfo.resource, window[`${libInfo.name}Editor`]);
+      libInfo.componentsDeclare =
+        window[`${libInfo.name}Editor`]?.libConfig?.componentsDeclare || {};
+    });
+    const wTreeNode = new WTreeNode(wNodeMock);
+    EditorHistory.registerStore<WTreeNode>(wTreeNode);
+    console.log('workbench', wTreeNode, wNodeMock, EditorHistory, libInfo);
+    workbenchProps.current = {
+      treeNode: wTreeNode,
+      wNode: wNodeMock,
+      History: EditorHistory,
+      libInfo,
+    };
+    forceUpdate({});
+  }, []);
+  console.log('workbench', workbench);
+  return (
+    <>
+      {workbench ? (
+        <WorkbenchContext.Provider value={workbench}>
+          <Layout>
+            <Header></Header>
+
+            <DndProvider backend={HTML5Backend}>
+              <Content>
+                <Sidebar></Sidebar>
+                <CanvasPanel></CanvasPanel>
+                <SettingPanel></SettingPanel>
+              </Content>
+            </DndProvider>
+          </Layout>
+        </WorkbenchContext.Provider>
+      ) : null}
+    </>
   );
 };
 

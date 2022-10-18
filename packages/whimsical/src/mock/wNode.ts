@@ -1,4 +1,17 @@
-import { IWNode } from 'whimsical-shared';
+import { ComponentLibInfoType, IWNode } from 'whimsical-shared';
+
+export const componentInfoMock: ComponentLibInfoType = {
+  name: 'WReact',
+  resource: {
+    component: {
+      sctript: ['http://127.0.0.1:8070/WReactEngine.umd.js'],
+      css: ['http://127.0.0.1:8070/style.css'],
+    },
+    editor: {
+      sctript: ['http://127.0.0.1:8070/WReactEditor.umd.js'],
+    },
+  },
+};
 
 export const wNodeMock: IWNode = {
   name: 'View',

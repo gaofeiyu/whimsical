@@ -6,10 +6,16 @@ type CreateSandboxType = {
   componentInfo: ComponentLibInfoType;
 };
 
+type CreateSandboxResponseType = {
+  lib: unknown;
+  libEditor: unknown;
+  libEngine: unknown;
+};
+
 export const createSandbox = (props: CreateSandboxType) => {
   const { renderSandbox, componentInfo } = props;
   const { name: componentLibName, resource = {} } = componentInfo;
-  return new Promise((resolve, reject) => {
+  return new Promise<CreateSandboxResponseType>((resolve, reject) => {
     if (renderSandbox && renderSandbox.contentDocument && renderSandbox.contentWindow) {
       const iframeDocument: Document = renderSandbox.contentDocument;
       const iframeWindow: Window = renderSandbox.contentWindow;
@@ -54,8 +60,14 @@ export const createSandbox = (props: CreateSandboxType) => {
 
       loadStatic({ resource, container: iframeDocument })
         .then(() => {
-          const lib = iframeWindow[componentLibName] || {};
-          resolve(lib.default || lib);
+          const lib = iframeWindow[componentLibName] || null;
+          const libEditor = iframeWindow[`${componentLibName}Editor`] || null;
+          const libEngine = iframeWindow[`${componentLibName}Engine`] || null;
+          resolve({
+            lib: lib.default || lib,
+            libEditor: libEditor.default || libEditor,
+            libEngine: libEngine.default || libEngine,
+          });
         })
         .catch((err) => {
           console.log('资源加载失败:', err);

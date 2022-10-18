@@ -2,7 +2,7 @@ import { ReactElement, useContext, useEffect, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import WTreeNode from '../../core/WNode';
 import uuid from '../../utils/uuid';
-import { EditorContext } from '../../pages/playground/EditorContext';
+import { WorkbenchContext } from '../../pages/playground/context';
 import { IWNode, ergodicNode, IErgodicNode } from 'whimsical-shared';
 import { EDITOR_EVENTS$ } from '../../editor-flow';
 
@@ -34,13 +34,13 @@ const renderEditorElement = (treeNode: WTreeNode) => {
 };
 
 const EditorLayer = (props: Props) => {
-  const editorContext = useContext(EditorContext);
+  const workbenchContext = useContext(WorkbenchContext);
   const [WidgetResult, setWidgetResult] = useState(null);
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: 'NODE_FRAGMENT',
     drop: (item: { nodeFragment: IWNode }, monitor) => {
       if (!monitor.didDrop()) {
-        const wTreeNode = editorContext.wTreeNode;
+        const wTreeNode = workbenchContext.treeNode;
         wTreeNode.prepend(
           new WTreeNode({
             ...item.nodeFragment,
@@ -59,21 +59,23 @@ const EditorLayer = (props: Props) => {
   }));
 
   useEffect(() => {
-    if (editorContext.wTreeNode) {
-      const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(editorContext.wTreeNode);
+    if (workbenchContext.treeNode) {
+      const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(workbenchContext.treeNode);
       setWidgetResult(treeNode[0].value);
     }
 
     const history = EDITOR_EVENTS$.on('history:goto', () => {
-      if (editorContext.wTreeNode) {
-        const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(editorContext.wTreeNode);
+      if (workbenchContext.treeNode) {
+        const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(
+          workbenchContext.treeNode
+        );
         setWidgetResult(treeNode[0].value);
       }
     });
     return () => {
       history();
     };
-  }, [editorContext.wTreeNode]);
+  }, [workbenchContext.treeNode]);
 
   return (
     <div ref={drop} className="w-full h-full border">

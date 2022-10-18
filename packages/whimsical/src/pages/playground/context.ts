@@ -1,5 +1,6 @@
 import { createContext } from 'react';
-import WTreeNode from 'src/core/WNode';
+import WTreeNode from '../../core/WNode';
+import Workbench from '../../core/Workbench';
 import { IComponentDeclare } from 'whimsical-shared';
 
 export interface IEditorContext {
@@ -7,4 +8,4 @@ export interface IEditorContext {
   wTreeNode?: WTreeNode;
 }
 
-export const EditorContext = createContext<IEditorContext>(null);
+export const WorkbenchContext = createContext<Workbench>(null);

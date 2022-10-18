@@ -47,7 +47,7 @@ export default defineConfig(({ command, mode }) => {
     build: {
       lib: {
         entry: path.resolve(__dirname, entryPath),
-        name: 'WReact',
+        name: libName,
         formats: ['umd', 'es'],
         fileName: (format) => {
           return `${libName}.${format}.js`;

@@ -13,7 +13,6 @@
     }
   },
   "scripts": {
-
     "dev": "npx concurrently -c \"bgBlue.bold,bgMagenta.bold\" -p \"{time}-{pid}-{name}\" -t \"HH:mm:ss\" --handle-input \"tsc -w\" \"vite build --mode dev --watch\"",
     "build": "rimraf -rf dist/{lib,types} && tsc --emitDeclarationOnly && vite build"
   },

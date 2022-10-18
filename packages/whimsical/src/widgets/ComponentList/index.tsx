@@ -1,6 +1,6 @@
 import { memo, useContext, useMemo } from 'react';
 import { IComponentDeclare, IWNode } from 'whimsical-shared';
-import { EditorContext } from '../../pages/playground/EditorContext';
+import { WorkbenchContext } from '../../pages/playground/context';
 import ComponentListItem from './Item';
 
 type convertDeclareToNodeProps = { declare: IComponentDeclare; id?: string };
@@ -15,7 +15,8 @@ const convertDeclareToNode = (props: convertDeclareToNodeProps): IWNode => {
 };
 
 const ComponentList = () => {
-  const { componentsDeclare } = useContext(EditorContext);
+  const { libInfo } = useContext(WorkbenchContext);
+  const { componentsDeclare } = libInfo;
   const componentNameList = Object.keys(componentsDeclare || {});
 
   const nodeTemplates: IWNode[] = useMemo(() => {

@@ -14,9 +14,27 @@ const CanvasRenderLayer = () => {
       setReady(true);
       createSandbox({
         renderSandbox: renderSandbox.current,
-        componentInfo: { name: 'test', resource: {} },
-      }).then((lib) => {
-        // code
+        componentInfo: {
+          name: 'test',
+          resource: {
+            component: {
+              sctript: ['http://127.0.0.1:8070/WReactEngine.umd.js'],
+              css: ['http://127.0.0.1:8070/style.css'],
+            },
+            editor: {
+              sctript: ['http://127.0.0.1:8070/WReactEditor.umd.js'],
+            },
+          },
+        },
+      }).then(({ lib, libEditor, libEngine }) => {
+        const componentLib = lib
+          ? lib
+          : {
+              editor: libEditor,
+              engine: libEngine,
+            };
+
+        console.log(componentLib);
       });
     }
   }, [renderSandbox, ready]);
