@@ -1,20 +1,20 @@
 // 组件库相关静态资源配置
 export type ComponentLibInfoResourceType = {
   dep?: {
-    css?: [];
-    sctript?: [];
+    css?: string[];
+    script?: string[];
   };
-  pro?: {
-    css?: [];
-    sctript?: [];
+  component?: {
+    css?: string[];
+    script?: string[];
   };
   editor?: {
-    css?: [];
-    sctript?: [];
+    css?: string[];
+    script?: string[];
   };
   other?: {
-    css?: [];
-    sctript?: [];
+    css?: string[];
+    script?: string[];
   };
 };
 

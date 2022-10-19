@@ -58,16 +58,10 @@ export const createSandbox = (props: CreateSandboxType) => {
       `);
       iframeDocument.close();
 
-      loadStatic({ resource, container: iframeDocument })
+      loadStatic({ resource, container: iframeDocument, ignoreResource: ['editor'] })
         .then(() => {
-          const lib = iframeWindow[componentLibName] || null;
-          const libEditor = iframeWindow[`${componentLibName}Editor`] || null;
-          const libEngine = iframeWindow[`${componentLibName}Engine`] || null;
-          resolve({
-            lib: lib.default || lib,
-            libEditor: libEditor.default || libEditor,
-            libEngine: libEngine.default || libEngine,
-          });
+          const libEngine = iframeWindow[componentLibName]?.engine || null;
+          resolve(libEngine);
         })
         .catch((err) => {
           console.log('资源加载失败:', err);

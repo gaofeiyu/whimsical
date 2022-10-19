@@ -17,13 +17,14 @@ import { loadStatic } from 'whimsical-shared';
 
 const Playground = () => {
   const workbenchProps = useRef<IWorkbenchProps>();
-  const [, forceUpdate] = useState({});
+  const [ready, setReady] = useState(false);
   const workbench = useMemo(() => {
-    if (workbenchProps.current) {
+    if (workbenchProps.current && ready) {
+      console.log('workbench', workbenchProps.current);
       return new Workbench(workbenchProps.current);
     }
     return null;
-  }, []);
+  }, [ready]);
   useEffect(() => {
     const libInfo: LibManager = new LibManager({
       ...componentInfoMock,
@@ -33,22 +34,22 @@ const Playground = () => {
       resource: libInfo.resource,
       ignoreResource: ['dep', 'component', 'other'],
     }).then(() => {
-      console.log(libInfo.resource, window[`${libInfo.name}Editor`]);
-      libInfo.componentsDeclare =
-        window[`${libInfo.name}Editor`]?.libConfig?.componentsDeclare || {};
+      console.log(libInfo, window[`${libInfo.name}`]);
+      const lib = window[`${libInfo.name}`].default || window[`${libInfo.name}`];
+      if (!lib) return;
+      libInfo.componentsDeclare = lib?.editor?.libConfig?.componentsDeclare || {};
+
+      const wTreeNode = new WTreeNode(wNodeMock);
+      EditorHistory.registerStore<WTreeNode>(wTreeNode);
+      workbenchProps.current = {
+        treeNode: wTreeNode,
+        wNode: wNodeMock,
+        History: EditorHistory,
+        libInfo,
+      };
+      setReady(true);
     });
-    const wTreeNode = new WTreeNode(wNodeMock);
-    EditorHistory.registerStore<WTreeNode>(wTreeNode);
-    console.log('workbench', wTreeNode, wNodeMock, EditorHistory, libInfo);
-    workbenchProps.current = {
-      treeNode: wTreeNode,
-      wNode: wNodeMock,
-      History: EditorHistory,
-      libInfo,
-    };
-    forceUpdate({});
   }, []);
-  console.log('workbench', workbench);
   return (
     <>
       {workbench ? (

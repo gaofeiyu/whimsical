@@ -106,8 +106,13 @@ const getNeedLoadStatic = (
   const css: string[] = [];
   keys.forEach((key) => {
     if (ignoreResource.includes(key)) return;
-    script.splice(script.length - 1, 0, ...resource[key].script);
-    css.splice(css.length - 1, 0, ...resource[key].css);
+
+    if (resource[key].script && resource[key].script.length) {
+      script.splice(script.length, 0, ...resource[key].script);
+    }
+    if (resource[key].css && resource[key].css.length) {
+      css.splice(css.length, 0, ...resource[key].css);
+    }
   });
   return [[...new Set(script)], [...new Set(css)]];
 };

@@ -1,5 +1,6 @@
-import { ReactElement, createRef, useEffect, useState } from 'react';
+import { ReactElement, createRef, useEffect, useState, useContext } from 'react';
 import Sandbox, { createSandbox } from './Sandbox';
+import { WorkbenchContext } from '../../pages/playground/context';
 
 export type CanvasRenderLayerProps = {
   children?: ReactElement | ReactElement[];
@@ -7,6 +8,7 @@ export type CanvasRenderLayerProps = {
 
 const CanvasRenderLayer = () => {
   const renderSandbox = createRef<HTMLIFrameElement>();
+  const workbench = useContext(WorkbenchContext);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
@@ -15,26 +17,11 @@ const CanvasRenderLayer = () => {
       createSandbox({
         renderSandbox: renderSandbox.current,
         componentInfo: {
-          name: 'test',
-          resource: {
-            component: {
-              sctript: ['http://127.0.0.1:8070/WReactEngine.umd.js'],
-              css: ['http://127.0.0.1:8070/style.css'],
-            },
-            editor: {
-              sctript: ['http://127.0.0.1:8070/WReactEditor.umd.js'],
-            },
-          },
+          name: workbench.libInfo.name,
+          resource: workbench.libInfo.resource,
         },
-      }).then(({ lib, libEditor, libEngine }) => {
-        const componentLib = lib
-          ? lib
-          : {
-              editor: libEditor,
-              engine: libEngine,
-            };
-
-        console.log(componentLib);
+      }).then((libEngine) => {
+        console.log(libEngine);
       });
     }
   }, [renderSandbox, ready]);

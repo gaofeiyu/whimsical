@@ -16,7 +16,11 @@ class Workbench {
   History?: HistoryRecorder;
   libInfo?: LibManager;
   constructor(props: IWorkbenchProps) {
-    console.log('Workbench constructor');
+    const { treeNode, wNode, History, libInfo } = props;
+    this.treeNode = treeNode;
+    this.wNode = wNode;
+    this.History = History;
+    this.libInfo = libInfo;
   }
 }
 
