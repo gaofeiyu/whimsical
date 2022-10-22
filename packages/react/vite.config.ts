@@ -30,18 +30,13 @@ export default defineConfig(({ command, mode }) => {
   }
 
   if (command === 'build' && mode === 'engine') {
-    entryPath = 'src/engine.tsx';
+    entryPath = 'src/engine/index.tsx';
     libName = 'WReactEngine';
   }
 
   return {
     define: {
-      'process.env.NODE_ENV': env,
-    },
-    resolve: {
-      alias: {
-        packages: path.resolve(__dirname, 'packages'),
-      },
+      __NODE_ENV__: env,
     },
     plugins: [react()],
     build: {
@@ -51,16 +46,6 @@ export default defineConfig(({ command, mode }) => {
         formats: ['umd', 'es'],
         fileName: (format) => {
           return `${libName}.${format}.js`;
-        },
-      },
-      rollupOptions: {
-        // 确保外部化处理那些你不想打包进库的依赖
-        external: ['react', 'react-dom'],
-        output: {
-          globals: {
-            react: 'React',
-            'react-dom': 'ReactDOM',
-          },
         },
       },
       emptyOutDir: false,

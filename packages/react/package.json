@@ -5,7 +5,9 @@
   "module": "dist/WReact.es.js",
   "types": "dist/types/src/index.d.ts",
   "type": "module",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "import": "./dist/WReact.es.js",
@@ -13,6 +15,7 @@
     }
   },
   "scripts": {
+    "example": "vite dev",
     "dev": "npx concurrently -c \"bgBlue.bold,bgMagenta.bold\" -p \"{time}-{pid}-{name}\" -t \"HH:mm:ss\" --handle-input \"tsc -w\" \"cross-env NODE_ENV=development vite build --mode dev --watch\"",
     "build": "rimraf -rf dist && tsc && vite build && pnpm build:editor && pnpm build:engine",
     "build:engine": "vite build --mode engine",
@@ -20,16 +23,18 @@
   },
   "dependencies": {
     "axios": "0.27.2",
-    "react": "^18.0.0",
-    "react-dom": "^18.0.0",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "whimsical-shared": "workspace:*"
   },
   "peerDependencies": {
-    "react": "18",
-    "react-dom": "18",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
     "whimsical-shared": "workspace:*"
   },
   "devDependencies": {
-    "rimraf": "^3.0.2"
+    "@vitejs/plugin-react": "^2.1.0",
+    "rimraf": "^3.0.2",
+    "vite": "^3.1.0"
   }
 }

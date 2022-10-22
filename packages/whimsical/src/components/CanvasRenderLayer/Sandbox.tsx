@@ -1,9 +1,9 @@
 import { memo, forwardRef } from 'react';
-import { ComponentLibInfoType, loadStatic } from 'whimsical-shared';
+import { ComponentLibInfoResourceType, loadStatic } from 'whimsical-shared';
 
 type CreateSandboxType = {
-  renderSandbox: HTMLIFrameElement;
-  componentInfo: ComponentLibInfoType;
+  renderSandboxDocument: Document;
+  resource: ComponentLibInfoResourceType;
 };
 
 type CreateSandboxResponseType = {
@@ -13,13 +13,10 @@ type CreateSandboxResponseType = {
 };
 
 export const createSandbox = (props: CreateSandboxType) => {
-  const { renderSandbox, componentInfo } = props;
-  const { name: componentLibName, resource = {} } = componentInfo;
-  return new Promise<CreateSandboxResponseType>((resolve, reject) => {
-    if (renderSandbox && renderSandbox.contentDocument && renderSandbox.contentWindow) {
-      const iframeDocument: Document = renderSandbox.contentDocument;
-      const iframeWindow: Window = renderSandbox.contentWindow;
-      iframeDocument.write(`
+  const { renderSandboxDocument, resource } = props;
+  return new Promise<CreateSandboxResponseType>(async (resolve, reject) => {
+    if (renderSandboxDocument) {
+      renderSandboxDocument.write(`
         <!DOCTYPE html>
         <html>
         <head>
@@ -56,17 +53,19 @@ export const createSandbox = (props: CreateSandboxType) => {
         </body>
         </html>
       `);
-      iframeDocument.close();
+      renderSandboxDocument.close();
 
-      loadStatic({ resource, container: iframeDocument, ignoreResource: ['editor'] })
-        .then(() => {
-          const libEngine = iframeWindow[componentLibName]?.engine || null;
-          resolve(libEngine);
-        })
-        .catch((err) => {
-          console.log('资源加载失败:', err);
-          reject(err);
+      try {
+        await loadStatic({
+          resource,
+          container: renderSandboxDocument,
+          ignoreResource: ['editor'],
         });
+        resolve(null);
+      } catch (err) {
+        console.log('资源加载失败:', err);
+        reject(err);
+      }
     } else {
       resolve(null);
     }
@@ -77,7 +76,7 @@ const Sandbox = forwardRef<HTMLIFrameElement>((props, ref) => {
   return (
     <iframe
       ref={ref}
-      id="renderSandbox"
+      id="renderSandboxDocument"
       className="absolute top-0 left-0 w-full h-full"
       {...props}
     ></iframe>

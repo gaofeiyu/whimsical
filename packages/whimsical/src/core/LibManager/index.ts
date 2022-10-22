@@ -1,10 +1,13 @@
 import { makeObservable, observable } from 'mobx';
 import { ComponentLibInfoResourceType, IComponentDeclare } from 'whimsical-shared';
 
+export interface IEngine {
+  render: () => unknown;
+}
 export interface LibManagerProps {
   name: string;
   componentsDeclare?: Record<string, IComponentDeclare>;
-  engine?: unknown;
+  engine?: IEngine;
   resource?: ComponentLibInfoResourceType;
 }
 
@@ -12,7 +15,7 @@ class LibManager {
   name: string;
   resource?: ComponentLibInfoResourceType;
   componentsDeclare?: Record<string, IComponentDeclare>;
-  engine?: unknown;
+  engine?: IEngine;
 
   constructor(props: LibManagerProps) {
     const { name, componentsDeclare, engine, resource } = props;

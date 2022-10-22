@@ -16,33 +16,35 @@ export type CanvasRenderLayerProps = {
 };
 
 const CanvasRenderLayer = () => {
+  const workbench = useContext(WorkbenchContext);
   const renderSandbox = createRef<HTMLIFrameElement>();
   const libEngine = useRef(null);
-  const workbench = useContext(WorkbenchContext);
   const [ready, setReady] = useState(false);
 
-  const resetRender = useCallback(
-    (wNode: IWNode) => {
-      if (libEngine.current && libEngine.current?.render) {
-        console.log(libEngine.current?.render(wNode));
-      }
-    },
-    [libEngine.current]
-  );
+  const resetRender = (wNode: IWNode, sandbox: HTMLIFrameElement) => {
+    if (libEngine.current && libEngine.current?.render && sandbox) {
+      const sandboxDocument = sandbox.contentDocument;
+      const sandboxBody = sandboxDocument.querySelector('body');
+      const renderRoot = sandboxDocument.createElement('div');
+      renderRoot.id = 'renderRoot';
+      libEngine.current.render(wNode, renderRoot, () => {
+        sandboxBody.prepend(renderRoot);
+        console.log('render after');
+      });
+    }
+  };
 
   useEffect(() => {
     if (renderSandbox.current && !ready) {
-      setReady(true);
+      const sandbox = renderSandbox.current;
       createSandbox({
-        renderSandbox: renderSandbox.current,
-        componentInfo: {
-          name: workbench.libInfo.name,
-          resource: workbench.libInfo.resource,
-        },
-      }).then((res) => {
-        libEngine.current = res;
-        resetRender(workbench.wNode);
+        renderSandboxDocument: sandbox.contentDocument,
+        resource: workbench.libInfo.resource,
+      }).then(() => {
+        libEngine.current = sandbox.contentWindow[workbench.libInfo.name]?.engine || null;
+        resetRender(workbench.wNode, sandbox);
       });
+      setReady(true);
     }
   }, [renderSandbox, ready]);
 

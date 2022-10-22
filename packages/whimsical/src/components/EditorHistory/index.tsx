@@ -5,7 +5,6 @@ import { useCallback } from 'react';
 
 const EditorHistory = () => {
   const [history] = useHistory(EditorHistoryRecorder);
-  console.log('EditorHistory history', history);
 
   const handleGoto = useCallback((index) => {
     EditorHistoryRecorder.goto(index);

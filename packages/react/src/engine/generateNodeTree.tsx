@@ -3,7 +3,7 @@ import { IWNode, ergodicNode, getComponents } from 'whimsical-shared';
 
 const components = getComponents();
 
-export default function generatorDSL2JSX(node: IWNode) {
+export default function generateNodeTree(node: IWNode) {
   const ergodicResult = ergodicNode<IWNode, ReactElement | null>({
     node,
     callback: (props) => {

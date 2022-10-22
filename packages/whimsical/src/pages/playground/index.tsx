@@ -20,7 +20,6 @@ const Playground = () => {
   const [ready, setReady] = useState(false);
   const workbench = useMemo(() => {
     if (workbenchProps.current && ready) {
-      console.log('workbench', workbenchProps.current);
       return new Workbench(workbenchProps.current);
     }
     return null;
@@ -34,10 +33,10 @@ const Playground = () => {
       resource: libInfo.resource,
       ignoreResource: ['dep', 'component', 'other'],
     }).then(() => {
-      console.log(libInfo, window[`${libInfo.name}`]);
       const lib = window[`${libInfo.name}`].default || window[`${libInfo.name}`];
       if (!lib) return;
       libInfo.componentsDeclare = lib?.editor?.libConfig?.componentsDeclare || {};
+      libInfo.engine = lib?.editor;
 
       const wTreeNode = new WTreeNode(wNodeMock);
       EditorHistory.registerStore<WTreeNode>(wTreeNode);

@@ -3,6 +3,12 @@ import { ComponentLibInfoType, IWNode } from 'whimsical-shared';
 export const componentInfoMock: ComponentLibInfoType = {
   name: 'WReact',
   resource: {
+    dep: {
+      script: [
+        'https://unpkg.com/react@18.2.0/umd/react.development.js',
+        'https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js',
+      ],
+    },
     component: {
       script: ['http://127.0.0.1:8070/WReact.umd.js'],
       css: ['http://127.0.0.1:8070/style.css'],
