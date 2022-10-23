@@ -17,6 +17,7 @@
     "declarationDir": "dist/types",
     "baseUrl": "."
   },
+  "include": ["src"],
   "exclude": ["node_modules", "dist"],
-  "include": ["src"]
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

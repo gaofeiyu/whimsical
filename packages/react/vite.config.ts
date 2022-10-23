@@ -48,6 +48,16 @@ export default defineConfig(({ command, mode }) => {
           return `${libName}.${format}.js`;
         },
       },
+      rollupOptions: {
+        // 确保外部化处理那些你不想打包进库的依赖
+        external: ['react', 'react-dom'],
+        output: {
+          globals: {
+            react: 'React',
+            'react-dom': 'ReactDOM',
+          },
+        },
+      },
       emptyOutDir: false,
       sourcemap: env !== 'production',
     },

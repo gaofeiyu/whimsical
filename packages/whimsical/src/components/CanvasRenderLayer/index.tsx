@@ -1,48 +1,45 @@
-import {
-  ReactElement,
-  createRef,
-  useEffect,
-  useState,
-  useContext,
-  useRef,
-  useCallback,
-} from 'react';
+import { ReactElement, useEffect, useState, useContext, useRef } from 'react';
 import Sandbox, { createSandbox } from './Sandbox';
 import { WorkbenchContext } from '../../pages/playground/context';
-import { IWNode } from 'whimsical-shared';
+import { IWNode, loadStatic } from 'whimsical-shared';
 
 export type CanvasRenderLayerProps = {
   children?: ReactElement | ReactElement[];
 };
 
+const resetRender = (wNode: IWNode, sandbox: HTMLIFrameElement, libEngine) => {
+  if (libEngine && libEngine?.render && sandbox) {
+    const sandboxDocument = sandbox.contentDocument;
+    const sandboxBody = sandboxDocument.querySelector('body');
+    const renderRoot = sandboxDocument.createElement('div');
+    renderRoot.id = 'renderRoot';
+    libEngine.render(wNode, renderRoot, () => {
+      sandboxBody.prepend(renderRoot);
+      console.log('render after');
+    });
+  }
+};
+
 const CanvasRenderLayer = () => {
   const workbench = useContext(WorkbenchContext);
-  const renderSandbox = createRef<HTMLIFrameElement>();
+  const renderSandbox = useRef<HTMLIFrameElement>();
   const libEngine = useRef(null);
   const [ready, setReady] = useState(false);
 
-  const resetRender = (wNode: IWNode, sandbox: HTMLIFrameElement) => {
-    if (libEngine.current && libEngine.current?.render && sandbox) {
-      const sandboxDocument = sandbox.contentDocument;
-      const sandboxBody = sandboxDocument.querySelector('body');
-      const renderRoot = sandboxDocument.createElement('div');
-      renderRoot.id = 'renderRoot';
-      libEngine.current.render(wNode, renderRoot, () => {
-        sandboxBody.prepend(renderRoot);
-        console.log('render after');
-      });
-    }
-  };
-
   useEffect(() => {
-    if (renderSandbox.current && !ready) {
-      const sandbox = renderSandbox.current;
+    const sandbox = renderSandbox.current;
+    const renderSandboxDocument = sandbox?.contentDocument;
+    if (sandbox && renderSandboxDocument && !ready) {
       createSandbox({
-        renderSandboxDocument: sandbox.contentDocument,
-        resource: workbench.libInfo.resource,
+        renderSandboxDocument,
+      });
+      loadStatic({
+        resource: workbench.libInfo?.resource,
+        container: renderSandboxDocument,
+        ignoreResource: ['editor'],
       }).then(() => {
         libEngine.current = sandbox.contentWindow[workbench.libInfo.name]?.engine || null;
-        resetRender(workbench.wNode, sandbox);
+        resetRender(workbench.wNode, sandbox, libEngine.current);
       });
       setReady(true);
     }

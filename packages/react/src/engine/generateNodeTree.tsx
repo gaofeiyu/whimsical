@@ -10,34 +10,31 @@ export default function generateNodeTree(node: IWNode) {
       const { currentNode, nodeRenderId = '', children } = props;
       let result: ReactElement | null = null;
 
-      if (!result) {
-        const Node: any = components[currentNode.name];
-        if (Node) {
-          const childrenNode: ReactElement[] = [];
-          if (children && children.length) {
-            children.forEach((child) => {
-              if (child.value) {
-                childrenNode.push(child.value);
-              }
-            });
-          }
-          //props
-          const nodeProps = currentNode.props;
-
-          result = (
-            <Node
-              key={nodeRenderId}
-              id={nodeRenderId}
-              className={'coralsea_' + nodeRenderId}
-              {...currentNode.style}
-              {...nodeProps}
-            >
-              {childrenNode}
-            </Node>
-          );
+      const Node: any = components[currentNode.name];
+      if (Node) {
+        const childrenNode: ReactElement[] = [];
+        if (children && children.length) {
+          children.forEach((child) => {
+            if (child.value) {
+              childrenNode.push(child.value);
+            }
+          });
         }
-      }
+        //props
+        const nodeProps = currentNode.props;
 
+        result = (
+          <Node
+            key={nodeRenderId}
+            id={nodeRenderId}
+            className={'coralsea_' + nodeRenderId}
+            {...currentNode.style}
+            {...nodeProps}
+          >
+            {childrenNode.length ? childrenNode : null}
+          </Node>
+        );
+      }
       return result;
     },
   });

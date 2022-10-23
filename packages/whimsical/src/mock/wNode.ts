@@ -5,8 +5,8 @@ export const componentInfoMock: ComponentLibInfoType = {
   resource: {
     dep: {
       script: [
-        'https://unpkg.com/react@18.2.0/umd/react.development.js',
-        'https://unpkg.com/react-dom@18.2.0/umd/react-dom.development.js',
+        'http://127.0.0.1:8070/lib/react.development@18.2.0.js',
+        'http://127.0.0.1:8070/lib/react-dom.development@18.2.0.js',
       ],
     },
     component: {

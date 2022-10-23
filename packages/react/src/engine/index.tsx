@@ -1,8 +1,11 @@
-import React, { ForwardedRef, useCallback, useImperativeHandle, useRef } from 'react';
 import { createRoot } from 'react-dom/client';
-import { IWNode, getDOMElement } from 'whimsical-shared';
+import { IWNode, getDOMElement, registerComponents } from 'whimsical-shared';
 import './index.css';
-import { WView } from './WView';
+import { WNodeRenderComponent, WView } from './WView';
+import * as components from '../components';
+
+// 注册组件
+registerComponents(components);
 
 export interface IWContainerRef {
   reload: () => void;
@@ -28,7 +31,9 @@ export const render = (
   const root = createRoot(element);
 
   if (options.editor) {
-    root.render(<>{options.isPreview ? <WView node={node}></WView> : null}</>);
+    root.render(
+      <>{options.isPreview ? <WView node={node}></WView> : WNodeRenderComponent({ node })}</>
+    );
   } else {
     root.render(<WContainer node={node} empty={element?.innerHTML}></WContainer>);
   }
