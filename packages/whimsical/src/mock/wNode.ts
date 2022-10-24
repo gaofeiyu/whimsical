@@ -75,7 +75,7 @@ export const wNodeMock: IWNode = {
                     position: 'relative',
                   },
                   props: {
-                    text: 'Whimsical Test',
+                    content: 'Whimsical Test',
                   },
                   children: [],
                 },

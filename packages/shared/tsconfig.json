@@ -9,9 +9,9 @@
     "sourceMap": true,
     "noUnusedLocals": true,
     "esModuleInterop": true,
-    "noImplicitAny": false,
-    "include": ["src"],
-    "exclude": ["node_modules", "dist"],
-    "references": [{ "path": "./tsconfig.node.json" }]
-  }
+    "noImplicitAny": false
+  },
+  "include": ["src"],
+  "exclude": ["node_modules", "dist"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

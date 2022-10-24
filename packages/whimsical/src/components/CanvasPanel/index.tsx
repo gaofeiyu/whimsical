@@ -25,8 +25,8 @@ const CanvasPanel = observer(() => {
       <CanvasToolbar></CanvasToolbar>
       <div>EditorState: {JSON.stringify(EditorState.serialize())}</div>
       <div className="flex-auto relative">
-        <CanvasEditLayer></CanvasEditLayer>
         <CanvasRenderLayer></CanvasRenderLayer>
+        <CanvasEditLayer></CanvasEditLayer>
       </div>
     </div>
   );

@@ -5,16 +5,21 @@ import uuid from '../../utils/uuid';
 import { WorkbenchContext } from '../../pages/playground/context';
 import { IWNode, ergodicNode, IErgodicNode } from 'whimsical-shared';
 import { EDITOR_EVENTS$ } from '../../editor-flow';
+import Base from './selection-widgets/Base';
+import { IRenderLayerTree } from '../CanvasRenderLayer/renderLayer';
+import { observer } from 'mobx-react-lite';
 
 type Props = {
   children?: ReactElement;
 };
 
-const renderEditorElement = (treeNode: WTreeNode) => {
+const renderEditorElement = (treeNode: WTreeNode, renderLayerInfo: IRenderLayerTree) => {
+  console.log('renderEditorElement');
   return ergodicNode<WTreeNode, ReactElement>({
     node: treeNode,
     callback: (props) => {
       const { currentNode, children } = props;
+      const style = renderLayerInfo ? renderLayerInfo[currentNode.id]?.style : {};
       let childrenNode: ReactElement[] = [];
       if (children && children.length) {
         childrenNode = children.map((item) => {
@@ -23,31 +28,33 @@ const renderEditorElement = (treeNode: WTreeNode) => {
       }
 
       const ItemResult = (
-        <div key={currentNode.id}>
-          {currentNode.name}
+        <Base key={currentNode.id} style={style}>
           {childrenNode}
-        </div>
+        </Base>
       );
       return ItemResult;
     },
   });
 };
 
-const EditorLayer = (props: Props) => {
-  const workbenchContext = useContext(WorkbenchContext);
+const EditorLayer = observer((props: Props) => {
+  const workbench = useContext(WorkbenchContext);
   const [WidgetResult, setWidgetResult] = useState(null);
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: 'NODE_FRAGMENT',
     drop: (item: { nodeFragment: IWNode }, monitor) => {
       if (!monitor.didDrop()) {
-        const wTreeNode = workbenchContext.treeNode;
+        const wTreeNode = workbench.treeNode;
         wTreeNode.prepend(
           new WTreeNode({
             ...item.nodeFragment,
             id: uuid(),
           })
         );
-        const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(wTreeNode);
+        const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(
+          wTreeNode,
+          workbench.renderLayerInfo
+        );
 
         setWidgetResult(treeNode[0].value);
       }
@@ -59,15 +66,19 @@ const EditorLayer = (props: Props) => {
   }));
 
   useEffect(() => {
-    if (workbenchContext.treeNode) {
-      const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(workbenchContext.treeNode);
+    if (workbench.treeNode) {
+      const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(
+        workbench.treeNode,
+        workbench.renderLayerInfo
+      );
       setWidgetResult(treeNode[0].value);
     }
 
     const history = EDITOR_EVENTS$.on('history:goto', () => {
-      if (workbenchContext.treeNode) {
+      if (workbench.treeNode) {
         const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(
-          workbenchContext.treeNode
+          workbench.treeNode,
+          workbench.renderLayerInfo
         );
         setWidgetResult(treeNode[0].value);
       }
@@ -75,15 +86,13 @@ const EditorLayer = (props: Props) => {
     return () => {
       history();
     };
-  }, [workbenchContext.treeNode]);
-
+  }, [workbench.treeNode, workbench.renderLayerInfo]);
+  console.log(123);
   return (
-    <div ref={drop} className="w-full h-full border">
-      请拖拽组件到区域中
+    <div ref={drop} className="absolute top-0 left-0 w-full h-full">
       {WidgetResult}
-      {props.children}
     </div>
   );
-};
+});
 
 export default EditorLayer;

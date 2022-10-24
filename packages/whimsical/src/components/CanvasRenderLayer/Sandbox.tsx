@@ -1,13 +1,13 @@
 import { memo, forwardRef } from 'react';
 
 type CreateSandboxType = {
-  renderSandboxDocument: Document;
+  sandboxDocument: Document;
 };
 
 export const createSandbox = (props: CreateSandboxType) => {
-  const { renderSandboxDocument } = props;
-  if (renderSandboxDocument) {
-    renderSandboxDocument.write(`
+  const { sandboxDocument } = props;
+  if (sandboxDocument) {
+    sandboxDocument.write(`
       <!DOCTYPE html>
       <html>
       <head>
@@ -44,7 +44,7 @@ export const createSandbox = (props: CreateSandboxType) => {
       </body>
       </html>
     `);
-    renderSandboxDocument.close();
+    sandboxDocument.close();
   }
 };
 
@@ -52,7 +52,7 @@ const Sandbox = forwardRef<HTMLIFrameElement>((props, ref) => {
   return (
     <iframe
       ref={ref}
-      id="renderSandboxDocument"
+      id="sandboxDocument"
       className="absolute top-0 left-0 w-full h-full"
       {...props}
     ></iframe>
