@@ -1,4 +1,4 @@
-import { makeObservable, observable } from 'mobx';
+import { action, makeObservable, observable } from 'mobx';
 import { ComponentLibInfoResourceType, IComponentDeclare } from 'whimsical-shared';
 
 export interface IEngine {
@@ -28,7 +28,17 @@ class LibManager {
       name: observable,
       componentsDeclare: observable,
       engine: observable,
+      setComponentsDeclare: action,
+      setEngine: action,
     });
+  }
+
+  setComponentsDeclare(componentsDeclare: Record<string, IComponentDeclare>) {
+    this.componentsDeclare = componentsDeclare;
+  }
+
+  setEngine(engine: IEngine) {
+    this.engine = engine;
   }
 }
 

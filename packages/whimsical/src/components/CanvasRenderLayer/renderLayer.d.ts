@@ -10,10 +10,10 @@ export interface IRenderLayerItemRect {
 // 渲染层元素布局信息详情
 export interface IRenderLayerItem {
   children?: {
-    [key: string]: RenderLayerNodeMapNodeProps;
+    [key: string]: IRenderLayerItem;
   };
-  style?: RenderLayerElementRectProps;
-  selectionBoxStyle?: RenderLayerElementRectProps;
+  style?: IRenderLayerItemRect;
+  selectionBoxStyle?: IRenderLayerItemRect;
   hidden?: boolean;
 }
 

@@ -8,6 +8,7 @@ import { EDITOR_EVENTS$ } from '../../editor-flow';
 import Base from './selection-widgets/Base';
 import { IRenderLayerTree } from '../CanvasRenderLayer/renderLayer';
 import { observer } from 'mobx-react-lite';
+import { toJS } from 'mobx';
 
 type Props = {
   children?: ReactElement;
@@ -53,7 +54,7 @@ const EditorLayer = observer((props: Props) => {
         );
         const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(
           wTreeNode,
-          workbench.renderLayerInfo
+          toJS(workbench.renderLayerInfo)
         );
 
         setWidgetResult(treeNode[0].value);
@@ -69,7 +70,7 @@ const EditorLayer = observer((props: Props) => {
     if (workbench.treeNode) {
       const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(
         workbench.treeNode,
-        workbench.renderLayerInfo
+        toJS(workbench.renderLayerInfo)
       );
       setWidgetResult(treeNode[0].value);
     }
@@ -78,7 +79,7 @@ const EditorLayer = observer((props: Props) => {
       if (workbench.treeNode) {
         const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(
           workbench.treeNode,
-          workbench.renderLayerInfo
+          toJS(workbench.renderLayerInfo)
         );
         setWidgetResult(treeNode[0].value);
       }
@@ -86,8 +87,8 @@ const EditorLayer = observer((props: Props) => {
     return () => {
       history();
     };
-  }, [workbench.treeNode, workbench.renderLayerInfo]);
-  console.log(123);
+  }, [workbench.treeNode]);
+
   return (
     <div ref={drop} className="absolute top-0 left-0 w-full h-full">
       {WidgetResult}

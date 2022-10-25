@@ -1,3 +1,4 @@
+import { observer } from 'mobx-react-lite';
 import { memo, useContext, useMemo } from 'react';
 import { IComponentDeclare, IWNode } from 'whimsical-shared';
 import { WorkbenchContext } from '../../pages/playground/context';
@@ -14,9 +15,9 @@ const convertDeclareToNode = (props: convertDeclareToNodeProps): IWNode => {
   };
 };
 
-const ComponentList = () => {
-  const { libInfo } = useContext(WorkbenchContext);
-  const { componentsDeclare } = libInfo;
+const ComponentList = observer(() => {
+  const { LibInfo } = useContext(WorkbenchContext);
+  const { componentsDeclare } = LibInfo;
   const componentNameList = Object.keys(componentsDeclare || {});
 
   const nodeTemplates: IWNode[] = useMemo(() => {
@@ -43,7 +44,7 @@ const ComponentList = () => {
       })}
     </div>
   );
-};
+});
 
 ComponentList.displayName = 'ComponentList';
 

@@ -1,5 +1,5 @@
 import { ergodicNode, IWNode } from 'whimsical-shared';
-import { RenderLayerElementRectProps, RenderLayerNodeMapProps } from './renderLayer';
+import { IRenderLayerItemRect, IRenderLayerTree } from './renderLayer';
 
 const addListener = (editDom, renderDom) => {
   editDom &&
@@ -26,15 +26,12 @@ export const handleOverflow = (node, contentDocument): string => {
   return display;
 };
 
-export const collectionNodeSize = (
-  node: IWNode,
-  contentDocument: Document
-): RenderLayerNodeMapProps => {
+export const collectionNodeSize = (node: IWNode, contentDocument: Document): IRenderLayerTree => {
   if (!contentDocument) return {};
   const rootDOMNode = contentDocument.querySelector('body');
   if (!rootDOMNode) return {};
   const rootDOMRect = rootDOMNode.getBoundingClientRect();
-  const allSizeMap: RenderLayerNodeMapProps = {
+  const allSizeMap: IRenderLayerTree = {
     renderRoot: {
       style: {
         width: rootDOMRect.width,
@@ -57,7 +54,7 @@ export const collectionNodeSize = (
       if (currentDOMNode) {
         const currentDOMRect = currentDOMNode.getBoundingClientRect();
         const overflow = handleOverflow(currentDOMNode, contentDocument);
-        const currentNodeRect: RenderLayerElementRectProps = {
+        const currentNodeRect: IRenderLayerItemRect = {
           position: 'absolute',
           transform: `perspective(1px) translate3d(${rootDOMRect.x}px,${rootDOMRect.y}px,0)`,
           width: currentDOMRect.width,

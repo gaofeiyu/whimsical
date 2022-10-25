@@ -9,7 +9,7 @@ export interface IWorkbenchProps {
   treeNode?: WTreeNode;
   wNode?: IWNode;
   History?: HistoryRecorder;
-  libInfo?: LibManager;
+  LibInfo?: LibManager;
 }
 
 class Workbench {
@@ -19,16 +19,16 @@ class Workbench {
 
   History: HistoryRecorder;
 
-  libInfo: LibManager;
+  LibInfo: LibManager;
 
   renderLayerInfo: IRenderLayerTree;
 
   constructor(props: IWorkbenchProps) {
-    const { treeNode, wNode, History, libInfo } = props;
+    const { treeNode, wNode, History, LibInfo } = props;
     this.treeNode = treeNode;
     this.wNode = wNode;
     this.History = History;
-    this.libInfo = libInfo;
+    this.LibInfo = LibInfo;
 
     makeObservable<Workbench, string>(this, {
       renderLayerInfo: observable,

@@ -4,7 +4,6 @@ import Sandbox, { createSandbox } from './Sandbox';
 import { WorkbenchContext } from '../../pages/playground/context';
 import { collectionNodeSize } from './collectionNodeSize';
 import { IRenderLayerTree } from './renderLayer';
-import Workbench from '../../core/Workbench';
 
 export type CanvasRenderLayerProps = {
   children?: ReactElement | ReactElement[];
@@ -32,6 +31,7 @@ const resetRender = (wNode: IWNode, sandbox: HTMLIFrameElement, libEngine) => {
 
 const CanvasRenderLayer = () => {
   const workbench = useContext(WorkbenchContext);
+  const { LibInfo } = workbench;
   const renderSandbox = useRef<HTMLIFrameElement>();
   const libEngine = useRef(null);
   const [ready, setReady] = useState(false);
@@ -44,11 +44,14 @@ const CanvasRenderLayer = () => {
         sandboxDocument,
       });
       loadStatic({
-        resource: workbench.libInfo?.resource,
+        resource: LibInfo?.resource,
         container: sandboxDocument,
-        ignoreResource: ['editor'],
       }).then(() => {
-        libEngine.current = sandbox.contentWindow[workbench.libInfo.name]?.engine || null;
+        const lib = window[`${LibInfo.name}`].default || window[`${LibInfo.name}`];
+        if (!lib) return;
+        LibInfo.setComponentsDeclare(lib?.editor?.libConfig?.componentsDeclare);
+        LibInfo.setEngine(lib?.editor);
+        libEngine.current = sandbox.contentWindow[workbench.LibInfo.name]?.engine || null;
         resetRender(workbench.wNode, sandbox, libEngine.current).then(() => {
           renderLayerCollection = collectionNodeSize(workbench.wNode, sandboxDocument);
           console.log('renderLayerCollection', renderLayerCollection);

@@ -25,28 +25,27 @@ const Playground = () => {
     return null;
   }, [ready]);
   useEffect(() => {
-    const libInfo: LibManager = new LibManager({
+    const LibInfo: LibManager = new LibManager({
       ...componentInfoMock,
     });
+    const wTreeNode = new WTreeNode(wNodeMock);
+    EditorHistory.registerStore<WTreeNode>(wTreeNode);
+    workbenchProps.current = {
+      treeNode: wTreeNode,
+      wNode: wNodeMock,
+      History: EditorHistory,
+      LibInfo,
+    };
+    setReady(true);
 
     loadStatic({
-      resource: libInfo.resource,
-      ignoreResource: ['dep', 'component', 'other'],
+      resource: LibInfo.resource,
+      ignoreResource: ['component', 'other'],
     }).then(() => {
-      const lib = window[`${libInfo.name}`].default || window[`${libInfo.name}`];
+      const lib = window[`${LibInfo.name}`].default || window[`${LibInfo.name}`];
       if (!lib) return;
-      libInfo.componentsDeclare = lib?.editor?.libConfig?.componentsDeclare || {};
-      libInfo.engine = lib?.editor;
-
-      const wTreeNode = new WTreeNode(wNodeMock);
-      EditorHistory.registerStore<WTreeNode>(wTreeNode);
-      workbenchProps.current = {
-        treeNode: wTreeNode,
-        wNode: wNodeMock,
-        History: EditorHistory,
-        libInfo,
-      };
-      setReady(true);
+      LibInfo.componentsDeclare = lib?.editor?.libConfig?.componentsDeclare || {};
+      LibInfo.engine = lib?.editor;
     });
   }, []);
   return (
