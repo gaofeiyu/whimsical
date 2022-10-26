@@ -20,16 +20,17 @@ const renderEditorElement = (treeNode: WTreeNode, renderLayerInfo: IRenderLayerT
     node: treeNode,
     callback: (props) => {
       const { currentNode, children } = props;
-      const style = renderLayerInfo ? renderLayerInfo[currentNode.id]?.style : {};
+      if (!renderLayerInfo || !renderLayerInfo[currentNode.id]?.style) return;
+      const style = renderLayerInfo[currentNode.id]?.style;
       let childrenNode: ReactElement[] = [];
       if (children && children.length) {
         childrenNode = children.map((item) => {
           return item.value;
         });
       }
-
+      console.log(currentNode.id, style);
       const ItemResult = (
-        <Base key={currentNode.id} style={style}>
+        <Base id={currentNode.id} key={currentNode.id} style={style}>
           {childrenNode}
         </Base>
       );
@@ -87,7 +88,7 @@ const EditorLayer = observer((props: Props) => {
     return () => {
       history();
     };
-  }, [workbench.treeNode]);
+  }, [workbench.treeNode, workbench.renderLayerInfo]);
 
   return (
     <div ref={drop} className="absolute top-0 left-0 w-full h-full">

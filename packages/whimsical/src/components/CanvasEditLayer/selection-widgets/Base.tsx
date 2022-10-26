@@ -2,12 +2,18 @@ import { CSSProperties, ReactElement } from 'react';
 import { IRenderLayerItemRect } from 'src/components/CanvasRenderLayer/renderLayer';
 
 type Props = {
+  id: string;
   style: IRenderLayerItemRect;
   children?: ReactElement | ReactElement[];
 };
 
 const Base = (props: Props) => {
-  return <div style={props.style as CSSProperties}>{props.children}</div>;
+  const { children, id, style } = props;
+  return (
+    <div id={id} style={style as CSSProperties}>
+      {children}
+    </div>
+  );
 };
 
 export default Base;

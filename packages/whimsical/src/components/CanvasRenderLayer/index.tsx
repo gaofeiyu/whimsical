@@ -57,8 +57,8 @@ const CanvasRenderLayer = () => {
           console.log('renderLayerCollection', renderLayerCollection);
           workbench.setRenderLayerInfo(renderLayerCollection);
         });
+        setReady(true);
       });
-      setReady(true);
     }
   }, [renderSandbox, ready]);
 
