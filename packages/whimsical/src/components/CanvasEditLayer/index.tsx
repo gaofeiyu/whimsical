@@ -9,6 +9,7 @@ import Base from './selection-widgets/Base';
 import { IRenderLayerTree } from '../CanvasRenderLayer/renderLayer';
 import { observer } from 'mobx-react-lite';
 import { toJS } from 'mobx';
+import './index.css';
 
 type Props = {
   children?: ReactElement;
@@ -91,7 +92,7 @@ const EditorLayer = observer((props: Props) => {
   }, [workbench.treeNode, workbench.renderLayerInfo]);
 
   return (
-    <div ref={drop} className="absolute top-0 left-0 w-full h-full">
+    <div ref={drop} className="editor-layer">
       {WidgetResult}
     </div>
   );

@@ -1,6 +1,6 @@
 import { CSSProperties, ReactElement, useMemo, useRef, useState } from 'react';
 import { IWNode } from 'whimsical-shared';
-import { useDrop, useDrag } from 'react-dnd';
+import { useDrop } from 'react-dnd';
 import { XYCoord } from 'dnd-core';
 import { IRenderLayerItemRect } from 'src/components/CanvasRenderLayer/renderLayer';
 
@@ -40,7 +40,6 @@ const calcClassName = (props: CalcClassNameProps): string => {
   if (isFocus) {
     className.push('editor-item--focus');
   }
-  console.log('calcClassName', className.join(' '));
   return className.join(' ');
 };
 
@@ -95,12 +94,7 @@ const Base = (props: Props) => {
   }, [canDrop, isOver, upwards]);
 
   return (
-    <div
-      ref={itemRef}
-      id={id}
-      style={style as CSSProperties}
-      className={`hover:outline-dashed hover:outline-purple-500 ${className}`}
-    >
+    <div ref={itemRef} id={id} style={style as CSSProperties} className={className}>
       {children}
     </div>
   );

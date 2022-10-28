@@ -1,0 +1,84 @@
+@tailwind utilities;
+@tailwind variants;
+
+.editor-layer {
+  @apply absolute top-0 left-0 w-full h-full;
+}
+
+.editor-layer__keyboard {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 0;
+  height: 0;
+  opacity: 0;
+  pointer-events: none;
+}
+
+.editor-item {
+  position: relative;
+}
+
+.editor-item:hover {
+  @apply outline-dashed outline-purple-500
+}
+
+.editor-item:focus {
+  background: #fff;
+}
+
+@variants before {
+  .editor-item--hover {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  .editor-item--hover-before {
+    border-top: 1px solid #1861d5;
+  }
+
+  .editor-item--hover-inner {
+    top: 50%;
+    border-top: 1px solid #1861d5;
+  }
+
+  .editor-item--hover-after {
+    border-bottom: 1px solid #1861d5;
+  }
+
+  .editor-item--focus {
+    position: absolute;
+    top: 0;
+    bottom: unset;
+    right: unset;
+    left: 0;
+    float: left;
+    overflow: hidden;
+    padding: 0 3px 0 4px;
+    height: 12px;
+    font-size: 8px;
+    color: #fff;
+    background: #00f;
+    z-index: 2;
+    content: attr(data-component-name);
+    line-height: 14px;
+  }
+}
+
+@variants after {
+  .editor-item--focus {
+    pointer-events: none;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 255, 0.1);
+    border: 1px solid #1861d5;
+    content: '';
+  }
+}
