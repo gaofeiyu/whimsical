@@ -56,7 +56,7 @@ export const wNodeMock: IWNode = {
                 width: '120px',
               },
               props: {
-                src: '/src/assets/whimsical-light.svg',
+                src: '/src/assets/whimsical-dark.svg',
               },
               children: [],
             },

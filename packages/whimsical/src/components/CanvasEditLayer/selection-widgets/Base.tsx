@@ -1,7 +1,6 @@
 import { CSSProperties, ReactElement, useMemo, useRef, useState } from 'react';
 import { IWNode } from 'whimsical-shared';
 import { useDrop } from 'react-dnd';
-import { XYCoord } from 'dnd-core';
 import { IRenderLayerItemRect } from 'src/components/CanvasRenderLayer/renderLayer';
 
 type DropPositionDirectionType = 'BEFORE' | 'INNER' | 'AFTER';
@@ -17,16 +16,16 @@ type Props = {
 type CalcClassNameProps = {
   canDrop: boolean;
   isOver: boolean;
-  upwards: DropPositionDirectionType;
+  insertMode: DropPositionDirectionType;
   isFocus?: boolean;
 };
 
 const calcClassName = (props: CalcClassNameProps): string => {
-  const { canDrop, isOver, upwards, isFocus } = props;
+  const { canDrop, isOver, insertMode, isFocus } = props;
   const className: string[] = ['editor-item'];
   if (canDrop && isOver) {
     className.push('editor-item--hover');
-    switch (upwards) {
+    switch (insertMode) {
       case 'BEFORE':
         className.push('editor-item--hover-before');
         break;
@@ -43,30 +42,38 @@ const calcClassName = (props: CalcClassNameProps): string => {
   return className.join(' ');
 };
 
+const HOT_AREA_RATIO = 0.25;
+
+const getHotArea = (height) => {
+  return [Math.round(height * HOT_AREA_RATIO), Math.round(height * (1 - HOT_AREA_RATIO))];
+};
+
 const Base = (props: Props) => {
   const { children, id, style } = props;
   const itemRef = useRef<HTMLDivElement>(null);
-  const [upwards, setUpwards] = useState<DropPositionDirectionType>('AFTER');
+  const [insertMode, setInsertMode] = useState<DropPositionDirectionType>('AFTER');
 
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
       accept: 'NODE_FRAGMENT',
       // canDrop: () => true,
+      // 拖拽内容进过该组件区域
       hover: (item: DropItemType, monitor) => {
-        console.log(item);
         if (!itemRef.current) return;
         if (monitor.isOver({ shallow: true })) {
           const hoverBoundingRect = itemRef.current?.getBoundingClientRect();
-          const hoverMiddleY = (hoverBoundingRect.bottom - hoverBoundingRect.top) / 4;
-          const clientOffset = monitor.getClientOffset();
-          const hoverClientY = (clientOffset as XYCoord).y - hoverBoundingRect.top;
-          setUpwards(
-            hoverClientY < hoverMiddleY
-              ? 'BEFORE'
-              : hoverClientY < 3 * hoverMiddleY
-              ? 'INNER'
-              : 'AFTER'
+          // 确定当前模块元素1/4的高度用来做热区计算
+          const [hotAreaTop, hotAreaBottom] = getHotArea(
+            hoverBoundingRect.bottom - hoverBoundingRect.top
           );
+          const clientOffset = monitor.getClientOffset();
+          const hoverClientY = clientOffset.y - hoverBoundingRect.top;
+          const newInsertMode =
+            hoverClientY < hotAreaTop ? 'BEFORE' : hoverClientY < hotAreaBottom ? 'INNER' : 'AFTER';
+          console.log(newInsertMode, insertMode, hoverClientY, hotAreaTop, hotAreaBottom);
+          if (newInsertMode !== insertMode) {
+            setInsertMode(newInsertMode);
+          }
         }
       },
       drop: (item, monitor) => {
@@ -81,7 +88,7 @@ const Base = (props: Props) => {
         };
       },
     }),
-    [upwards]
+    [insertMode]
   );
   drop(itemRef);
 
@@ -89,9 +96,9 @@ const Base = (props: Props) => {
     return calcClassName({
       canDrop,
       isOver,
-      upwards,
+      insertMode,
     });
-  }, [canDrop, isOver, upwards]);
+  }, [canDrop, isOver, insertMode]);
 
   return (
     <div ref={itemRef} id={id} style={style as CSSProperties} className={className}>

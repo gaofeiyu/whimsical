@@ -15,7 +15,7 @@
     "dev": "pnpm --filter=whimsical run dev",
     "dev:shared": "pnpm --filter=whimsical-shared run dev",
     "dev:react": "pnpm --filter=whimsical-react run dev",
-    "example:react":  "pnpm --filter=whimsical-react run example",
+    "example:react": "pnpm --filter=whimsical-react run example",
     "publish:canary": "lerna publish --canary --yes",
     "publish:release": "lerna publish --yes",
     "test": "lerna run --parallel test"
@@ -62,6 +62,7 @@
     "postcss": "^8.4.14",
     "prettier": "^2.7.1",
     "prettier-plugin-tailwind": "^2.2.12",
+    "prettier-plugin-tailwindcss": "^0.1.13",
     "prettier-stylelint": "^0.4.2",
     "react": "18.2.0",
     "react-dom": "18.2.0",
