@@ -10,7 +10,7 @@
 }
 
 .editor-item:hover {
-  @apply outline-dashed outline-purple;
+  @apply outline-dashed outline-1 outline-purple;
 }
 
 .editor-item:focus {
@@ -25,15 +25,15 @@
 }
 
 .editor-item--hover-before:before {
-  @apply border-t border-[#1861d5];
+  @apply border-t border-purple;
 }
 
 .editor-item--hover-inner:before {
-  @apply border border-[#1861d5];
+  @apply border border-purple;
 }
 
 .editor-item--hover-after:before {
-  @apply border-b border-[#1861d5];
+  @apply border-b border-purple;
 }
 
 .editor-item--focus:before {
@@ -41,5 +41,5 @@
 }
 
 .editor-item--focus:after {
-  @apply content-[''] absolute top-0 left-0 w-full h-full border-[#1861d5] pointer-events-none;
+  @apply content-[''] absolute top-0 left-0 w-full h-full border-purple pointer-events-none;
 }

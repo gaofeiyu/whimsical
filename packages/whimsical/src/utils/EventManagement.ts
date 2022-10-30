@@ -1,4 +1,4 @@
-import { Subject } from 'rxjs';
+import { Subject, Subscription } from 'rxjs';
 
 export type EventSubjectType = Map<string, Subject<null>>;
 
@@ -43,15 +43,27 @@ export default class EventManagement {
     return this.eventStore.get(name);
   }
 
-  on(name, cb) {
-    if (!this.checkEventName(name)) return;
-    const eventItem = this.eventStore.get(name).subscribe({
-      next: (value) => {
-        cb(value);
-      },
+  on(name: string | string[], cb) {
+    const names = typeof name === 'string' ? [name] : name;
+    const eventsRemove: (Subscription | (() => null))[] = names.map((name) => {
+      if (!this.checkEventName(name)) return () => null;
+      return this.eventStore.get(name).subscribe({
+        next: (value) => {
+          cb({
+            type: name,
+            value,
+          });
+        },
+      });
     });
     return () => {
-      eventItem.unsubscribe();
+      eventsRemove.forEach((remove) => {
+        if (typeof remove === 'function') {
+          // 类型 "Subscription" 没有调用签名。
+          // eslint-disable-next-line @typescript-eslint/no-explicit-any
+          (remove as any)();
+        }
+      });
     };
   }
 }

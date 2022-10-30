@@ -29,7 +29,6 @@ const renderEditorElement = (treeNode: WTreeNode, renderLayerInfo: IRenderLayerT
           return item.value;
         });
       }
-      console.log(currentNode.id, style);
       const ItemResult = (
         <Base id={currentNode.id} key={currentNode.id} style={style}>
           {childrenNode}
@@ -46,7 +45,9 @@ const EditorLayer = observer((props: Props) => {
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: 'NODE_FRAGMENT',
     drop: (item: { nodeFragment: IWNode }, monitor) => {
-      if (!monitor.didDrop()) {
+      console.log('monitor.didDrop', monitor.didDrop());
+      if (monitor.didDrop()) {
+        console.log('monitor.didDrop');
         const wTreeNode = workbench.treeNode;
         wTreeNode.prepend(
           new WTreeNode({
@@ -83,6 +84,7 @@ const EditorLayer = observer((props: Props) => {
           workbench.treeNode,
           toJS(workbench.renderLayerInfo)
         );
+        console.log('trigger history ce', workbench.treeNode, treeNode[0].value);
         setWidgetResult(treeNode[0].value);
       }
     });

@@ -4,6 +4,7 @@ import Sandbox, { createSandbox } from './Sandbox';
 import { WorkbenchContext } from '../../pages/playground/context';
 import { collectionNodeSize } from './collectionNodeSize';
 import { IRenderLayerTree } from './renderLayer';
+import { EDITOR_EVENTS$ } from '../../editor-flow';
 
 export type CanvasRenderLayerProps = {
   children?: ReactElement | ReactElement[];
@@ -52,15 +53,28 @@ const CanvasRenderLayer = () => {
         LibInfo.setComponentsDeclare(lib?.editor?.libConfig?.componentsDeclare);
         LibInfo.setEngine(lib?.editor);
         libEngine.current = sandbox.contentWindow[workbench.LibInfo.name]?.engine || null;
-        resetRender(workbench.wNode, sandbox, libEngine.current).then(() => {
-          renderLayerCollection = collectionNodeSize(workbench.wNode, sandboxDocument);
-          console.log('renderLayerCollection', renderLayerCollection);
-          workbench.setRenderLayerInfo(renderLayerCollection);
-        });
+        EDITOR_EVENTS$.emit('renderLayer:ready');
         setReady(true);
       });
     }
   }, [renderSandbox, ready]);
+
+  useEffect(() => {
+    if (!EDITOR_EVENTS$) return;
+    const eventRemove = EDITOR_EVENTS$.on(['node:prepend', 'renderLayer:ready'], (e) => {
+      console.log(e.type);
+      const sandbox = renderSandbox.current;
+      const sandboxDocument = sandbox?.contentDocument;
+      resetRender(workbench.wNode, sandbox, libEngine.current).then(() => {
+        renderLayerCollection = collectionNodeSize(workbench.wNode, sandboxDocument);
+        console.log('renderLayerCollection', renderLayerCollection);
+        workbench.setRenderLayerInfo(renderLayerCollection);
+      });
+    });
+    return () => {
+      eventRemove();
+    };
+  });
 
   return <Sandbox ref={renderSandbox} />;
 };

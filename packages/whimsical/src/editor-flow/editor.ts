@@ -9,6 +9,7 @@ EDITOR_EVENTS$.createEvent('triggerButton1');
 EDITOR_EVENTS$.createEvent('triggerButton2');
 EDITOR_EVENTS$.createEvent('triggerStateChange');
 EDITOR_EVENTS$.createEvent('node:prepend');
+EDITOR_EVENTS$.createEvent('renderLayer:ready');
 
 type EditorStateType = {
   key: number;

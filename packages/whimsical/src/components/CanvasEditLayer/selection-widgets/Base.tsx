@@ -70,7 +70,6 @@ const Base = (props: Props) => {
           const hoverClientY = clientOffset.y - hoverBoundingRect.top;
           const newInsertMode =
             hoverClientY < hotAreaTop ? 'BEFORE' : hoverClientY < hotAreaBottom ? 'INNER' : 'AFTER';
-          console.log(newInsertMode, insertMode, hoverClientY, hotAreaTop, hotAreaBottom);
           if (newInsertMode !== insertMode) {
             setInsertMode(newInsertMode);
           }
