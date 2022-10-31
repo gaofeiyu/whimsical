@@ -20,9 +20,15 @@ const resetRender = (wNode: IWNode, sandbox: HTMLIFrameElement, libEngine) => {
       const renderRoot = sandboxDocument.createElement('div');
       renderRoot.id = 'renderRoot';
       libEngine.render(wNode, renderRoot, () => {
+        const renderRootEle = sandboxDocument.getElementById('renderRoot');
+        if (renderRootEle) {
+          renderRootEle.remove();
+        }
         sandboxBody.prepend(renderRoot);
-        console.log('render after');
-        resolve(renderRoot);
+        console.log('render after', renderRoot);
+        setTimeout(() => {
+          resolve(renderRoot);
+        }, 0);
       });
     });
   } else {
@@ -74,7 +80,7 @@ const CanvasRenderLayer = () => {
     return () => {
       eventRemove();
     };
-  });
+  }, []);
 
   return <Sandbox ref={renderSandbox} />;
 };

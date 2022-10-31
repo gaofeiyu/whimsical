@@ -1,6 +1,3 @@
-@tailwind utilities;
-@tailwind variants;
-
 .editor-layer {
   @apply absolute top-0 left-0 w-full h-full;
 }
@@ -15,9 +12,6 @@
 
 .editor-item:focus {
   background: #fff;
-}
-
-@variants before {
 }
 
 .editor-item--hover:before {

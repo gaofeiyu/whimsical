@@ -1,15 +1,18 @@
 import { CSSProperties, ReactElement, useMemo, useRef, useState } from 'react';
 import { IWNode } from 'whimsical-shared';
 import { useDrop } from 'react-dnd';
-import { IRenderLayerItemRect } from 'src/components/CanvasRenderLayer/renderLayer';
+import { IRenderLayerItemRect } from '../../../components/CanvasRenderLayer/renderLayer';
+import WTreeNode from '../../../core/WNode';
+import uuid from '../../../utils/uuid';
 
 type DropPositionDirectionType = 'BEFORE' | 'INNER' | 'AFTER';
 
-type DropItemType = { node: IWNode; path: string };
+type DropItemType = { nodeFragment: IWNode };
 
 type Props = {
   id: string;
   style: IRenderLayerItemRect;
+  node: WTreeNode;
   children?: ReactElement | ReactElement[];
 };
 
@@ -49,7 +52,7 @@ const getHotArea = (height) => {
 };
 
 const Base = (props: Props) => {
-  const { children, id, style } = props;
+  const { children, id, style, node } = props;
   const itemRef = useRef<HTMLDivElement>(null);
   const [insertMode, setInsertMode] = useState<DropPositionDirectionType>('AFTER');
 
@@ -75,9 +78,15 @@ const Base = (props: Props) => {
           }
         }
       },
-      drop: (item, monitor) => {
+      drop: (item: DropItemType, monitor) => {
         if (!monitor.didDrop()) {
-          console.log('onAddNode', item);
+          node.prepend(
+            new WTreeNode({
+              ...item.nodeFragment,
+              id: uuid(),
+            })
+          );
+          console.log(node);
         }
       },
       collect: (monitor) => {

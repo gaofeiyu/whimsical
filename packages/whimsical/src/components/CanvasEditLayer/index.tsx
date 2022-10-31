@@ -30,7 +30,7 @@ const renderEditorElement = (treeNode: WTreeNode, renderLayerInfo: IRenderLayerT
         });
       }
       const ItemResult = (
-        <Base id={currentNode.id} key={currentNode.id} style={style}>
+        <Base id={currentNode.id} key={currentNode.id} node={currentNode} style={style}>
           {childrenNode}
         </Base>
       );
@@ -46,22 +46,6 @@ const EditorLayer = observer((props: Props) => {
     accept: 'NODE_FRAGMENT',
     drop: (item: { nodeFragment: IWNode }, monitor) => {
       console.log('monitor.didDrop', monitor.didDrop());
-      if (monitor.didDrop()) {
-        console.log('monitor.didDrop');
-        const wTreeNode = workbench.treeNode;
-        wTreeNode.prepend(
-          new WTreeNode({
-            ...item.nodeFragment,
-            id: uuid(),
-          })
-        );
-        const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(
-          wTreeNode,
-          toJS(workbench.renderLayerInfo)
-        );
-
-        setWidgetResult(treeNode[0].value);
-      }
     },
     collect: (monitor) => ({
       isOver: monitor.isOver(),
@@ -70,6 +54,7 @@ const EditorLayer = observer((props: Props) => {
   }));
 
   useEffect(() => {
+    console.log('trigger rerender editor layer');
     if (workbench.treeNode) {
       const treeNode: IErgodicNode<ReactElement>[] = renderEditorElement(
         workbench.treeNode,
