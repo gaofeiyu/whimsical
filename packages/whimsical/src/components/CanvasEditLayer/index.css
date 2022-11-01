@@ -10,8 +10,12 @@
   @apply outline-dashed outline-1 outline-purple;
 }
 
-.editor-item:focus {
-  background: #fff;
+.editor-item--focus {
+  @apply outline outline-1 outline-purple bg-purple/20;
+}
+
+.editor-item--focus:hover {
+  @apply outline;
 }
 
 .editor-item--hover:before {

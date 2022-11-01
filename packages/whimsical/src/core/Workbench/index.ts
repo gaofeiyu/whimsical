@@ -23,6 +23,8 @@ class Workbench {
 
   renderLayerInfo: IRenderLayerTree;
 
+  selection: WTreeNode;
+
   constructor(props: IWorkbenchProps) {
     const { treeNode, wNode, History, LibInfo } = props;
     this.treeNode = treeNode;
@@ -32,12 +34,18 @@ class Workbench {
 
     makeObservable<Workbench, string>(this, {
       renderLayerInfo: observable,
+      selection: observable.shallow,
       setRenderLayerInfo: action,
+      setSelection: action,
     });
   }
 
   setRenderLayerInfo(value: IRenderLayerTree) {
     this.renderLayerInfo = value;
+  }
+
+  setSelection(value: WTreeNode) {
+    this.selection = value;
   }
 }
 

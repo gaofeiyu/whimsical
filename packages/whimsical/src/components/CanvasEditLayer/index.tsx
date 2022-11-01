@@ -1,7 +1,6 @@
 import { ReactElement, useContext, useEffect, useState } from 'react';
 import { useDrop } from 'react-dnd';
 import WTreeNode from '../../core/WNode';
-import uuid from '../../utils/uuid';
 import { WorkbenchContext } from '../../pages/playground/context';
 import { IWNode, ergodicNode, IErgodicNode } from 'whimsical-shared';
 import { EDITOR_EVENTS$ } from '../../editor-flow';

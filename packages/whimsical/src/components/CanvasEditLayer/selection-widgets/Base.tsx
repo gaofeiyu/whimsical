@@ -1,9 +1,19 @@
-import { CSSProperties, ReactElement, useMemo, useRef, useState } from 'react';
+import {
+  CSSProperties,
+  ReactElement,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState,
+} from 'react';
 import { IWNode } from 'whimsical-shared';
-import { useDrop } from 'react-dnd';
+import { useDrag, useDrop } from 'react-dnd';
 import { IRenderLayerItemRect } from '../../../components/CanvasRenderLayer/renderLayer';
 import WTreeNode from '../../../core/WNode';
 import uuid from '../../../utils/uuid';
+import { useWorkbench } from 'src/hooks/useWorkbench';
+import { observer } from 'mobx-react-lite';
 
 type DropPositionDirectionType = 'BEFORE' | 'INNER' | 'AFTER';
 
@@ -51,10 +61,28 @@ const getHotArea = (height) => {
   return [Math.round(height * HOT_AREA_RATIO), Math.round(height * (1 - HOT_AREA_RATIO))];
 };
 
-const Base = (props: Props) => {
+const Base = observer((props: Props) => {
   const { children, id, style, node } = props;
   const itemRef = useRef<HTMLDivElement>(null);
   const [insertMode, setInsertMode] = useState<DropPositionDirectionType>('AFTER');
+  const workbench = useWorkbench();
+
+  // 自己被拖拽
+  const [{}, dragRef] = useDrag(() => {
+    return {
+      type: 'NODE_FRAGMENT',
+      item: {
+        nodeFragment: node,
+      },
+      previewOptions: {
+        offsetX: 0,
+        offsetY: 0,
+      },
+      collect: (monitor) => ({
+        isDragging: monitor.isDragging(),
+      }),
+    };
+  }, [node]);
 
   const [{ isOver, canDrop }, drop] = useDrop(
     () => ({
@@ -100,7 +128,15 @@ const Base = (props: Props) => {
   );
   drop(itemRef);
 
-  const className = useMemo(() => {
+  const onSelectionChange = useCallback(
+    (e) => {
+      e.stopPropagation();
+      workbench.setSelection(node);
+    },
+    [workbench]
+  );
+
+  const dropClassName = useMemo(() => {
     return calcClassName({
       canDrop,
       isOver,
@@ -108,11 +144,27 @@ const Base = (props: Props) => {
     });
   }, [canDrop, isOver, insertMode]);
 
+  const className = useMemo(() => {
+    const focusName = workbench.selection === node ? 'editor-item--focus' : '';
+    return `${dropClassName} ${focusName}`;
+  }, [workbench.selection]);
+
+  // 绑定拖拽元素
+  useEffect(() => {
+    dragRef(itemRef);
+  }, [dragRef, itemRef]);
+
   return (
-    <div ref={itemRef} id={id} style={style as CSSProperties} className={className}>
+    <div
+      ref={itemRef}
+      id={id}
+      style={style as CSSProperties}
+      className={className}
+      onClick={onSelectionChange}
+    >
       {children}
     </div>
   );
-};
+});
 
 export default Base;

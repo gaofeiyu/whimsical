@@ -15,7 +15,10 @@
     "downlevelIteration": true,
     "emitDeclarationOnly": true,
     "declarationDir": "dist/types",
-    "baseUrl": "."
+    "baseUrl": ".",
+    "path": {
+      "src": "./src"
+    }
   },
   "include": ["src"],
   "exclude": ["node_modules", "dist"],
