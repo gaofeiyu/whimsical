@@ -33,6 +33,7 @@ class Workbench {
     this.LibInfo = LibInfo;
 
     makeObservable<Workbench, string>(this, {
+      wNode: observable.shallow,
       renderLayerInfo: observable,
       selection: observable.shallow,
       setRenderLayerInfo: action,
@@ -46,6 +47,10 @@ class Workbench {
 
   setSelection(value: WTreeNode) {
     this.selection = value;
+  }
+
+  setWNode(value: IWNode) {
+    this.wNode = value;
   }
 }
 

@@ -71,9 +71,11 @@ const CanvasRenderLayer = () => {
       console.log(e.type);
       const sandbox = renderSandbox.current;
       const sandboxDocument = sandbox?.contentDocument;
-      resetRender(workbench.wNode, sandbox, libEngine.current).then(() => {
-        renderLayerCollection = collectionNodeSize(workbench.wNode, sandboxDocument);
+      const wNode = workbench.treeNode.serialize();
+      resetRender(wNode, sandbox, libEngine.current).then(() => {
+        renderLayerCollection = collectionNodeSize(wNode, sandboxDocument);
         console.log('renderLayerCollection', renderLayerCollection);
+        workbench.setWNode(wNode);
         workbench.setRenderLayerInfo(renderLayerCollection);
       });
     });

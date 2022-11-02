@@ -68,16 +68,26 @@ export const wNodeMock: IWNode = {
               props: {},
               children: [
                 {
-                  id: 'uae47df2fmb',
+                  id: 'uae47df2fmb1',
                   name: 'Text',
                   style: {
                     color: '#FF7F57',
                     position: 'relative',
                   },
                   props: {
-                    content: 'Whimsical Test',
+                    content: 'Whimsical Test1',
                   },
-                  children: [],
+                },
+                {
+                  id: 'uae47df2fmb2',
+                  name: 'Text',
+                  style: {
+                    color: '#FF7F57',
+                    position: 'relative',
+                  },
+                  props: {
+                    content: 'Whimsical Test2',
+                  },
                 },
               ],
             },

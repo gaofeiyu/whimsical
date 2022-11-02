@@ -1,6 +1,6 @@
 import WTreeNode from '.';
 
-const removeNode = (node: WTreeNode) => {
+export const removeNode = (node: WTreeNode) => {
   if (node.parent) {
     node.parent.children = node.parent.children.filter((child) => child !== node);
   }
@@ -29,7 +29,12 @@ export const resetNodesParent = (
 ) => {
   return nodes.map((node) => {
     if (node === parent) return node;
-    deepReset(node, parent, WTreeNodeCache);
+    if (!node.isRoot && node.isInOperation) {
+      removeNode(node);
+      shallowReset(node, parent);
+    } else {
+      deepReset(node, parent, WTreeNodeCache);
+    }
     if (!WTreeNodeCache.has(node.id)) {
       WTreeNodeCache.set(node.id, node);
     }

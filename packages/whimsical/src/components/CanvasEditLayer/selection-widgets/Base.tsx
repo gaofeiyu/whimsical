@@ -68,7 +68,7 @@ const Base = observer((props: Props) => {
   const workbench = useWorkbench();
 
   // 自己被拖拽
-  const [{}, dragRef] = useDrag(() => {
+  const [collected, drag, dragPreview] = useDrag(() => {
     return {
       type: 'NODE_FRAGMENT',
       item: {
@@ -91,6 +91,7 @@ const Base = observer((props: Props) => {
       // 拖拽内容进过该组件区域
       hover: (item: DropItemType, monitor) => {
         if (!itemRef.current) return;
+        if (item.nodeFragment.id === node.id) return;
         if (monitor.isOver({ shallow: true })) {
           const hoverBoundingRect = itemRef.current?.getBoundingClientRect();
           // 确定当前模块元素1/4的高度用来做热区计算
@@ -107,14 +108,16 @@ const Base = observer((props: Props) => {
         }
       },
       drop: (item: DropItemType, monitor) => {
+        if (item.nodeFragment.id === node.id) return;
         if (!monitor.didDrop()) {
-          node.prepend(
-            new WTreeNode({
-              ...item.nodeFragment,
-              id: uuid(),
-            })
-          );
-          console.log(node);
+          const newChild =
+            item.nodeFragment instanceof WTreeNode
+              ? item.nodeFragment
+              : new WTreeNode({
+                  ...item.nodeFragment,
+                  id: uuid(),
+                });
+          node.prepend(newChild);
         }
       },
       collect: (monitor) => {
@@ -126,7 +129,6 @@ const Base = observer((props: Props) => {
     }),
     [insertMode]
   );
-  drop(itemRef);
 
   const onSelectionChange = useCallback(
     (e) => {
@@ -147,20 +149,30 @@ const Base = observer((props: Props) => {
   const className = useMemo(() => {
     const focusName = workbench.selection === node ? 'editor-item--focus' : '';
     return `${dropClassName} ${focusName}`;
-  }, [workbench.selection]);
+  }, [workbench.selection, dropClassName]);
+
+  useEffect(() => {
+    drop(itemRef);
+  }, []);
 
   // 绑定拖拽元素
   useEffect(() => {
-    dragRef(itemRef);
-  }, [dragRef, itemRef]);
+    if (collected.isDragging) {
+      dragPreview(itemRef);
+    } else {
+      drag(itemRef);
+    }
+    node.isInOperation = collected.isDragging;
+  }, [collected.isDragging]);
 
   return (
     <div
       ref={itemRef}
       id={id}
+      data-component-name={node.name}
       style={style as CSSProperties}
       className={className}
-      onClick={onSelectionChange}
+      onMouseDown={onSelectionChange}
     >
       {children}
     </div>

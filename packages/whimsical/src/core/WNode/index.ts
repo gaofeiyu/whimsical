@@ -1,7 +1,7 @@
 import { observable, makeObservable, action, toJS } from 'mobx';
 import { isArray, IWNode } from 'whimsical-shared';
 import uuid from '../../utils/uuid';
-import { resetNodesParent } from './resetNodesParent';
+import { resetNodesParent, removeNode } from './resetNodesParent';
 import { EDITOR_EVENTS$ } from '../../editor-flow';
 
 const WTreeNodeCache = new Map<string, WTreeNode>();
@@ -19,6 +19,8 @@ class WTreeNode implements IWNode {
   props: Record<string | number | symbol, unknown>;
 
   children: WTreeNode[] = [];
+
+  isInOperation = false;
 
   constructor(node: IWNode, parent?: WTreeNode) {
     if (node instanceof WTreeNode) {
@@ -151,6 +153,11 @@ class WTreeNode implements IWNode {
     if (!newNodes.length) return [];
     this.children = newNodes.concat(this.children);
     return newNodes;
+  }
+
+  remove() {
+    removeNode(this);
+    WTreeNodeCache.delete(this.id);
   }
 
   findNode(node: IWNode): WTreeNode;
