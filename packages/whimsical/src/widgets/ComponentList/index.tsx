@@ -1,7 +1,7 @@
 import { observer } from 'mobx-react-lite';
 import { memo, useContext, useMemo } from 'react';
 import { IComponentDeclare, IWNode } from 'whimsical-shared';
-import { WorkbenchContext } from '../../pages/playground/context';
+import { WorkbenchContext } from 'src/pages/playground/context';
 import ComponentListItem from './Item';
 
 type convertDeclareToNodeProps = { declare: IComponentDeclare; id?: string };

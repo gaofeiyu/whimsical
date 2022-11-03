@@ -1,10 +1,10 @@
 import { ReactElement, useEffect, useState, useContext, useRef } from 'react';
 import { IWNode, loadStatic } from 'whimsical-shared';
 import Sandbox, { createSandbox } from './Sandbox';
-import { WorkbenchContext } from '../../pages/playground/context';
+import { WorkbenchContext } from 'src/pages/playground/context';
 import { collectionNodeSize } from './collectionNodeSize';
 import { IRenderLayerTree } from './renderLayer';
-import { EDITOR_EVENTS$ } from '../../editor-flow';
+import { EDITOR_EVENTS$ } from 'src/editor-flow';
 
 export type CanvasRenderLayerProps = {
   children?: ReactElement | ReactElement[];

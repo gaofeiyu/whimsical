@@ -16,8 +16,8 @@
     "emitDeclarationOnly": true,
     "declarationDir": "dist/types",
     "baseUrl": ".",
-    "path": {
-      "src": "./src"
+    "paths": {
+      "src": ["./src"]
     }
   },
   "include": ["src"],

@@ -1,8 +1,8 @@
 import { Button } from 'antd';
 import { observer } from 'mobx-react-lite';
 import React, { useCallback, useContext } from 'react';
-import { WorkbenchContext } from '../../pages/playground/context';
-import { EDITOR_EVENTS$, PageDSLState } from '../../editor-flow';
+import { WorkbenchContext } from 'src/pages/playground/context';
+import { EDITOR_EVENTS$, PageDSLState } from 'src/editor-flow';
 
 export type EventManagerProps = {
   children?: React.ReactElement | React.ReactElement[];

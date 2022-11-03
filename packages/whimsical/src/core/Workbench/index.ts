@@ -1,7 +1,7 @@
 import { action, makeObservable, observable } from 'mobx';
 import { IWNode } from 'whimsical-shared';
-import { IRenderLayerTree } from '../../components/CanvasRenderLayer/renderLayer';
-import HistoryRecorder from '../../utils/HistoryRecorder';
+import { IRenderLayerTree } from 'src/components/CanvasRenderLayer/renderLayer';
+import HistoryRecorder from 'src/utils/HistoryRecorder';
 import LibManager from '../LibManager';
 import WTreeNode from '../WNode';
 

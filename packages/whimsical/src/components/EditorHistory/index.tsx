@@ -1,5 +1,5 @@
-import { useHistory } from '../../utils/HistoryRecorder';
-import { EditorHistory as EditorHistoryRecorder } from '../../editor-flow';
+import { useHistory } from 'src/utils/HistoryRecorder';
+import { EditorHistory as EditorHistoryRecorder } from 'src/editor-flow';
 import { Button } from 'antd';
 import { useCallback } from 'react';
 

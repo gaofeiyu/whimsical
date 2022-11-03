@@ -1,4 +1,4 @@
-import logo from '../../assets/logo.svg';
+import logo from 'src/assets/logo.svg';
 const Header = () => {
   return (
     <div className="flex items-center w-screen h-10 text-lg font-bold border-b">

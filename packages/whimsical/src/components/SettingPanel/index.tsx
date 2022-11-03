@@ -1,5 +1,5 @@
-import EventManager from '../../laboratory/EventManager';
-import StoreManager from '../../laboratory/StoreManager';
+import EventManager from 'src/laboratory/EventManager';
+import StoreManager from 'src/laboratory/StoreManager';
 import Panel from '../Panel';
 
 const SettingPanel = () => {

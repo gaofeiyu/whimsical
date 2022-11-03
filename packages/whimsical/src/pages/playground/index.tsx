@@ -1,18 +1,18 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import CanvasPanel from '../../components/CanvasPanel';
-import Content from '../../components/Content';
-import Header from '../../components/Header';
-import Layout from '../../components/Layout';
-import SettingPanel from '../../components/SettingPanel';
-import Sidebar from '../../components/Sidebar';
+import CanvasPanel from 'src/components/CanvasPanel';
+import Content from 'src/components/Content';
+import Header from 'src/components/Header';
+import Layout from 'src/components/Layout';
+import SettingPanel from 'src/components/SettingPanel';
+import Sidebar from 'src/components/Sidebar';
 import { WorkbenchContext } from './context';
-import WTreeNode from '../../core/WNode';
-import { wNodeMock, componentInfoMock } from '../../mock/wNode';
-import { EditorHistory } from '../../editor-flow';
-import Workbench, { IWorkbenchProps } from '../../core/Workbench';
-import LibManager from '../../core/LibManager';
+import WTreeNode from 'src/core/WNode';
+import { wNodeMock, componentInfoMock } from 'src/mock/wNode';
+import { EditorHistory } from 'src/editor-flow';
+import Workbench, { IWorkbenchProps } from 'src/core/Workbench';
+import LibManager from 'src/core/LibManager';
 import { loadStatic } from 'whimsical-shared';
 
 const Playground = () => {

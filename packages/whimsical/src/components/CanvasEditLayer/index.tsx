@@ -1,9 +1,9 @@
 import { ReactElement, useContext, useEffect, useState } from 'react';
 import { useDrop } from 'react-dnd';
-import WTreeNode from '../../core/WNode';
-import { WorkbenchContext } from '../../pages/playground/context';
+import WTreeNode from 'src/core/WNode';
+import { WorkbenchContext } from 'src/pages/playground/context';
 import { IWNode, ergodicNode, IErgodicNode } from 'whimsical-shared';
-import { EDITOR_EVENTS$ } from '../../editor-flow';
+import { EDITOR_EVENTS$ } from 'src/editor-flow';
 import Base from './selection-widgets/Base';
 import { IRenderLayerTree } from '../CanvasRenderLayer/renderLayer';
 import { observer } from 'mobx-react-lite';
@@ -40,6 +40,7 @@ const renderEditorElement = (treeNode: WTreeNode, renderLayerInfo: IRenderLayerT
 
 const EditorLayer = observer((props: Props) => {
   const workbench = useContext(WorkbenchContext);
+  if (!workbench.LibInfo) return null;
   const [WidgetResult, setWidgetResult] = useState(null);
   const [{ canDrop, isOver }, drop] = useDrop(() => ({
     accept: 'NODE_FRAGMENT',

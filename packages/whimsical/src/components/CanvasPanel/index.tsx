@@ -3,7 +3,7 @@ import { observer } from 'mobx-react-lite';
 import CanvasEditLayer from '../CanvasEditLayer';
 import CanvasRenderLayer from '../CanvasRenderLayer';
 import CanvasToolbar from '../CanvasToolbar';
-import { EDITOR_EVENTS$, EditorState } from '../../editor-flow';
+import { EDITOR_EVENTS$, EditorState } from 'src/editor-flow';
 
 export type CanvasPanelProps = {
   children?: React.ReactElement | React.ReactElement[];

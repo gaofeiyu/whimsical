@@ -8,9 +8,9 @@ import {
 } from '@ant-design/icons';
 import Panel from '../Panel';
 import { useEffect, useState } from 'react';
-import { EDITOR_EVENTS$ } from '../../editor-flow';
+import { EDITOR_EVENTS$ } from 'src/editor-flow';
 import EditorHistory from '../EditorHistory';
-import ComponentList from '../../widgets/ComponentList';
+import ComponentList from 'src/widgets/ComponentList';
 
 type MenuItem = Required<MenuProps>['items'][number];
 

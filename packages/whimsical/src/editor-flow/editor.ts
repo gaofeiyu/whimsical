@@ -1,5 +1,5 @@
 import StateManagement from '../utils/StateManagement';
-import EventManagement from '../../src/utils/EventManagement';
+import EventManagement from 'src/utils/EventManagement';
 import HistoryRecorder from '../utils/HistoryRecorder';
 import WTreeNode from '../core/WNode';
 

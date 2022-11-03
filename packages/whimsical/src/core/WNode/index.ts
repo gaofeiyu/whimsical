@@ -1,8 +1,8 @@
 import { observable, makeObservable, action, toJS } from 'mobx';
 import { isArray, IWNode } from 'whimsical-shared';
-import uuid from '../../utils/uuid';
+import uuid from 'src/utils/uuid';
 import { resetNodesParent, removeNode } from './resetNodesParent';
-import { EDITOR_EVENTS$ } from '../../editor-flow';
+import { EDITOR_EVENTS$ } from 'src/editor-flow';
 
 const WTreeNodeCache = new Map<string, WTreeNode>();
 class WTreeNode implements IWNode {

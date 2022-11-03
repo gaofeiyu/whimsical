@@ -1,6 +1,6 @@
 import { Button } from 'antd';
 import React, { useCallback, useState } from 'react';
-import { EditorState, EDITOR_EVENTS$ } from '../../editor-flow';
+import { EditorState, EDITOR_EVENTS$ } from 'src/editor-flow';
 
 export type StoreManagerProps = {
   children?: React.ReactElement | React.ReactElement[];

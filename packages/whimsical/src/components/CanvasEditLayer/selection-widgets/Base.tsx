@@ -7,13 +7,14 @@ import {
   useRef,
   useState,
 } from 'react';
-import { IWNode } from 'whimsical-shared';
+import { IComponentDeclare, IWNode } from 'whimsical-shared';
 import { useDrag, useDrop } from 'react-dnd';
-import { IRenderLayerItemRect } from '../../../components/CanvasRenderLayer/renderLayer';
-import WTreeNode from '../../../core/WNode';
-import uuid from '../../../utils/uuid';
+import { IRenderLayerItemRect } from 'src/components/CanvasRenderLayer/renderLayer';
+import WTreeNode from 'src/core/WNode';
+import uuid from 'src/utils/uuid';
 import { useWorkbench } from 'src/hooks/useWorkbench';
 import { observer } from 'mobx-react-lite';
+import { useComponentDeclare } from 'src/hooks';
 
 type DropPositionDirectionType = 'BEFORE' | 'INNER' | 'AFTER';
 
@@ -55,10 +56,11 @@ const calcClassName = (props: CalcClassNameProps): string => {
   return className.join(' ');
 };
 
-const HOT_AREA_RATIO = 0.25;
+const CONTAINER_HOT_AREA_RATIO = 0.25;
+const HOT_AREA_RATIO = 0.5;
 
-const getHotArea = (height) => {
-  return [Math.round(height * HOT_AREA_RATIO), Math.round(height * (1 - HOT_AREA_RATIO))];
+const getHotArea = (height, ratio) => {
+  return [Math.round(height * ratio), Math.round(height * (1 - ratio))];
 };
 
 const Base = observer((props: Props) => {
@@ -66,6 +68,9 @@ const Base = observer((props: Props) => {
   const itemRef = useRef<HTMLDivElement>(null);
   const [insertMode, setInsertMode] = useState<DropPositionDirectionType>('AFTER');
   const workbench = useWorkbench();
+  const componentDeclare: IComponentDeclare = useComponentDeclare(node.name);
+  const hotAreaRatio =
+    componentDeclare.isContainer === false ? HOT_AREA_RATIO : CONTAINER_HOT_AREA_RATIO;
 
   // 自己被拖拽
   const [collected, drag, dragPreview] = useDrag(() => {
@@ -96,7 +101,8 @@ const Base = observer((props: Props) => {
           const hoverBoundingRect = itemRef.current?.getBoundingClientRect();
           // 确定当前模块元素1/4的高度用来做热区计算
           const [hotAreaTop, hotAreaBottom] = getHotArea(
-            hoverBoundingRect.bottom - hoverBoundingRect.top
+            hoverBoundingRect.bottom - hoverBoundingRect.top,
+            hotAreaRatio
           );
           const clientOffset = monitor.getClientOffset();
           const hoverClientY = clientOffset.y - hoverBoundingRect.top;
