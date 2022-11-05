@@ -135,29 +135,53 @@ class WTreeNode implements IWNode {
     if (nodes.some((node) => node.contains(this))) return [];
     const newNodes = this.resetNodesParent(nodes, this);
     if (!newNodes.length) return [];
-    this.children = newNodes.concat(this.children);
+    this.children = this.children.concat(newNodes);
+    EDITOR_EVENTS$.emit('node:append');
     return newNodes;
   }
 
   insertAfter(...nodes: WTreeNode[]) {
+    const parent = this.parent;
     if (nodes.some((node) => node.contains(this))) return [];
-    const newNodes = this.resetNodesParent(nodes, this);
-    if (!newNodes.length) return [];
-    this.children = newNodes.concat(this.children);
-    return newNodes;
+    if (parent?.children?.length) {
+      const newNodes = this.resetNodesParent(nodes, parent);
+      if (!newNodes.length) return [];
+      parent.children = parent.children.reduce((buf, node) => {
+        if (node === this) {
+          return buf.concat([node]).concat(newNodes);
+        } else {
+          return buf.concat([node]);
+        }
+      }, []);
+      EDITOR_EVENTS$.emit('node:insertAfter');
+      return newNodes;
+    }
+    return [];
   }
 
   insertBefore(...nodes: WTreeNode[]) {
+    const parent = this.parent;
     if (nodes.some((node) => node.contains(this))) return [];
-    const newNodes = this.resetNodesParent(nodes, this);
-    if (!newNodes.length) return [];
-    this.children = newNodes.concat(this.children);
-    return newNodes;
+    if (parent?.children?.length) {
+      const newNodes = this.resetNodesParent(nodes, parent);
+      if (!newNodes.length) return [];
+      parent.children = parent.children.reduce((buf, node) => {
+        if (node === this) {
+          return buf.concat(newNodes).concat([node]);
+        } else {
+          return buf.concat([node]);
+        }
+      }, []);
+      EDITOR_EVENTS$.emit('node:insertBefore');
+      return newNodes;
+    }
+    return [];
   }
 
   remove() {
     removeNode(this);
     WTreeNodeCache.delete(this.id);
+    EDITOR_EVENTS$.emit('node:remove');
   }
 
   findNode(node: IWNode): WTreeNode;

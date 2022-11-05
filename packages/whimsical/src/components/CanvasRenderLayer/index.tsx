@@ -67,18 +67,28 @@ const CanvasRenderLayer = () => {
 
   useEffect(() => {
     if (!EDITOR_EVENTS$) return;
-    const eventRemove = EDITOR_EVENTS$.on(['node:prepend', 'renderLayer:ready'], (e) => {
-      console.log(e.type);
-      const sandbox = renderSandbox.current;
-      const sandboxDocument = sandbox?.contentDocument;
-      const wNode = workbench.treeNode.serialize();
-      resetRender(wNode, sandbox, libEngine.current).then(() => {
-        renderLayerCollection = collectionNodeSize(wNode, sandboxDocument);
-        console.log('renderLayerCollection', renderLayerCollection);
-        workbench.setWNode(wNode);
-        workbench.setRenderLayerInfo(renderLayerCollection);
-      });
-    });
+    const eventRemove = EDITOR_EVENTS$.on(
+      [
+        'node:prepend',
+        'node:append',
+        'node:insertAfter',
+        'node:insertBefore',
+        'node:remove',
+        'renderLayer:ready',
+      ],
+      (e) => {
+        const sandbox = renderSandbox.current;
+        const sandboxDocument = sandbox?.contentDocument;
+        const wNode = workbench.treeNode.serialize();
+        console.log('new wNode ready to render', e.type, wNode);
+        resetRender(wNode, sandbox, libEngine.current).then(() => {
+          renderLayerCollection = collectionNodeSize(wNode, sandboxDocument);
+          console.log('renderLayerCollection', renderLayerCollection);
+          workbench.setWNode(wNode);
+          workbench.setRenderLayerInfo(renderLayerCollection);
+        });
+      }
+    );
     return () => {
       eventRemove();
     };

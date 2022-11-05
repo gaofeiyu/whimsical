@@ -18,6 +18,12 @@ import { useComponentDeclare } from 'src/hooks';
 
 type DropPositionDirectionType = 'BEFORE' | 'INNER' | 'AFTER';
 
+enum DROP_POSITION_DIRECTION {
+  BEFORE = 'BEFORE',
+  INNER = 'INNER',
+  AFTER = 'AFTER',
+}
+
 type DropItemType = { nodeFragment: IWNode };
 
 type Props = {
@@ -30,7 +36,7 @@ type Props = {
 type CalcClassNameProps = {
   canDrop: boolean;
   isOver: boolean;
-  insertMode: DropPositionDirectionType;
+  insertMode: DROP_POSITION_DIRECTION;
   isFocus?: boolean;
 };
 
@@ -66,7 +72,9 @@ const getHotArea = (height, ratio) => {
 const Base = observer((props: Props) => {
   const { children, id, style, node } = props;
   const itemRef = useRef<HTMLDivElement>(null);
-  const [insertMode, setInsertMode] = useState<DropPositionDirectionType>('AFTER');
+  const [insertMode, setInsertMode] = useState<DROP_POSITION_DIRECTION>(
+    DROP_POSITION_DIRECTION.AFTER
+  );
   const workbench = useWorkbench();
   const componentDeclare: IComponentDeclare = useComponentDeclare(node.name);
   const hotAreaRatio =
@@ -107,7 +115,11 @@ const Base = observer((props: Props) => {
           const clientOffset = monitor.getClientOffset();
           const hoverClientY = clientOffset.y - hoverBoundingRect.top;
           const newInsertMode =
-            hoverClientY < hotAreaTop ? 'BEFORE' : hoverClientY < hotAreaBottom ? 'INNER' : 'AFTER';
+            hoverClientY < hotAreaTop
+              ? DROP_POSITION_DIRECTION.BEFORE
+              : hoverClientY < hotAreaBottom
+              ? DROP_POSITION_DIRECTION.INNER
+              : DROP_POSITION_DIRECTION.AFTER;
           if (newInsertMode !== insertMode) {
             setInsertMode(newInsertMode);
           }
@@ -123,7 +135,23 @@ const Base = observer((props: Props) => {
                   ...item.nodeFragment,
                   id: uuid(),
                 });
-          node.prepend(newChild);
+          console.log('drop', node.name, 'new noode id', newChild.id, insertMode);
+          switch (insertMode) {
+            case DROP_POSITION_DIRECTION.BEFORE:
+              node.insertBefore(newChild);
+              break;
+
+            case DROP_POSITION_DIRECTION.AFTER:
+              node.insertAfter(newChild);
+              break;
+
+            case DROP_POSITION_DIRECTION.INNER:
+              node.append(newChild);
+              break;
+
+            default:
+            // no default
+          }
         }
       },
       collect: (monitor) => {

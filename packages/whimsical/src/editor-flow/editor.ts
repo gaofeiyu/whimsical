@@ -8,8 +8,14 @@ export const EDITOR_EVENTS$ = new EventManagement();
 EDITOR_EVENTS$.createEvent('triggerButton1');
 EDITOR_EVENTS$.createEvent('triggerButton2');
 EDITOR_EVENTS$.createEvent('triggerStateChange');
-EDITOR_EVENTS$.createEvent('node:prepend');
 EDITOR_EVENTS$.createEvent('renderLayer:ready');
+
+// node event
+EDITOR_EVENTS$.createEvent('node:prepend');
+EDITOR_EVENTS$.createEvent('node:append');
+EDITOR_EVENTS$.createEvent('node:insertAfter');
+EDITOR_EVENTS$.createEvent('node:insertBefore');
+EDITOR_EVENTS$.createEvent('node:remove');
 
 type EditorStateType = {
   key: number;
