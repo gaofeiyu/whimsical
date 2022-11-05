@@ -32,6 +32,7 @@ const resetRender = (wNode: IWNode, sandbox: HTMLIFrameElement, libEngine) => {
       });
     });
   } else {
+    console.debug('NO_LIB_ENGINE', libEngine, sandbox);
     return Promise.reject('NO_LIB_ENGINE');
   }
 };
@@ -75,6 +76,7 @@ const CanvasRenderLayer = () => {
         'node:insertBefore',
         'node:remove',
         'renderLayer:ready',
+        'history:goto',
       ],
       (e) => {
         const sandbox = renderSandbox.current;

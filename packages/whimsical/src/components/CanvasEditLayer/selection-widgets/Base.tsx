@@ -16,8 +16,6 @@ import { useWorkbench } from 'src/hooks/useWorkbench';
 import { observer } from 'mobx-react-lite';
 import { useComponentDeclare } from 'src/hooks';
 
-type DropPositionDirectionType = 'BEFORE' | 'INNER' | 'AFTER';
-
 enum DROP_POSITION_DIRECTION {
   BEFORE = 'BEFORE',
   INNER = 'INNER',
@@ -71,7 +69,7 @@ const getHotArea = (height, ratio) => {
 
 const Base = observer((props: Props) => {
   const { children, id, style, node } = props;
-  const itemRef = useRef<HTMLDivElement>(null);
+  const ref = useRef<HTMLDivElement>(null);
   const [insertMode, setInsertMode] = useState<DROP_POSITION_DIRECTION>(
     DROP_POSITION_DIRECTION.AFTER
   );
@@ -103,10 +101,10 @@ const Base = observer((props: Props) => {
       // canDrop: () => true,
       // 拖拽内容进过该组件区域
       hover: (item: DropItemType, monitor) => {
-        if (!itemRef.current) return;
+        if (!ref.current) return;
         if (item.nodeFragment.id === node.id) return;
         if (monitor.isOver({ shallow: true })) {
-          const hoverBoundingRect = itemRef.current?.getBoundingClientRect();
+          const hoverBoundingRect = ref.current?.getBoundingClientRect();
           // 确定当前模块元素1/4的高度用来做热区计算
           const [hotAreaTop, hotAreaBottom] = getHotArea(
             hoverBoundingRect.bottom - hoverBoundingRect.top,
@@ -186,22 +184,22 @@ const Base = observer((props: Props) => {
   }, [workbench.selection, dropClassName]);
 
   useEffect(() => {
-    drop(itemRef);
+    drop(ref);
   }, []);
 
   // 绑定拖拽元素
   useEffect(() => {
     if (collected.isDragging) {
-      dragPreview(itemRef);
+      dragPreview(ref);
     } else {
-      drag(itemRef);
+      drag(ref);
     }
     node.isInOperation = collected.isDragging;
   }, [collected.isDragging]);
 
   return (
     <div
-      ref={itemRef}
+      ref={ref}
       id={id}
       data-component-name={node.name}
       style={style as CSSProperties}
