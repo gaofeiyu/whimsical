@@ -1,11 +1,11 @@
 import Panel from '../Panel';
-import SettingForm from 'src/widgets/SettingForm';
+import { SettingsForm } from 'src/widgets/SettingForm';
 
 const SettingPanel = () => {
   return (
     <div className="flex">
       <Panel title="属性配置">
-        <SettingForm></SettingForm>
+        <SettingsForm></SettingsForm>
       </Panel>
     </div>
   );

@@ -1,36 +1,71 @@
-import { createForm } from '@formily/core';
+import {
+  createForm,
+  onFieldChange,
+  onFormInit,
+  onFormMount,
+  Form as FormilyForm,
+} from '@formily/core';
 import { Form } from '@formily/antd';
 import { SchemaField } from './SchemaField';
 import './index.less';
+import { mockSchema } from './mock';
+import { useMemo } from 'react';
+import { useCurrentNode } from 'src/hooks';
+import { observer } from 'mobx-react-lite';
 
-const normalForm = createForm({
-  validateFirst: true,
-});
+const normalSchema = mockSchema;
 
-const normalSchema = {
-  type: 'object',
-  properties: {
-    username: {
-      type: 'string',
-      title: '属性1',
-      'x-decorator': 'FormItem',
-      'x-component': 'Input',
-      'x-component-props': {},
-    },
-    password: {
-      type: 'string',
-      title: '属性2',
-      'x-decorator': 'FormItem',
-      'x-component': 'Password',
-      'x-component-props': {},
-    },
-  },
-};
+export interface ISettingFormProps {
+  className?: string;
+  style?: React.CSSProperties;
+  components?: Record<string, React.FC<unknown>>;
+  effects?: (form: FormilyForm) => void;
+  scope?: unknown;
+}
 
-export default () => {
+export const SettingsForm: React.FC<ISettingFormProps> = observer((props) => {
+  const node = useCurrentNode();
+  console.log('SettingsForm', node);
+
+  const form = useMemo(() => {
+    let formReady = false;
+
+    return createForm({
+      values: node?.props,
+      effects(form) {
+        let cache = '';
+
+        onFormInit(() => {
+          formReady = false;
+          cache = JSON.stringify(node?.props);
+        });
+
+        onFieldChange('*', () => {
+          if (formReady) {
+            if (cache !== JSON.stringify(node.props)) {
+              cache = JSON.stringify(node.props);
+            }
+          }
+        });
+
+        onFormMount(() => {
+          formReady = true;
+        });
+
+        props.effects?.(form);
+      },
+    });
+  }, [node, node?.props]);
+
+  console.log(form);
+
   return (
-    <Form form={normalForm} layout="vertical" size="large" onAutoSubmit={console.log}>
-      <SchemaField schema={normalSchema} />
-    </Form>
+    <>
+      {!node ? null : (
+        <Form form={form} layout="vertical" size="large">
+          <SchemaField schema={normalSchema} />
+        </Form>
+      )}
+    </>
   );
-};
+});

@@ -1,6 +1,6 @@
 import { useWorkbench } from './useWorkbench';
 
-export const useLibInfo = () => {
+export const useCurrentNode = () => {
   const workbanch = useWorkbench();
-  return workbanch.LibInfo;
+  return workbanch.selection;
 };
