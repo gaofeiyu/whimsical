@@ -46,6 +46,7 @@ class WTreeNode implements IWNode {
       name: observable.ref,
       props: observable,
       children: observable.shallow,
+      updateProps: action,
       prepend: action,
       append: action,
       insertAfter: action,
@@ -191,6 +192,11 @@ class WTreeNode implements IWNode {
       return [this];
     }
     return this;
+  }
+
+  updateProps(newProps) {
+    this.props = newProps;
+    EDITOR_EVENTS$.emit('props:update');
   }
 }
 

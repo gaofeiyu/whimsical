@@ -1,7 +1,7 @@
 export const mockSchema = {
   type: 'object',
   properties: {
-    username: {
+    'props.content': {
       type: 'string',
       title: '属性1',
       'x-decorator': 'FormItem',

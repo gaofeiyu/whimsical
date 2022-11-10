@@ -17,6 +17,9 @@ EDITOR_EVENTS$.createEvent('node:insertAfter');
 EDITOR_EVENTS$.createEvent('node:insertBefore');
 EDITOR_EVENTS$.createEvent('node:remove');
 
+// props event
+EDITOR_EVENTS$.createEvent('props:update');
+
 type EditorStateType = {
   key: number;
 };

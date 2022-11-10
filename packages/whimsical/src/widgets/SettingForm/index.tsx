@@ -12,6 +12,7 @@ import { mockSchema } from './mock';
 import { useMemo } from 'react';
 import { useCurrentNode } from 'src/hooks';
 import { observer } from 'mobx-react-lite';
+import { EDITOR_EVENTS$ } from 'src/editor-flow';
 
 const normalSchema = mockSchema;
 
@@ -25,7 +26,6 @@ export interface ISettingFormProps {
 
 export const SettingsForm: React.FC<ISettingFormProps> = observer((props) => {
   const node = useCurrentNode();
-  console.log('SettingsForm', node);
 
   const form = useMemo(() => {
     let formReady = false;
@@ -37,13 +37,14 @@ export const SettingsForm: React.FC<ISettingFormProps> = observer((props) => {
 
         onFormInit(() => {
           formReady = false;
-          cache = JSON.stringify(node?.props);
+          cache = JSON.stringify(form.values);
         });
 
         onFieldChange('*', () => {
           if (formReady) {
-            if (cache !== JSON.stringify(node.props)) {
-              cache = JSON.stringify(node.props);
+            if (cache !== JSON.stringify(form.values)) {
+              cache = JSON.stringify(form.values);
+              node.updateProps(form.values);
             }
           }
         });
@@ -56,8 +57,6 @@ export const SettingsForm: React.FC<ISettingFormProps> = observer((props) => {
       },
     });
   }, [node, node?.props]);
-
-  console.log(form);
 
   return (
     <>

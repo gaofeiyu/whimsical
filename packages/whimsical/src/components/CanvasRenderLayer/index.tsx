@@ -75,6 +75,7 @@ const CanvasRenderLayer = () => {
         'node:insertAfter',
         'node:insertBefore',
         'node:remove',
+        'props:update',
         'renderLayer:ready',
         'history:goto',
       ],
