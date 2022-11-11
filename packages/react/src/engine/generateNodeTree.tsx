@@ -28,7 +28,7 @@ export default function generateNodeTree(node: IWNode) {
             key={nodeRenderId}
             id={nodeRenderId}
             className={'coralsea_' + nodeRenderId}
-            {...currentNode.style}
+            style={currentNode.style}
             {...nodeProps}
           >
             {childrenNode.length ? childrenNode : null}

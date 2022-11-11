@@ -1,15 +1,15 @@
 import React from 'react';
 import { createSchemaField } from '@formily/react';
-import { FormItem, Input, Password } from '@formily/antd';
+import { FormItem, Input } from '@formily/antd';
 import * as ICONS from '@ant-design/icons';
-import { InputItems } from '../SettingComponents';
+import { InputItems, CollapseItem } from '../SettingComponents';
 
 export const SchemaField = createSchemaField({
   components: {
     FormItem,
     InputItems,
     Input,
-    Password,
+    CollapseItem,
   },
   scope: {
     icon(name) {

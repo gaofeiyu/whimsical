@@ -8,13 +8,10 @@ import {
 import { Form } from '@formily/antd';
 import { SchemaField } from './SchemaField';
 import './index.less';
-import { mockSchema } from './mock';
+import { settingsSchema } from './defaultSettingsSchema';
 import { useMemo } from 'react';
 import { useCurrentNode } from 'src/hooks';
 import { observer } from 'mobx-react-lite';
-import { EDITOR_EVENTS$ } from 'src/editor-flow';
-
-const normalSchema = mockSchema;
 
 export interface ISettingFormProps {
   className?: string;
@@ -44,6 +41,7 @@ export const SettingsForm: React.FC<ISettingFormProps> = observer((props) => {
           if (formReady) {
             if (cache !== JSON.stringify(form.values)) {
               cache = JSON.stringify(form.values);
+              console.log('form.values', form.values);
               node.updateProps(form.values);
             }
           }
@@ -62,7 +60,7 @@ export const SettingsForm: React.FC<ISettingFormProps> = observer((props) => {
     <>
       {!node ? null : (
         <Form form={form} layout="vertical" size="large">
-          <SchemaField schema={normalSchema} />
+          <SchemaField schema={settingsSchema} />
         </Form>
       )}
     </>
