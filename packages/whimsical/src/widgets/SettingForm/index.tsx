@@ -1,25 +1,13 @@
-import {
-  createForm,
-  onFieldChange,
-  onFormInit,
-  onFormMount,
-  Form as FormilyForm,
-} from '@formily/core';
+import { createForm, onFieldChange, onFormInit, onFormMount } from '@formily/core';
 import { Form } from '@formily/antd';
 import { SchemaField } from './SchemaField';
-import './index.less';
 import { settingsSchema } from './defaultSettingsSchema';
 import { useMemo } from 'react';
 import { useCurrentNode } from 'src/hooks';
 import { observer } from 'mobx-react-lite';
-
-export interface ISettingFormProps {
-  className?: string;
-  style?: React.CSSProperties;
-  components?: Record<string, React.FC<unknown>>;
-  effects?: (form: FormilyForm) => void;
-  scope?: unknown;
-}
+import { ISettingFormProps } from './types';
+import { SettingsFormContext } from './context';
+import './index.less';
 
 export const SettingsForm: React.FC<ISettingFormProps> = observer((props) => {
   const node = useCurrentNode();
@@ -59,9 +47,11 @@ export const SettingsForm: React.FC<ISettingFormProps> = observer((props) => {
   return (
     <>
       {!node ? null : (
-        <Form form={form} layout="vertical" size="large">
-          <SchemaField schema={settingsSchema} />
-        </Form>
+        <SettingsFormContext.Provider value={props}>
+          <Form form={form} layout="vertical" size="large">
+            <SchemaField schema={settingsSchema} />
+          </Form>
+        </SettingsFormContext.Provider>
       )}
     </>
   );

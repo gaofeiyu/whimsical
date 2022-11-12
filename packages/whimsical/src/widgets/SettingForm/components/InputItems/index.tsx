@@ -7,7 +7,7 @@ export interface IInputItemsContext {
 }
 
 export interface IInputItemsProps {
-  children: React.ReactElement;
+  children: React.ReactElement | React.ReactElement[];
   className?: string;
   style?: React.CSSProperties;
   width?: string | number;

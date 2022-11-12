@@ -2,8 +2,8 @@ import React, { useState } from 'react';
 import { useField, observer } from '@formily/react';
 import { usePrefix } from 'src/hooks';
 import cls from 'classnames';
+import { DownOutlined } from '@ant-design/icons';
 import './styles.less';
-import { RightOutlined } from '@ant-design/icons';
 
 export interface ICollapseItemProps {
   className?: string;
@@ -26,7 +26,7 @@ export const CollapseItem: React.FC<ICollapseItemProps> = observer((props) => {
         }}
       >
         <div className={prefix + '-header-expand'}>
-          <RightOutlined />
+          <DownOutlined />
         </div>
         <div className={prefix + '-header-content'}>{field.title}</div>
       </div>

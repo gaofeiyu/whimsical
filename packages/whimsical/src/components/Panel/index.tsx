@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from 'react';
+import React from 'react';
 import PanelTitle from './PanelTitle';
 
 export type PanelProps = {
