@@ -4,8 +4,9 @@ import { usePrefix } from 'src/hooks';
 import { FoldItem } from '../FoldItem';
 import { SizeInput } from '../SizeInput';
 import { InputItems } from '../InputItems';
+import Icon from '@ant-design/icons';
+import EditorIcons from '../../icons';
 import cls from 'classnames';
-import { VerticalAlignBottomOutlined, VerticalAlignTopOutlined } from '@ant-design/icons';
 
 type Position = 'top' | 'right' | 'left' | 'bottom' | 'all';
 export interface IMarginStyleSetterProps {
@@ -85,9 +86,9 @@ export const BoxStyleSetter: React.FC<IMarginStyleSetterProps> = observer((props
 
 BoxStyleSetter.defaultProps = {
   labels: [
-    <VerticalAlignTopOutlined key="1" />,
-    <VerticalAlignTopOutlined key="1" />,
-    <VerticalAlignBottomOutlined key="1" />,
-    <VerticalAlignBottomOutlined key="1" />,
+    <Icon key="1" component={EditorIcons.Top} />,
+    <Icon key="2" component={EditorIcons.Right} />,
+    <Icon key="3" component={EditorIcons.Bottom} />,
+    <Icon key="4" component={EditorIcons.Left} />,
   ],
 };
