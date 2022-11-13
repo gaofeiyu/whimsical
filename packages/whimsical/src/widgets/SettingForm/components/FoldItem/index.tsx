@@ -1,16 +1,15 @@
-import React, { Fragment, useRef, useMemo } from 'react';
-import { observable } from 'mobx';
+import React, { useRef } from 'react';
+import { action, observable } from 'mobx';
 import { FormItem, IFormItemProps } from '@formily/antd';
 import { useField } from '@formily/react';
 import { usePrefix } from 'src/hooks';
 import { observer } from 'mobx-react-lite';
 import cls from 'classnames';
-import { DownOutlined } from '@ant-design/icons';
+import Icon from '@ant-design/icons';
+import EditorIcons from '../../icons';
 import './styles.less';
 
-const ExpandedMap = new Map<string, boolean>();
-
-observable.ref(ExpandedMap, 'ExpandedMap');
+const ExpandedMap = observable(new Map<string, boolean>());
 
 export const FoldItem: React.FC<
   IFormItemProps & {
@@ -26,7 +25,8 @@ export const FoldItem: React.FC<
 } = observer(({ className, children, ...props }) => {
   const prefix = usePrefix('fold-item');
   const field = useField();
-  const expand = useMemo(() => ExpandedMap.get(field.address.toString()), []);
+  console.log('field', field, props);
+  const expand = ExpandedMap.get(field.address.toString());
   const slots = useRef({ base: null, extra: null });
   React.Children.forEach(children, (node) => {
     if (React.isValidElement(node)) {
@@ -42,9 +42,9 @@ export const FoldItem: React.FC<
     <div className={cls(prefix, className)}>
       <div
         className={prefix + '-base'}
-        onClick={() => {
+        onClick={action(() => {
           ExpandedMap.set(field.address.toString(), !expand);
-        }}
+        })}
       >
         <FormItem.BaseItem
           {...props}
@@ -54,7 +54,9 @@ export const FoldItem: React.FC<
                 expand,
               })}
             >
-              {slots.current.extra && <DownOutlined />}
+              {slots.current.extra && (
+                <Icon className={cls(prefix + '-icon')} component={EditorIcons.Expand} />
+              )}
               {props.label}
             </span>
           }
