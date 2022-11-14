@@ -3,7 +3,7 @@ import { SettingsForm } from 'src/widgets/SettingForm';
 
 const SettingPanel = () => {
   return (
-    <div className="flex">
+    <div className="flex w-[300px]">
       <Panel title="属性配置">
         <SettingsForm></SettingsForm>
       </Panel>

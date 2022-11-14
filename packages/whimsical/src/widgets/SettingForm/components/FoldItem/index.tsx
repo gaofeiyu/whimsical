@@ -55,7 +55,10 @@ export const FoldItem: React.FC<
               })}
             >
               {slots.current.extra && (
-                <Icon className={cls(prefix + '-icon')} component={EditorIcons.Expand} />
+                <Icon
+                  className={`${cls(prefix + '-icon')} text-xs`}
+                  component={EditorIcons.Expand}
+                />
               )}
               {props.label}
             </span>

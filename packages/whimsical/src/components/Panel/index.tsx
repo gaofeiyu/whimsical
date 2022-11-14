@@ -14,7 +14,7 @@ const Panel = (props: PanelProps) => {
   return (
     <div className={`flex flex-col justify-start w-full h-full border m-[-1px] ${className}`}>
       <PanelTitle title={title} onClose={onClose} />
-      <div>{props.children}</div>
+      <div className="h-full overflow-auto">{props.children}</div>
     </div>
   );
 };

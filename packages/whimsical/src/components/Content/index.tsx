@@ -5,7 +5,7 @@ export type ContentProps = {
 };
 
 const Content = (props: ContentProps) => {
-  return <div className="flex flex-auto">{props.children}</div>;
+  return <div className="flex flex-auto h-full overflow-auto">{props.children}</div>;
 };
 
 Content.displayName = 'Content';
