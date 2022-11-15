@@ -132,7 +132,7 @@ export const FlexStyleSetter: React.FC<IFlexStyleSetterProps> = observer((props)
           basePath={field.address.parent()}
           dataSource={[
             {
-              label: <Icon component={EditorIcons.RetFlexAlignItemsCenterurn} />,
+              label: <Icon component={EditorIcons.FlexAlignItemsCenter} />,
               value: 'center',
             },
             {

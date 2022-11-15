@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { useField, observer } from '@formily/react';
 import { usePrefix } from 'src/hooks';
 import cls from 'classnames';
-import { DownOutlined } from '@ant-design/icons';
+import Icon from '@ant-design/icons';
+import EditorIcons from '../../icons';
 import './styles.less';
 
 export interface ICollapseItemProps {
@@ -26,7 +27,7 @@ export const CollapseItem: React.FC<ICollapseItemProps> = observer((props) => {
         }}
       >
         <div className={prefix + '-header-expand'}>
-          <DownOutlined />
+          <Icon className={`${cls(prefix + '-icon')} text-xs`} component={EditorIcons.Expand} />
         </div>
         <div className={prefix + '-header-content'}>{field.title}</div>
       </div>
