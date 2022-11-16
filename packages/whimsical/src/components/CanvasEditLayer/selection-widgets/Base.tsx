@@ -150,6 +150,7 @@ const Base = observer((props: Props) => {
             default:
             // no default
           }
+          workbench.setSelection(newChild);
         }
       },
       collect: (monitor) => {

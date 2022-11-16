@@ -41,11 +41,8 @@ const ComponentListItem: React.FC<Props> = (props) => {
 
   return (
     <div ref={ref} className={`w-36 mb-2 ${previewClassName}`}>
-      <div className="py-1">{name}</div>
       <div className="border">
-        <div className="flex items-center content-center h-6">
-          <span>默认</span>
-        </div>
+        <div className="flex items-center content-center h-6 cursor-pointer">{name}</div>
       </div>
     </div>
   );

@@ -1,11 +1,5 @@
 import { Menu, MenuProps } from 'antd';
-import {
-  AppstoreOutlined,
-  ContainerOutlined,
-  DesktopOutlined,
-  MailOutlined,
-  PieChartOutlined,
-} from '@ant-design/icons';
+import { HistoryOutlined, BuildOutlined } from '@ant-design/icons';
 import Panel from '../Panel';
 import { useEffect, useState } from 'react';
 import { EDITOR_EVENTS$ } from 'src/editor-flow';
@@ -30,11 +24,8 @@ function getItem(
   } as MenuItem;
 }
 const items: MenuItem[] = [
-  getItem('Option 1', '1', <PieChartOutlined />),
-  getItem('Option 2', '2', <DesktopOutlined />),
-  getItem('Option 3', '3', <ContainerOutlined />),
-  getItem('Navigation One', '4', <MailOutlined />),
-  getItem('Navigation Two', '5', <AppstoreOutlined />),
+  getItem('Option 1', '组件列表', <BuildOutlined />),
+  getItem('Option 2', '历史', <HistoryOutlined />),
 ];
 
 const Sidebar = () => {
