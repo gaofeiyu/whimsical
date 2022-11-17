@@ -4,14 +4,16 @@ import { Form } from '@formily/antd';
 import cls from 'classnames';
 import { SchemaField } from './SchemaField';
 import { settingsSchema } from './defaultSettingsSchema';
-import { useMemo } from 'react';
-import { useCurrentNode, usePrefix } from 'src/hooks';
+import { useEffect, useMemo, useState } from 'react';
+import { useCurrentNode, useLibInfo, usePrefix } from 'src/hooks';
 import { ISettingFormProps } from './types';
 import { SettingsFormContext } from './context';
 import './index.less';
 
 export const SettingsForm: React.FC<ISettingFormProps> = observer((props) => {
   const node = useCurrentNode();
+  const LibInfo = useLibInfo();
+  const [, focusUpdate] = useState({});
   const prefix = usePrefix('settings-form');
 
   const form = useMemo(() => {
@@ -45,6 +47,14 @@ export const SettingsForm: React.FC<ISettingFormProps> = observer((props) => {
       },
     });
   }, [node, node?.props]);
+
+  useEffect(() => {
+    if (node?.name) {
+      settingsSchema.properties.props.properties = LibInfo.componentsSettingsFormConfig[node.name];
+      console.log('settingsSchema.properties.props', settingsSchema.properties.props);
+      focusUpdate({});
+    }
+  }, [node, LibInfo.componentsSettingsFormConfig]);
 
   return (
     <>

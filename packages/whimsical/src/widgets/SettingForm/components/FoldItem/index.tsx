@@ -25,7 +25,6 @@ export const FoldItem: React.FC<
 } = observer(({ className, children, ...props }) => {
   const prefix = usePrefix('fold-item');
   const field = useField();
-  console.log('field', field, props);
   const expand = ExpandedMap.get(field.address.toString());
   const slots = useRef({ base: null, extra: null });
   React.Children.forEach(children, (node) => {

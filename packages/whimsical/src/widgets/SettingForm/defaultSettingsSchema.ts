@@ -1,12 +1,11 @@
 export const settingsSchema = {
   type: 'object',
   properties: {
-    'props.content': {
-      type: 'string',
-      title: '属性1',
-      'x-decorator': 'FormItem',
-      'x-component': 'Input',
-      'x-component-props': {},
+    props: {
+      type: 'void',
+      title: '属性',
+      'x-component': 'CollapseItem',
+      properties: {},
     },
     styles: {
       type: 'void',

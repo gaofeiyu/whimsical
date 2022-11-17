@@ -23,6 +23,14 @@ export type ComponentLibInfoType = {
   resource?: ComponentLibInfoResourceType;
 };
 
+export interface IComponentDeclareProp {
+  type: string;
+  component?: string;
+  decorator?: string;
+  componentProps?: Record<string, unknown>;
+  decoratorProps?: Record<string, unknown>;
+}
+
 // 组件DSL描述
 export interface IComponentDeclare {
   // 组件名称
@@ -38,5 +46,5 @@ export interface IComponentDeclare {
   // 是否是容器，即是否可以加入子元素
   isContainer?: boolean;
   // 组件可以传入的属性定义
-  props?: Record<string, unknown>;
+  props?: Record<string, IComponentDeclareProp>;
 }

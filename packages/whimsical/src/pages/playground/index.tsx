@@ -13,7 +13,34 @@ import { wNodeMock, componentInfoMock } from 'src/mock/wNode';
 import { EditorHistory } from 'src/editor-flow';
 import Workbench, { IWorkbenchProps } from 'src/core/Workbench';
 import LibManager from 'src/core/LibManager';
-import { loadStatic } from 'whimsical-shared';
+import { IComponentDeclare, IComponentDeclareProp, loadStatic } from 'whimsical-shared';
+import { ISchema } from '@formily/react';
+
+// 根据组件的属性描述，获取属性操作菜单配置
+const getComponentPropsFormItem = (
+  props: Record<string, IComponentDeclareProp>
+): Record<string, ISchema> => {
+  const componentPropKeys = Object.keys(props);
+  return componentPropKeys.reduce((formProperties, key) => {
+    const { component = 'Input', type, ...propConfig } = props[key];
+    formProperties[`props.${key}`] = {
+      type,
+      'x-component': component,
+      ...propConfig,
+    };
+    return formProperties;
+  }, {});
+};
+
+const generatorComponentsSettingsFormConfig = (componentsDeclare: IComponentDeclare) => {
+  const componentNames = Object.keys(componentsDeclare);
+
+  return componentNames.reduce((config, name) => {
+    const componentDeclare = componentsDeclare[name];
+    config[name] = getComponentPropsFormItem(componentDeclare.props);
+    return config;
+  }, {});
+};
 
 const Playground = () => {
   const workbenchProps = useRef<IWorkbenchProps>();
@@ -45,6 +72,9 @@ const Playground = () => {
       const lib = window[`${LibInfo.name}`].default || window[`${LibInfo.name}`];
       if (!lib) return;
       LibInfo.componentsDeclare = lib?.editor?.libConfig?.componentsDeclare || {};
+      LibInfo.componentsSettingsFormConfig = generatorComponentsSettingsFormConfig(
+        LibInfo.componentsDeclare
+      );
       LibInfo.engine = lib?.editor;
     });
   }, []);

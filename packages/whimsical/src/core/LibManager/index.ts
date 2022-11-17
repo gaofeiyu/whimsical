@@ -1,3 +1,4 @@
+import { ISchema } from '@formily/react';
 import { action, makeObservable, observable } from 'mobx';
 import { ComponentLibInfoResourceType, IComponentDeclare } from 'whimsical-shared';
 
@@ -15,6 +16,7 @@ class LibManager {
   name: string;
   resource?: ComponentLibInfoResourceType;
   componentsDeclare?: Record<string, IComponentDeclare>;
+  componentsSettingsFormConfig?: Record<string, ISchema>;
   engine?: IEngine;
 
   constructor(props: LibManagerProps) {
