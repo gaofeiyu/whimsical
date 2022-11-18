@@ -1,46 +1,20 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
+import { loadStatic } from 'whimsical-shared';
 import CanvasPanel from 'src/components/CanvasPanel';
 import Content from 'src/components/Content';
 import Header from 'src/components/Header';
 import Layout from 'src/components/Layout';
 import SettingPanel from 'src/components/SettingPanel';
 import Sidebar from 'src/components/Sidebar';
-import { WorkbenchContext } from './context';
 import WTreeNode from 'src/core/WNode';
 import { wNodeMock, componentInfoMock } from 'src/mock/wNode';
 import { EditorHistory } from 'src/editor-flow';
 import Workbench, { IWorkbenchProps } from 'src/core/Workbench';
 import LibManager from 'src/core/LibManager';
-import { IComponentDeclare, IComponentDeclareProp, loadStatic } from 'whimsical-shared';
-import { ISchema } from '@formily/react';
-
-// 根据组件的属性描述，获取属性操作菜单配置
-const getComponentPropsFormItem = (
-  props: Record<string, IComponentDeclareProp>
-): Record<string, ISchema> => {
-  const componentPropKeys = Object.keys(props);
-  return componentPropKeys.reduce((formProperties, key) => {
-    const { component = 'Input', type, ...propConfig } = props[key];
-    formProperties[`props.${key}`] = {
-      type,
-      'x-component': component,
-      ...propConfig,
-    };
-    return formProperties;
-  }, {});
-};
-
-const generatorComponentsSettingsFormConfig = (componentsDeclare: IComponentDeclare) => {
-  const componentNames = Object.keys(componentsDeclare);
-
-  return componentNames.reduce((config, name) => {
-    const componentDeclare = componentsDeclare[name];
-    config[name] = getComponentPropsFormItem(componentDeclare.props);
-    return config;
-  }, {});
-};
+import { generatorComponentsSettingsFormConfig } from 'src/utils/generatorSettingsFormConfig';
+import { WorkbenchContext } from './context';
 
 const Playground = () => {
   const workbenchProps = useRef<IWorkbenchProps>();
@@ -84,7 +58,6 @@ const Playground = () => {
         <WorkbenchContext.Provider value={workbench}>
           <Layout>
             <Header></Header>
-
             <DndProvider backend={HTML5Backend}>
               <Content>
                 <Sidebar></Sidebar>

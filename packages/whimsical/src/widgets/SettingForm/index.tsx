@@ -50,8 +50,9 @@ export const SettingsForm: React.FC<ISettingFormProps> = observer((props) => {
 
   useEffect(() => {
     if (node?.name) {
-      settingsSchema.properties.props.properties = LibInfo.componentsSettingsFormConfig[node.name];
-      console.log('settingsSchema.properties.props', settingsSchema.properties.props);
+      settingsSchema.properties.properties.properties =
+        LibInfo.componentsSettingsFormConfig[node.name] || {};
+      console.log('settingsSchema.properties.properties', settingsSchema.properties.properties);
       focusUpdate({});
     }
   }, [node, LibInfo.componentsSettingsFormConfig]);

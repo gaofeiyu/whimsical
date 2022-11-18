@@ -10,6 +10,7 @@ const declare: IComponentDeclare = {
   props: {
     content: {
       type: 'string',
+      title: '内容',
     },
   },
 };

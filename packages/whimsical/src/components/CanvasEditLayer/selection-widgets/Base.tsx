@@ -168,7 +168,7 @@ const Base = observer((props: Props) => {
       e.stopPropagation();
       workbench.setSelection(node);
     },
-    [workbench]
+    [node, workbench]
   );
 
   const dropClassName = useMemo(() => {
@@ -182,7 +182,7 @@ const Base = observer((props: Props) => {
   const className = useMemo(() => {
     const focusName = workbench.selection === node ? 'editor-item--focus' : '';
     return `${dropClassName} ${focusName}`;
-  }, [workbench.selection, dropClassName]);
+  }, [node, workbench.selection, dropClassName]);
 
   useEffect(() => {
     drop(ref);

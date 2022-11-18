@@ -1,7 +1,7 @@
 export const settingsSchema = {
   type: 'object',
   properties: {
-    props: {
+    properties: {
       type: 'void',
       title: '属性',
       'x-component': 'CollapseItem',

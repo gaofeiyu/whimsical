@@ -25,6 +25,7 @@ export type ComponentLibInfoType = {
 
 export interface IComponentDeclareProp {
   type: string;
+  title?: string;
   component?: string;
   decorator?: string;
   componentProps?: Record<string, unknown>;
