@@ -1,9 +1,9 @@
 import { memo, useEffect, useMemo, useRef } from 'react';
 import { useDrag } from 'react-dnd';
-import { IComponentDeclare } from 'whimsical-shared';
+import { IComponentDeclare, IWNode } from 'whimsical-shared';
 
 interface Props {
-  nodeFragment: IComponentDeclare;
+  nodeFragment: IComponentDeclare | IWNode;
   name: string;
 }
 

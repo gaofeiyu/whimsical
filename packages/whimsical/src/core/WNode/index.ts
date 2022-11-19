@@ -194,6 +194,14 @@ class WTreeNode implements IWNode {
     return this;
   }
 
+  findById(id: string) {
+    if (!id) return;
+    if (this.id === id) return this;
+    if (this.children?.length > 0) {
+      return WTreeNodeCache.get(id);
+    }
+  }
+
   updateProps(newProps) {
     this.props = newProps;
     EDITOR_EVENTS$.emit('props:update');

@@ -29,7 +29,6 @@ const ComponentList = observer(() => {
       return template;
     });
   }, [componentsDeclare]);
-
   return (
     <div className="flex flex-col items-center">
       {componentNameList.map((componentName, index) => {

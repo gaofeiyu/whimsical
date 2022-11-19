@@ -70,6 +70,10 @@ const EditorLayer = observer((props: Props) => {
           toJS(workbench.renderLayerInfo)
         );
         console.log('trigger history ce', workbench.treeNode, treeNode[0].value);
+        if (workbench.selection) {
+          const selection = workbench.treeNode.findById(workbench.selection?.id);
+          workbench.setSelection(selection);
+        }
         setWidgetResult(treeNode[0].value);
       }
     });

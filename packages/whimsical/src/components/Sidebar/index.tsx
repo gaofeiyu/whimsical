@@ -1,35 +1,26 @@
 import { Menu, MenuProps } from 'antd';
 import { HistoryOutlined, BuildOutlined } from '@ant-design/icons';
-import Panel from '../Panel';
-import { useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { EDITOR_EVENTS$ } from 'src/editor-flow';
 import EditorHistory from '../EditorHistory';
 import ComponentList from 'src/widgets/ComponentList';
+import SidebarContent from './SidebarContent';
+import { MenuItemType } from 'antd/lib/menu/hooks/useItems';
 
-type MenuItem = Required<MenuProps>['items'][number];
-
-function getItem(
-  label: React.ReactNode,
-  key: React.Key,
-  icon?: React.ReactNode,
-  children?: MenuItem[],
-  type?: 'group'
-): MenuItem {
+function getItem(title?: string, key?: React.Key, icon?: React.ReactNode): MenuItemType {
   return {
     key,
     icon,
-    children,
-    label,
-    type,
-  } as MenuItem;
+    title,
+  };
 }
-const items: MenuItem[] = [
-  getItem('Option 1', '组件列表', <BuildOutlined />),
-  getItem('Option 2', '历史', <HistoryOutlined />),
+const items: MenuItemType[] = [
+  getItem('组件列表', '0', <BuildOutlined />),
+  getItem('历史', '1', <HistoryOutlined />),
 ];
 
 const Sidebar = () => {
-  const [selectKey, setSelectKey] = useState('1');
+  const [selectKey, setSelectKey] = useState('0');
   const [showPanel, setShowPanel] = useState(true);
 
   useEffect(() => {
@@ -42,6 +33,33 @@ const Sidebar = () => {
     };
   }, []);
 
+  const selectIndex = useMemo(() => {
+    let result = 0;
+    items.find((item, index) => {
+      if (item.key === selectKey) {
+        result = index;
+        return true;
+      }
+    });
+    return result;
+  }, [selectKey]);
+
+  const onChangeMenu = useCallback(
+    ({ key }) => {
+      if (key === selectKey) {
+        setShowPanel(!showPanel);
+      } else {
+        setShowPanel(true);
+      }
+      setSelectKey(key);
+    },
+    [selectKey, showPanel]
+  );
+
+  const sidebarContentChildren = useMemo(() => {
+    return [<ComponentList />, <EditorHistory />];
+  }, []);
+
   return (
     <div className="flex relative">
       <Menu
@@ -50,21 +68,17 @@ const Sidebar = () => {
         mode="inline"
         items={items}
         inlineCollapsed={true}
-        onClick={({ key }) => {
-          if (!showPanel) {
-            setShowPanel(true);
-          }
-          if (key === selectKey && showPanel) {
-            setShowPanel(false);
-          }
-          setSelectKey(key);
-        }}
+        onClick={onChangeMenu}
       />
-      {showPanel ? (
-        <Panel title={selectKey} onClose={() => setShowPanel(false)}>
-          {selectKey === '1' ? <ComponentList /> : <EditorHistory></EditorHistory>}
-        </Panel>
-      ) : null}
+      <div className={showPanel ? 'block' : 'hidden'}>
+        <SidebarContent
+          index={selectIndex}
+          title={items[selectIndex].title}
+          onClose={() => setShowPanel(false)}
+        >
+          {sidebarContentChildren}
+        </SidebarContent>
+      </div>
     </div>
   );
 };

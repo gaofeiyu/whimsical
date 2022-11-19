@@ -4,7 +4,7 @@ import PanelTitle from './PanelTitle';
 export type PanelProps = {
   title?: string;
   className?: string;
-  children?: string | React.ReactElement | React.ReactElement[];
+  children?: string | React.ReactNode;
   onClose?: () => void;
 };
 
