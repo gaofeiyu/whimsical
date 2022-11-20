@@ -1,11 +1,11 @@
-import { Menu, MenuProps } from 'antd';
+import { Menu } from 'antd';
+import { MenuItemType } from 'antd/lib/menu/hooks/useItems';
 import { HistoryOutlined, BuildOutlined } from '@ant-design/icons';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { EDITOR_EVENTS$ } from 'src/editor-flow';
 import EditorHistory from '../EditorHistory';
 import ComponentList from 'src/widgets/ComponentList';
 import SidebarContent from './SidebarContent';
-import { MenuItemType } from 'antd/lib/menu/hooks/useItems';
 
 function getItem(title?: string, key?: React.Key, icon?: React.ReactNode): MenuItemType {
   return {
@@ -56,10 +56,6 @@ const Sidebar = () => {
     [selectKey, showPanel]
   );
 
-  const sidebarContentChildren = useMemo(() => {
-    return [<ComponentList />, <EditorHistory />];
-  }, []);
-
   return (
     <div className="flex relative">
       <Menu
@@ -76,7 +72,8 @@ const Sidebar = () => {
           title={items[selectIndex].title}
           onClose={() => setShowPanel(false)}
         >
-          {sidebarContentChildren}
+          <ComponentList />
+          <EditorHistory />
         </SidebarContent>
       </div>
     </div>

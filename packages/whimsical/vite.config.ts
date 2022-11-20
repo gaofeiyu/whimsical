@@ -16,6 +16,7 @@ export default defineConfig({
       less: {
         // 支持内联 JavaScript
         javascriptEnabled: true,
+        additionalData: '@root-entry-name: default; @import "~antd/lib/style/themes/index.less";',
       },
     },
   },

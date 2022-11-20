@@ -15,6 +15,8 @@ import Workbench, { IWorkbenchProps } from 'src/core/Workbench';
 import LibManager from 'src/core/LibManager';
 import { generatorComponentsSettingsFormConfig } from 'src/utils/generatorSettingsFormConfig';
 import { WorkbenchContext } from './context';
+import ImportDSL from './components/ImportDSL';
+import ExportDSL from './components/ExportDSL';
 
 const Playground = () => {
   const workbenchProps = useRef<IWorkbenchProps>();
@@ -57,7 +59,12 @@ const Playground = () => {
       {workbench ? (
         <WorkbenchContext.Provider value={workbench}>
           <Layout>
-            <Header></Header>
+            <Header>
+              <div className="tools-bar">
+                <ImportDSL />
+                <ExportDSL />
+              </div>
+            </Header>
             <DndProvider backend={HTML5Backend}>
               <Content>
                 <Sidebar></Sidebar>
