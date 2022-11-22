@@ -1,4 +1,4 @@
-import { IWExpression } from './types/schema';
+import { IWExpression } from './types/node';
 
 const has = Object.prototype.hasOwnProperty;
 const toString = Object.prototype.toString;

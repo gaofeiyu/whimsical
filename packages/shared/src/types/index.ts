@@ -1,3 +1,3 @@
 export * from './component';
-export * from './schema';
+export * from './node';
 export * from './engine';

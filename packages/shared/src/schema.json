@@ -1,0 +1,111 @@
+{
+  "$id": "/schemas/node",
+  "title": "Core schema meta-schema",
+  "type": "object",
+  "definitions": {
+    "IWExpression": {
+      "type": {
+        "type": "string"
+      },
+      "value": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/IWExpression"
+          },
+          {
+            "type": "string"
+          }
+        ]
+      },
+      "params": {
+        "anyOf": [
+          {
+            "$ref": "#/definitions/IWExpression"
+          },
+          {
+            "type": {}
+          }
+        ]
+      }
+    },
+    "IWProps": {
+      "type": "object",
+      "properties": {
+        "additionalProperties": {
+          "anyOf": [
+            {
+              "$ref": "#/definitions/IWExpression"
+            },
+            {
+              "type": {}
+            }
+          ]
+        }
+      }
+    },
+    "WNodeDataType": {
+
+    },
+    "IWActionExpression": {
+
+    },
+    "EventExpressionType":{
+      "type": "object",
+      "properties": {
+        "name": {
+          "type": "string"
+        },
+        "action": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/IWActionExpression"
+          }
+        }
+      }
+    }
+
+  },
+  "properties": {
+    "id": {
+      "type": "string"
+    },
+    "name": {
+      "type": "string"
+    },
+    "type": {
+      "type": "string"
+    },
+    "aliasId": {
+      "type": "string"
+    },
+    "children": {
+      "type": "array",
+      "items": {"$ref": "#"}
+    },
+    "style": {
+      "$ref": "#/definitions/IWProps"
+    },
+    "props": {
+      "$ref": "#/definitions/IWProps"
+    },
+    "events": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/IWProps"
+      }
+    },
+    "data": {
+      "$ref": "#/definitions/WNodeDataType"
+    },
+    "hidden": {
+      "anyOf": [
+        {
+          "$ref": "#/definitions/IWExpression"
+        },
+        {
+          "type": "boolean"
+        }
+      ]
+    }
+  }
+}

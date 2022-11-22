@@ -1,4 +1,4 @@
-import { IWNode } from './schema';
+import { IWNode } from './node';
 
 export interface IRuntimeContext<T = unknown> {
   node?: IWNode;
