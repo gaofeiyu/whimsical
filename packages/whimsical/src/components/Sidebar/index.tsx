@@ -1,8 +1,7 @@
 import { Menu } from 'antd';
 import { MenuItemType } from 'antd/lib/menu/hooks/useItems';
 import { HistoryOutlined, BuildOutlined } from '@ant-design/icons';
-import { useCallback, useEffect, useMemo, useState } from 'react';
-import { EDITOR_EVENTS$ } from 'src/editor-flow';
+import { useCallback, useMemo, useState } from 'react';
 import EditorHistory from '../EditorHistory';
 import ComponentList from 'src/widgets/ComponentList';
 import SidebarContent from './SidebarContent';
@@ -22,16 +21,6 @@ const items: MenuItemType[] = [
 const Sidebar = () => {
   const [selectKey, setSelectKey] = useState('0');
   const [showPanel, setShowPanel] = useState(true);
-
-  useEffect(() => {
-    const triggerButton = EDITOR_EVENTS$.on('triggerButton1', () => {
-      console.log('Sidebar trigger editorObservable');
-    });
-
-    return () => {
-      triggerButton();
-    };
-  }, []);
 
   const selectIndex = useMemo(() => {
     let result = 0;

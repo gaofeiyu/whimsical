@@ -60,7 +60,7 @@ const CanvasRenderLayer = () => {
         LibInfo.setComponentsDeclare(lib?.editor?.libConfig?.componentsDeclare);
         LibInfo.setEngine(lib?.editor);
         libEngine.current = sandbox.contentWindow[workbench.LibInfo.name]?.engine || null;
-        EDITOR_EVENTS$.emit('renderLayer:ready');
+        EDITOR_EVENTS$.emit('canvas:ready');
         setReady(true);
       });
     }
@@ -76,7 +76,8 @@ const CanvasRenderLayer = () => {
         'node:insertBefore',
         'node:remove',
         'props:update',
-        'renderLayer:ready',
+        'canvas:ready',
+        'canvas:resize',
         'history:goto',
       ],
       (e) => {

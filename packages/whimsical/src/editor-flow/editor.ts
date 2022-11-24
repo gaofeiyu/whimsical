@@ -5,10 +5,8 @@ import WTreeNode from '../core/WNode';
 
 export const EDITOR_EVENTS$ = new EventManagement();
 
-EDITOR_EVENTS$.createEvent('triggerButton1');
-EDITOR_EVENTS$.createEvent('triggerButton2');
-EDITOR_EVENTS$.createEvent('triggerStateChange');
-EDITOR_EVENTS$.createEvent('renderLayer:ready');
+EDITOR_EVENTS$.createEvent('canvas:resize');
+EDITOR_EVENTS$.createEvent('canvas:ready');
 
 // node event
 EDITOR_EVENTS$.createEvent('node:prepend');
