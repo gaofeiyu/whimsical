@@ -12,14 +12,14 @@ export type CanvasRenderLayerProps = {
 
 let renderLayerCollection: IRenderLayerTree = {};
 
-const resetRender = (wNode: IWNode, sandbox: HTMLIFrameElement, libEngine) => {
+const resetRender = (node: IWNode, sandbox: HTMLIFrameElement, libEngine) => {
   if (libEngine && libEngine?.render && sandbox) {
     return new Promise((resolve) => {
       const sandboxDocument = sandbox.contentDocument;
       const sandboxBody = sandboxDocument.querySelector('body');
       const renderRoot = sandboxDocument.createElement('div');
       renderRoot.id = 'renderRoot';
-      libEngine.render(wNode, renderRoot, () => {
+      libEngine.render(node, renderRoot, () => {
         const renderRootEle = sandboxDocument.getElementById('renderRoot');
         if (renderRootEle) {
           renderRootEle.remove();
@@ -83,12 +83,12 @@ const CanvasRenderLayer = () => {
       (e) => {
         const sandbox = renderSandbox.current;
         const sandboxDocument = sandbox?.contentDocument;
-        const wNode = workbench.treeNode.serialize();
-        console.log('new wNode ready to render', e.type, wNode);
-        resetRender(wNode, sandbox, libEngine.current).then(() => {
-          renderLayerCollection = collectionNodeSize(wNode, sandboxDocument);
+        const node = workbench.treeNode.serialize();
+        console.log('new node ready to render', e.type, node);
+        resetRender(node, sandbox, libEngine.current).then(() => {
+          renderLayerCollection = collectionNodeSize(node, sandboxDocument);
           console.log('renderLayerCollection', renderLayerCollection);
-          workbench.setWNode(wNode);
+          workbench.setWNode(node);
           workbench.setRenderLayerInfo(renderLayerCollection);
         });
       }

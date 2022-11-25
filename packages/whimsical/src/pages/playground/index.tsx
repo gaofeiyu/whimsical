@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { DndProvider } from 'react-dnd';
 import { HTML5Backend } from 'react-dnd-html5-backend';
-import { loadStatic } from 'whimsical-shared';
+import { ComponentLibInfoType, IWBody, loadStatic } from 'whimsical-shared';
 import CanvasPanel from 'src/components/CanvasPanel';
 import Content from 'src/components/Content';
 import Header from 'src/components/Header';
@@ -9,7 +9,6 @@ import Layout from 'src/components/Layout';
 import SettingPanel from 'src/components/SettingPanel';
 import Sidebar from 'src/components/Sidebar';
 import WTreeNode from 'src/core/WNode';
-import { wNodeMock, componentInfoMock } from 'src/mock/wNode';
 import { EditorHistory } from 'src/editor-flow';
 import Workbench, { IWorkbenchProps } from 'src/core/Workbench';
 import LibManager from 'src/core/LibManager';
@@ -18,7 +17,23 @@ import { WorkbenchContext } from './context';
 import ImportDSL from './components/ImportDSL';
 import ExportDSL from './components/ExportDSL';
 
-const Playground = () => {
+type PlaygroundProps = {
+  bodySchema: IWBody;
+  componentInfo: ComponentLibInfoType;
+};
+
+const Playground = (props: PlaygroundProps) => {
+  const {
+    bodySchema = {
+      node: null,
+      state: {
+        store: {},
+        api: {},
+      },
+    },
+    componentInfo,
+  } = props;
+  const { node, state } = bodySchema;
   const workbenchProps = useRef<IWorkbenchProps>();
   const [ready, setReady] = useState(false);
   const workbench = useMemo(() => {
@@ -28,14 +43,16 @@ const Playground = () => {
     return null;
   }, [ready]);
   useEffect(() => {
+    if (!componentInfo || !componentInfo.name) return;
     const LibInfo: LibManager = new LibManager({
-      ...componentInfoMock,
+      ...componentInfo,
     });
-    const wTreeNode = new WTreeNode(wNodeMock);
+    const wTreeNode = new WTreeNode(node);
     EditorHistory.registerStore<WTreeNode>(wTreeNode);
     workbenchProps.current = {
       treeNode: wTreeNode,
-      wNode: wNodeMock,
+      node: node,
+      state,
       History: EditorHistory,
       LibInfo,
     };

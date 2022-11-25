@@ -22,7 +22,8 @@ class WTreeNode implements IWNode {
 
   isInOperation = false;
 
-  constructor(node: IWNode, parent?: WTreeNode) {
+  constructor(node: IWNode | null, parent?: WTreeNode) {
+    if (!node) return null;
     if (node instanceof WTreeNode) {
       return node;
     }

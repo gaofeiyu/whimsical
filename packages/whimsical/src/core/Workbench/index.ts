@@ -1,5 +1,5 @@
 import { action, makeObservable, observable } from 'mobx';
-import { IWNode } from 'whimsical-shared';
+import { IWNode, BodyStateType } from 'whimsical-shared';
 import { IRenderLayerTree } from 'src/components/CanvasRenderLayer/renderLayer';
 import HistoryRecorder from 'src/utils/HistoryRecorder';
 import LibManager from '../LibManager';
@@ -7,7 +7,8 @@ import WTreeNode from '../WNode';
 
 export interface IWorkbenchProps {
   treeNode?: WTreeNode;
-  wNode?: IWNode;
+  node?: IWNode;
+  state?: BodyStateType;
   History?: HistoryRecorder;
   LibInfo?: LibManager;
 }
@@ -15,7 +16,9 @@ export interface IWorkbenchProps {
 class Workbench {
   treeNode: WTreeNode;
 
-  wNode: IWNode;
+  node: IWNode;
+
+  state: BodyStateType;
 
   History: HistoryRecorder;
 
@@ -26,18 +29,21 @@ class Workbench {
   selection: WTreeNode;
 
   constructor(props: IWorkbenchProps) {
-    const { treeNode, wNode, History, LibInfo } = props;
+    const { treeNode, node, History, LibInfo, state } = props;
     this.treeNode = treeNode;
-    this.wNode = wNode;
+    this.node = node;
     this.History = History;
     this.LibInfo = LibInfo;
+    this.state = state;
 
     makeObservable<Workbench, string>(this, {
-      wNode: observable.shallow,
+      node: observable.shallow,
+      state: observable,
       renderLayerInfo: observable,
       selection: observable.shallow,
       setRenderLayerInfo: action,
       setSelection: action,
+      setBodyState: action,
     });
   }
 
@@ -50,7 +56,11 @@ class Workbench {
   }
 
   setWNode(value: IWNode) {
-    this.wNode = value;
+    this.node = value;
+  }
+
+  setBodyState(state: BodyStateType) {
+    this.state = state;
   }
 }
 

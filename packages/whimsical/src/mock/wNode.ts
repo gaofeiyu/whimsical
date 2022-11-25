@@ -1,4 +1,4 @@
-import { ComponentLibInfoType, IWNode } from 'whimsical-shared';
+import { ComponentLibInfoType, IWNode, IWBody } from 'whimsical-shared';
 
 export const componentInfoMock: ComponentLibInfoType = {
   name: 'WReact',
@@ -96,4 +96,20 @@ export const wNodeMock: IWNode = {
       ],
     },
   ],
+};
+
+export const wBodyMock: IWBody = {
+  node: wNodeMock,
+  state: {
+    store: {
+      text: 'Whimsical',
+    },
+    api: {
+      getApi: {
+        method: 'GET',
+        url: 'https://json-schema.org/draft/2020-12/schema',
+        params: {},
+      },
+    },
+  },
 };
