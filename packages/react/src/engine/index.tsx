@@ -1,5 +1,5 @@
 import { createRoot } from 'react-dom/client';
-import { IWNode, getDOMElement, registerComponents } from 'whimsical-shared';
+import { getDOMElement, registerComponents, IWBody } from 'whimsical-shared';
 import './index.css';
 import { WNodeRenderComponent, WView } from './WView';
 import * as components from '../components';
@@ -12,7 +12,7 @@ export interface IWContainerRef {
 }
 
 export const render = (
-  node: IWNode,
+  wBody: IWBody,
   id?: string | HTMLElement | ShadowRoot,
   cb?: () => null,
   options = {
@@ -32,10 +32,21 @@ export const render = (
 
   if (options.editor) {
     root.render(
-      <>{options.isPreview ? <WView node={node}></WView> : WNodeRenderComponent({ node })}</>
+      <>
+        {options.isPreview ? (
+          <WView wBody={wBody}></WView>
+        ) : (
+          WNodeRenderComponent(
+            {
+              wBody,
+            },
+            wBody
+          )
+        )}
+      </>
     );
   } else {
-    root.render(<WContainer node={node} empty={element?.innerHTML}></WContainer>);
+    root.render(<WContainer wBody={wBody} empty={element?.innerHTML}></WContainer>);
   }
 
   // https://github.com/reactwg/react-18/discussions/5
@@ -48,17 +59,17 @@ export const render = (
 };
 
 export interface IWContainer {
-  node: IWNode;
+  wBody: IWBody;
   empty: string | undefined;
 }
 
 export const WContainer = (props: IWContainer) => {
-  const { node, empty } = props;
+  const { wBody, empty } = props;
 
   return (
     <>
-      {node ? (
-        <WView node={node}></WView>
+      {wBody ? (
+        <WView wBody={wBody}></WView>
       ) : (
         <div
           dangerouslySetInnerHTML={{

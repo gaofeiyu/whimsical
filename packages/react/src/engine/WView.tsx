@@ -1,34 +1,35 @@
 import React, { useMemo } from 'react';
-import { IRuntimeContext, IWNode } from 'whimsical-shared';
+import { IRuntimeContext, IWBody } from 'whimsical-shared';
 import generateNodeTree from './generateNodeTree';
 
 export const RuntimeContext = React.createContext<IRuntimeContext>({});
 
-export const WNodeRenderComponent = (context: IRuntimeContext) => {
-  const { node } = context;
+export const WNodeRenderComponent = (context: IRuntimeContext, wBody: IWBody) => {
+  const { node, state = {} } = wBody;
   if (!node) return <></>;
-  return <>{node?.name ? generateNodeTree(node) : <></>}</>;
+  return <>{node?.name ? generateNodeTree(context, node, state) : <></>}</>;
 };
 
 export interface IWViewProps {
-  node: IWNode;
+  wBody: IWBody;
 }
 
 export const WView = (props: IWViewProps) => {
-  const { node } = props;
+  const { wBody } = props;
+  const { node } = wBody;
 
   const context: IRuntimeContext = useMemo(() => {
     return {
-      node,
+      wBody,
     };
   }, [node]);
   return (
     <RuntimeContext.Provider
       value={{
-        node,
+        wBody,
       }}
     >
-      {WNodeRenderComponent(context)}
+      {WNodeRenderComponent(context, wBody)}
     </RuntimeContext.Provider>
   );
 };

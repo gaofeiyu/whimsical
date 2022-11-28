@@ -5,7 +5,9 @@
   "main": "dist/index.umd.js",
   "module": "dist/index.es.js",
   "types": "dist/types/index.d.ts",
-  "files": ["dist"],
+  "files": [
+    "dist"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.es.js",
@@ -18,5 +20,8 @@
   },
   "devDependencies": {
     "rimraf": "^3.0.2"
+  },
+  "dependencies": {
+    "json-logic-js": "^2.0.2"
   }
 }

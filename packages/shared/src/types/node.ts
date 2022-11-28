@@ -1,7 +1,24 @@
+export type IWNodePropsValue =
+  | IWExpression
+  | EventExpressionType
+  | string
+  | boolean
+  | number
+  | IWExpression[]
+  | []
+  | Record<string, unknown>
+  | IWActionExpression
+  | IWActionExpression[];
+
 export interface IWExpression {
   type: string;
-  value?: string | IWExpression;
+  value?: IWNodePropsValue;
   params?: Record<string, unknown> | IWExpression;
+}
+
+// 节点数据
+export interface IWNodeNodeDataType {
+  loopDataSource?: IWDataSourceExpression;
 }
 
 export interface IWActionExpression extends IWExpression {
@@ -29,6 +46,13 @@ export type EventExpressionType = {
 // 节点数据
 export type WNodeDataType = {
   loopDataSource?: IWDataSourceExpression;
+};
+
+// 循环数据缓存
+export type LoopCacheType = {
+  from: string;
+  loopDataSource: IWDataSourceExpression;
+  index?: number;
 };
 
 // 节点DSL

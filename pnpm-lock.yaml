@@ -122,7 +122,10 @@ importers:
 
   packages/shared:
     specifiers:
+      json-logic-js: ^2.0.2
       rimraf: ^3.0.2
+    dependencies:
+      json-logic-js: 2.0.2
     devDependencies:
       rimraf: 3.0.2
 
@@ -6693,6 +6696,10 @@ packages:
     engines: {node: '>=4'}
     hasBin: true
     dev: true
+
+  /json-logic-js/2.0.2:
+    resolution: {integrity: sha512-ZBtBdMJieqQcH7IX/LaBsr5pX+Y5JIW+EhejtM3Ffg2jdN9Iwf+Ht6TbHnvAZ/YtwyuhPaCBlnvzrwVeWdvGDQ==}
+    dev: false
 
   /json-parse-better-errors/1.0.2:
     resolution: {integrity: sha512-mrqyZKfX5EhL7hvqcV6WG1yYjnjeuYDzDhhcAAUrq8Po85NBQBJP+ZDUT75qZQ98IkUoBqdkExkukOU7Ts2wrw==}

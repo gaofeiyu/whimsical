@@ -1,5 +1,5 @@
 import { ReactElement, useEffect, useState, useContext, useRef } from 'react';
-import { IWNode, loadStatic } from 'whimsical-shared';
+import { IWBody, loadStatic } from 'whimsical-shared';
 import Sandbox, { createSandbox } from './Sandbox';
 import { WorkbenchContext } from 'src/pages/playground/context';
 import { collectionNodeSize } from './collectionNodeSize';
@@ -12,14 +12,14 @@ export type CanvasRenderLayerProps = {
 
 let renderLayerCollection: IRenderLayerTree = {};
 
-const resetRender = (node: IWNode, sandbox: HTMLIFrameElement, libEngine) => {
+const resetRender = (wBody: IWBody, sandbox: HTMLIFrameElement, libEngine) => {
   if (libEngine && libEngine?.render && sandbox) {
     return new Promise((resolve) => {
       const sandboxDocument = sandbox.contentDocument;
       const sandboxBody = sandboxDocument.querySelector('body');
       const renderRoot = sandboxDocument.createElement('div');
       renderRoot.id = 'renderRoot';
-      libEngine.render(node, renderRoot, () => {
+      libEngine.render(wBody, renderRoot, () => {
         const renderRootEle = sandboxDocument.getElementById('renderRoot');
         if (renderRootEle) {
           renderRootEle.remove();
@@ -84,8 +84,16 @@ const CanvasRenderLayer = () => {
         const sandbox = renderSandbox.current;
         const sandboxDocument = sandbox?.contentDocument;
         const node = workbench.treeNode.serialize();
+        const state = workbench.state;
         console.log('new node ready to render', e.type, node);
-        resetRender(node, sandbox, libEngine.current).then(() => {
+        resetRender(
+          {
+            node,
+            state,
+          },
+          sandbox,
+          libEngine.current
+        ).then(() => {
           renderLayerCollection = collectionNodeSize(node, sandboxDocument);
           console.log('renderLayerCollection', renderLayerCollection);
           workbench.setWNode(node);
