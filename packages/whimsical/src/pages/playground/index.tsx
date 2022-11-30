@@ -18,8 +18,8 @@ import ImportDSL from './components/ImportDSL';
 import ExportDSL from './components/ExportDSL';
 
 type PlaygroundProps = {
-  bodySchema: IWBody;
-  componentInfo: ComponentLibInfoType;
+  bodySchema?: IWBody;
+  componentInfo?: ComponentLibInfoType;
 };
 
 const Playground = (props: PlaygroundProps) => {
