@@ -4,7 +4,7 @@ export interface IErgodicNodeCallbackProps<T, P> {
   // 父级节点信息
   parentNode?: T;
   // 子节点的结果集合
-  children: IErgodicNode<P>[];
+  children?: IErgodicNode<P>[];
   // 当前节点的渲染id
   nodeRenderId?: string;
   // 父级节点的渲染id
@@ -57,19 +57,25 @@ export function ergodicNode<T, P>(props: IErgodicNodeProps<T, P>): IErgodicNode<
     children: nodeChildren,
     name: nodeName = '',
   } = covertNodeBase ? covertNodeBase(node) : (node as NodeBaseType<T>);
+  if (!nodeId || !nodeName) return [];
   const nodeRenderId = path === '' ? `${nodeId}` : `${nodeId}-${path}`;
-  const children: IErgodicNode<P>[] = [];
-  nodeChildren.forEach((childNode: T) => {
-    const value: IErgodicNode<P>[] = ergodicNode({
-      node: childNode,
-      parentNode: node,
-      path,
-      parentRenderId: nodeRenderId,
-      covertNodeBase,
-      callback,
+  let children: IErgodicNode<P>[] | undefined;
+  if (nodeChildren) {
+    children = [];
+    nodeChildren.forEach((childNode: T) => {
+      const value: IErgodicNode<P>[] = ergodicNode({
+        node: childNode,
+        parentNode: node,
+        path,
+        parentRenderId: nodeRenderId,
+        covertNodeBase,
+        callback,
+      });
+      if (children) {
+        children.splice(children.length, 0, ...value);
+      }
     });
-    children.splice(children.length, 0, ...value);
-  });
+  }
   return [
     {
       id: nodeId,

@@ -1,25 +1,35 @@
 import { describe, test, expect } from 'vitest';
 import { ergodicNode } from '../ergodicNode';
 
-import { IWNode } from '../types';
-import uuid from '../utils/uuid';
-
-const mockNode: IWNode = {
-  name: 'view',
-  id: uuid(),
+const mockNode = {
+  name: 'View',
+  id: 't1',
   children: [
     {
-      name: 'view',
-      id: uuid(),
+      name: 'View',
+      id: 't11',
+    },
+    {
+      name: 'View',
+    },
+    {
+      id: 't13',
     },
   ],
 };
 
 describe('ergodicNode', () => {
-  test('Normal', () => {
+  test('Base', () => {
     const result = ergodicNode({
       node: mockNode,
     });
-    expect(result).toEqual(result);
+    console.log(JSON.stringify(result));
+    expect(result).toEqual([
+      {
+        id: 't1',
+        children: [{ id: 't11', name: 'View' }],
+        name: 'View',
+      },
+    ]);
   });
 });
