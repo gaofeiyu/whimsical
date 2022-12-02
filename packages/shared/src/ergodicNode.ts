@@ -51,7 +51,7 @@ export interface IErgodicNode<P> {
  */
 
 export function ergodicNode<T, P>(props: IErgodicNodeProps<T, P>): IErgodicNode<P>[] {
-  const { node, parentNode, parentRenderId = '', path = '', covertNodeBase, callback } = props;
+  const { node, parentNode, parentRenderId, path = '', covertNodeBase, callback } = props;
   const {
     id: nodeId,
     children: nodeChildren,
