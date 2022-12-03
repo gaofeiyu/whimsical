@@ -1,12 +1,15 @@
 import jsonLogic from 'json-logic-js';
 import { execProp } from '.';
-import { IWExpression } from '../types';
+import { IPropsGeneratorOptions, IWExpression } from '../types';
 
 /**
  * 处理Logic表达式
  * @param current
  */
-export function execLogic(logicExpression: IWExpression, options?: any): any {
+export function execLogic(
+  logicExpression: IWExpression,
+  options?: IPropsGeneratorOptions
+): unknown {
   let data = {};
   if (logicExpression.params) {
     data = execProp(logicExpression.params, options);

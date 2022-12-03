@@ -3,7 +3,7 @@ import { isEmpty } from './typeof';
 import {
   EventExpressionType,
   IWActionExpression,
-  ActionModuleOptionsType,
+  IPropsGeneratorOptions,
   IActionModule,
 } from './types';
 
@@ -12,7 +12,7 @@ let actionModule: { [key: string]: IActionModule } = {};
 // 当前事件执行仅允许执行里面的Action，不允许执行其他类型表达式
 export const execEvent = (
   eventExpression: EventExpressionType,
-  options?: ActionModuleOptionsType
+  options?: IPropsGeneratorOptions
 ) => {
   return (...funcArgs) => {
     const { action = [] } = eventExpression;
@@ -155,7 +155,7 @@ export const execEvent = (
 
 export const generatorEvents = (
   eventOptions: EventExpressionType[],
-  options?: ActionModuleOptionsType
+  options?: IPropsGeneratorOptions
 ) => {
   const eventActions = {};
   eventOptions.forEach((eventItem) => {

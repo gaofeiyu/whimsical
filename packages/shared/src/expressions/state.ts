@@ -1,6 +1,6 @@
 import { execProp } from '.';
 import { isArray, isObject } from '../typeof';
-import { IWExpression, IWNodeNodeDataType } from '../types';
+import { IPropsGeneratorOptions, IWExpression, IWNodeNodeDataType } from '../types';
 
 /**
  * 将root.state.list的path翻译成真正的数据
@@ -10,7 +10,7 @@ import { IWExpression, IWNodeNodeDataType } from '../types';
 
 const regExpArrayLike = new RegExp(/^\[/);
 
-export function transformStateData(_state: unknown, path: string): any {
+export function transformStateData(_state: unknown, path: string): unknown {
   try {
     // 如果path为空返回''
     // 如果path第一位可能是数组下标或通过['fieldName']方式调用，则不需要"."开头，否则在开头加"."
@@ -28,8 +28,8 @@ export function transformStateData(_state: unknown, path: string): any {
  * @param prop
  * @param state
  */
-export function getNormalData(prop: IWExpression, options?: any): any {
-  const { state } = options;
+export function getNormalData(prop: IWExpression, options?: IPropsGeneratorOptions): any {
+  const { state } = options || {};
   if ((prop.type === 'API' || prop.type === 'Store') && prop.value) {
     return transformStateData(state, `${prop.type.toLowerCase()}.${execProp(prop.value, options)}`);
   } else {
@@ -41,8 +41,8 @@ export function getNormalData(prop: IWExpression, options?: any): any {
  * @param prop
  * @param args
  */
-export function getFunctionArguments(prop: IWExpression, options?: any): any {
-  const { funcArgs } = options;
+export function getFunctionArguments(prop: IWExpression, options?: IPropsGeneratorOptions): any {
+  const { funcArgs } = options || {};
   if (prop.value) {
     return transformStateData(funcArgs, `${execProp(prop.value, options)}`);
   } else {
@@ -70,9 +70,12 @@ export function isLoopData(data: IWNodeNodeDataType): boolean {
  * @param props
  * @param state
  */
-export function getLoopData(data: IWNodeNodeDataType, options?: any): any[] | null {
+export function getLoopData(
+  data: IWNodeNodeDataType,
+  options?: IPropsGeneratorOptions
+): unknown | null {
   if (!isLoopData(data) || !data.loopDataSource) return null;
-  const { state } = options;
+  const { state } = options || {};
   if (data?.loopDataSource?.type === 'LoopState') {
     const props = {
       type: data.loopDataSource.type,

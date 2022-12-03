@@ -1,12 +1,17 @@
 import { isArray, isObject } from '../typeof';
-import { IWActionExpression, IWExpression, IWNodePropsValue } from '../types';
+import {
+  IPropsGeneratorOptions,
+  IWActionExpression,
+  IWExpression,
+  IWNodePropsValue,
+} from '../types';
 import { getCustomExpressions } from './expressionManager';
 import { getJSONData } from './json';
 import { execLogic } from './logic';
 import { getFunctionArguments, getLoopStateData, getNormalData } from './state';
 import { execEvent } from '../eventManager';
 
-export function execProps(props: IWExpression[], options?: any): any {
+export function execProps(props: IWExpression[], options?: IPropsGeneratorOptions): any {
   if (!isArray(props)) return [];
   return props.map((prop) => {
     return execProp(prop, options);
@@ -18,7 +23,7 @@ export function execProps(props: IWExpression[], options?: any): any {
  * @param prop 属性值
  * @param options 扩展参数
  */
-export function execProp(prop: IWNodePropsValue, options?: any): any {
+export function execProp(prop: IWNodePropsValue, options?: IPropsGeneratorOptions): any {
   if (isArray(prop)) return execProps(prop as [], options);
   let result: any = {};
   if (!prop || !isObject(prop)) return prop;

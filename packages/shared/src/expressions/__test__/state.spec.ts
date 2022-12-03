@@ -37,5 +37,15 @@ describe('ExpressionState', () => {
         options
       )
     ).toBeUndefined();
+
+    expect(() =>
+      getNormalData(
+        {
+          type: 'Store',
+          value: 'o2.name1.name1.name1.name1',
+        },
+        options
+      )
+    ).toThrow('transformStateData error');
   });
 });
