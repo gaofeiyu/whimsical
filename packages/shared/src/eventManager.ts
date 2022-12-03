@@ -1,4 +1,4 @@
-import { execProp } from './propsGenerator';
+import { execProp } from './expressions';
 import { isEmpty } from './typeof';
 import {
   EventExpressionType,
