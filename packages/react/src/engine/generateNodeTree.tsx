@@ -74,14 +74,7 @@ export default function generateNodeTree(
         });
 
         result = (
-          <Node
-            key={nodeRenderId}
-            id={nodeRenderId}
-            className={'coralsea_' + nodeRenderId}
-            style={nodeStyle}
-            {...newProps}
-            {...nodeEvent}
-          >
+          <Node key={nodeRenderId} id={nodeRenderId} style={nodeStyle} {...newProps} {...nodeEvent}>
             {childrenNode.length ? childrenNode : null}
           </Node>
         );

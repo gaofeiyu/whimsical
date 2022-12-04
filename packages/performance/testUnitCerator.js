@@ -43,7 +43,7 @@ export const fullJSXStringCreator = (options) => {
 
 export const outputDSLFile = (str) => {
 
-  fs.writeFile(path.resolve('./src/DSLTest.js'), str, err => {
+  fs.writeFile(path.resolve('./src/DSLTest.json'), str, err => {
     if (err) {
       console.error(err);
     }
