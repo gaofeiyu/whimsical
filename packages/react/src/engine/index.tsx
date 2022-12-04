@@ -65,7 +65,7 @@ export interface IWContainer {
 
 export const WContainer = (props: IWContainer) => {
   const { wBody, empty } = props;
-
+  console.log(wBody);
   return (
     <>
       {wBody ? (
@@ -80,3 +80,5 @@ export const WContainer = (props: IWContainer) => {
     </>
   );
 };
+
+export { default as generateNodeTree } from './generateNodeTree';
