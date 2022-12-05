@@ -77,7 +77,7 @@ class WTreeNode implements IWNode {
       this.name = name;
     }
 
-    this.props = props;
+    this.props = props as Record<string | number | symbol, unknown>;
 
     if (children) {
       this.children =

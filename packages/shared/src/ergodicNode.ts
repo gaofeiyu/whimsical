@@ -1,3 +1,5 @@
+import { IWNode } from 'whimsical-shared';
+
 export interface IErgodicNodeCallbackProps<T, P> {
   // 当前节点信息
   currentNode: T;
@@ -50,14 +52,22 @@ export interface IErgodicNode<P> {
  * @returns IErgodicNode
  */
 
-export function ergodicNode<T, P>(props: IErgodicNodeProps<T, P>): IErgodicNode<P>[] {
+export function ergodicNode<T = IWNode, P = any>(
+  props: IErgodicNodeProps<T, P>
+): IErgodicNode<P>[] {
   const { node, parentNode, parentRenderId, path = '', covertNodeBase, callback } = props;
+  /**
+   * TODO 我想要的是下面这行的效果，但是在新版本的ts里面这里报错了，搞半天没改过来，搞明白了再弄
+   * if (!(node as NodeBaseType<T>).id || !(node as NodeBaseType<T>).name) return [];
+   * Infomation
+   * error TS2352: Conversion of type 'T' to type 'NodeBaseType<T>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+   */
+  if (!(node as any).id || !(node as any).name) return [];
   const {
     id: nodeId,
     children: nodeChildren,
     name: nodeName = '',
-  } = covertNodeBase ? covertNodeBase(node) : (node as NodeBaseType<T>);
-  if (!nodeId || !nodeName) return [];
+  } = covertNodeBase ? covertNodeBase(node) : (node as any);
   const nodeRenderId = path === '' ? `${nodeId}` : `${nodeId}-${path}`;
   let children: IErgodicNode<P>[] | undefined;
   if (nodeChildren) {

@@ -22,10 +22,11 @@
     "coverage": "vitest run --coverage"
   },
   "devDependencies": {
-    "@vitejs/plugin-react": "^2.1.0",
-    "rimraf": "^3.0.2"
+    "@vitejs/plugin-react": "2.1.0",
+    "rimraf": "3.0.2",
+    "typescript": "4.6.4"
   },
   "dependencies": {
-    "json-logic-js": "^2.0.2"
+    "json-logic-js": "2.0.2"
   }
 }

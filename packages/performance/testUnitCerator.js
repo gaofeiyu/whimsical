@@ -1,6 +1,8 @@
-import { generateNodeTree } from "../dist/WReactEngine.es.js";
 import fs from 'fs';
 import path from 'path';
+
+const DEEP = 4;
+const BREADTH = 10;
 
 export const fullTreeCreator = (options) => {
   const { deep = 1, breadth = 1, id = 'Root', createNode = () => null } = options;
@@ -70,8 +72,8 @@ export default () => {
 }
 
 const DSLValue = fullTreeCreator({
-  deep: 7,
-  breadth: 3,
+  deep: DEEP,
+  breadth: BREADTH,
   createNode: (id) => {
     return {
       id,
@@ -80,8 +82,8 @@ const DSLValue = fullTreeCreator({
   }
 });
 const JSXValue = fullJSXStringCreator({
-  deep: 7,
-  breadth: 3
+  deep: DEEP,
+  breadth: BREADTH
 });
 
 

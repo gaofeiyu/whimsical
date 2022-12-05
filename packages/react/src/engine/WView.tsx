@@ -6,7 +6,6 @@ export const RuntimeContext = React.createContext<IRuntimeContext>({});
 
 export const WNodeRenderComponent = (context: IRuntimeContext, wBody: IWBody) => {
   const { node, state = {} } = wBody;
-  console.log('trigger');
   if (!node) return <></>;
 
   return <>{node?.name ? generateNodeTree(context, node, state) : <></>}</>;
@@ -19,7 +18,6 @@ export interface IWViewProps {
 export const WView = (props: IWViewProps) => {
   const { wBody } = props;
   const { node } = wBody;
-  console.log('trigger');
 
   const context: IRuntimeContext = useMemo(() => {
     return {
