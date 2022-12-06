@@ -17,7 +17,7 @@
   "scripts": {
     "example": "vite dev",
     "dev": "npx concurrently -c \"bgBlue.bold,bgMagenta.bold\" -p \"{time}-{pid}-{name}\" -t \"HH:mm:ss\" --handle-input \"tsc -w\" \"cross-env NODE_ENV=development vite build --mode dev --watch\"",
-    "build": "rimraf -rf dist && tsc && vite build && pnpm build:editor && pnpm build:engine",
+    "build": "rimraf -rf dist/{lib,packages,types} && tsc && rimraf -rf dist/lib && vite build && pnpm build:editor && pnpm build:engine",
     "build:engine": "vite build --mode engine",
     "build:editor": "vite build --mode editor"
   },
@@ -34,7 +34,8 @@
   },
   "devDependencies": {
     "@vitejs/plugin-react": "2.1.0",
+    "fast-glob": "^3.2.12",
     "rimraf": "3.0.2",
-    "vite": "3.1.0"
+    "vite": "4.0.0-beta.0"
   }
 }

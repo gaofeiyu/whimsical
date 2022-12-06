@@ -1,10 +1,19 @@
-import { createServer, defineConfig, InlineConfig } from 'vite';
+import { createServer, defineConfig, InlineConfig, LibraryOptions } from 'vite';
 import path from 'path';
 import react from '@vitejs/plugin-react';
+import genEntries from './scripts/getEntries';
+
+const libInput = genEntries('src/**/*.{tsx,ts}');
 
 // https://vitejs.dev/config/
 export default defineConfig(({ command, mode }) => {
   const env = JSON.stringify(process.env.NODE_ENV || 'production');
+  const rollupOptions: any = {
+    input: {},
+    output: {
+      dir: 'dist',
+    },
+  };
   let entryPath = 'src/index.tsx';
   let libName = 'WReact';
 
@@ -34,24 +43,39 @@ export default defineConfig(({ command, mode }) => {
     libName = 'WReactEngine';
   }
 
+  const lib: LibraryOptions = {
+    entry: path.resolve(__dirname, entryPath),
+    formats: ['umd', 'es'],
+    name: libName,
+    fileName: (format) => {
+      return `${libName}.${format}.js`;
+    },
+  };
+
+  if (command === 'build' && mode === 'production') {
+    rollupOptions.input = libInput;
+    rollupOptions.output = {
+      entryFileNames: ({ name }) => {
+        return `${name}.js`;
+      },
+      dir: 'dist/packages',
+    };
+    lib.entry = libInput;
+    lib.formats = ['cjs', 'es'];
+    delete lib.name;
+  }
   return {
     define: {
       __NODE_ENV__: env,
     },
     plugins: [react()],
     build: {
-      lib: {
-        entry: path.resolve(__dirname, entryPath),
-        name: libName,
-        formats: ['umd', 'es'],
-        fileName: (format) => {
-          return `${libName}.${format}.js`;
-        },
-      },
+      lib,
       rollupOptions: {
         // 确保外部化处理那些你不想打包进库的依赖
         external: ['react', 'react-dom'],
         output: {
+          ...rollupOptions.output,
           globals: {
             react: 'React',
             'react-dom': 'ReactDOM',
