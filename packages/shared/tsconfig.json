@@ -1,11 +1,13 @@
 {
   "compilerOptions": {
-    "outDir": "dist/types",
+    "declaration": true,
+    "declarationDir": "dist/types",
+    "outDir": "dist/lib",
+    "types": ["node"],
     "target": "ESNext",
     "module": "ESNext",
     "moduleResolution": "Node",
     "strict": true,
-    "declaration": true,
     "sourceMap": true,
     "noUnusedLocals": true,
     "esModuleInterop": true,

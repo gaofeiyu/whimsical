@@ -38,7 +38,6 @@ describe('ergodicNode', () => {
         return value;
       },
     });
-    console.log(JSON.stringify(result));
     expect(result).toEqual([
       {
         id: 't1',

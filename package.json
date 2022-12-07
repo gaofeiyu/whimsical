@@ -18,7 +18,8 @@
     "example:react": "pnpm --filter=whimsical-react run example",
     "publish:canary": "lerna publish --canary --yes",
     "publish:release": "lerna publish --yes",
-    "test": "lerna run --parallel test"
+    "test": "lerna run --parallel test",
+    "test:shared": "pnpm --filter=whimsical-shared run test"
   },
   "repository": {
     "type": "git",
