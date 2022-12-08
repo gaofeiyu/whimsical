@@ -1,4 +1,4 @@
-import { IWNode } from 'whimsical-shared';
+import { IWNode } from './types';
 
 export interface IErgodicNodeCallbackProps<T, P> {
   // 当前节点信息
