@@ -25,5 +25,18 @@ export const mockState = {
       id: 'o1',
     },
   },
-  api: {},
+  api: {
+    getUserInfo: {
+      method: 'GET',
+      url: 'api/getUserInfo',
+      data: {
+        code: '0',
+        message: 'success',
+        data: {
+          name: 'Goofy',
+          age: 18,
+        },
+      },
+    },
+  },
 };

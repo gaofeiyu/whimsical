@@ -48,4 +48,19 @@ describe('ExpressionState', () => {
       )
     ).toThrow('transformStateData error');
   });
+  test('API', () => {
+    const keys = Object.keys(mockState.api.getUserInfo.data.data);
+    const options = { state: mockState };
+    keys.forEach((key) => {
+      expect(
+        getNormalData(
+          {
+            type: 'API',
+            value: `getUserInfo.data.${key}`,
+          },
+          options
+        )
+      ).toBe(mockState.api.getUserInfo.data[key]);
+    });
+  });
 });
