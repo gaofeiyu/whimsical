@@ -1,8 +1,8 @@
 {
   "name": "whimsical-react",
   "version": "0.0.1-alpha.0",
-  "main": "dist/WReact.umd.js",
-  "module": "dist/WReact.es.js",
+  "main": "dist/packages/es/src/index.js",
+  "module": "dist/packages/es/src/index.js",
   "types": "dist/types/src/index.d.ts",
   "type": "module",
   "files": [
@@ -10,8 +10,8 @@
   ],
   "exports": {
     ".": {
-      "import": "./dist/WReact.es.js",
-      "require": "./dist/WReact.umd.js"
+      "import": "./dist/packages/es/src/index.js",
+      "require": "./dist/packages/cjs/src/index.js"
     }
   },
   "scripts": {

@@ -10,7 +10,6 @@ const result = [];
 
 function test() {
   const startTime = +new Date();
-  console.time('test time');
   ReactDOM.createRoot(document.getElementById('root')).render(
     <React.StrictMode>
       <App />

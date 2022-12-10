@@ -4,7 +4,7 @@ interface Props<T> extends HTMLAttributes<T> {
   children?: string;
 }
 
-export const View = (props: Props<unknown>) => {
+const View = (props: Props<unknown>) => {
   return <div {...props}>{props.children}</div>;
 };
 

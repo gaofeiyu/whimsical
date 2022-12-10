@@ -34,7 +34,7 @@ const json = {
 
 describe('ExpressionJSON', () => {
   test('Base', () => {
-    expect(getJSONData(mockJson)).toEqual(json);
+    expect(getJSONData(mockJson)).toEqual(mockJson.value);
   });
   test('Normal Objcet', () => {
     expect(execProp(mockJson.value)).toEqual(json);

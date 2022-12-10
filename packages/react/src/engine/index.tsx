@@ -65,7 +65,6 @@ export interface IWContainer {
 
 export const WContainer = (props: IWContainer) => {
   const { wBody, empty } = props;
-  console.log(wBody);
   return (
     <>
       {wBody ? (

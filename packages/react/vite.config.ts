@@ -55,13 +55,13 @@ export default defineConfig(({ command, mode }) => {
   if (command === 'build' && mode === 'production') {
     rollupOptions.input = libInput;
     rollupOptions.output = {
-      entryFileNames: ({ name }) => {
-        return `${name}.js`;
-      },
       dir: 'dist/packages',
     };
     lib.entry = libInput;
-    lib.formats = ['cjs', 'es'];
+    lib.formats = ['es', 'cjs'];
+    lib.fileName = (format, entryName) => {
+      return `${format}/${entryName}.js`;
+    };
     delete lib.name;
   }
   return {

@@ -16,6 +16,12 @@ describe('ExpressionLogic', () => {
               {
                 var: 'n1',
               },
+              {
+                var: 'n2',
+              },
+              {
+                var: 'n3',
+              },
             ],
           },
           params: {
@@ -27,12 +33,14 @@ describe('ExpressionLogic', () => {
               type: 'Store',
               value: 'n1',
             },
+            n2: 2,
+            n3: -3,
           },
         },
         {
           state: mockState,
         }
       )
-    ).toBe(1);
+    ).toBe(0);
   });
 });
