@@ -43,7 +43,7 @@ export function execProp(prop: IWNodePropsValue, options?: IPropsGeneratorOption
       result = getLoopStateData(expressionProp, options);
       break;
     case 'JSON':
-      result = getJSONData(expressionProp, options);
+      result = getJSONData(expressionProp);
       break;
     case 'Action':
       // 行为执行比较特殊，返回的是一个promise
