@@ -29,5 +29,24 @@ describe('execProp', () => {
         test: 'execProp',
       },
     ]);
+    expect(
+      execProp([
+        {
+          type: 'JSON',
+          value: {
+            test: 'execProp',
+          },
+        },
+      ])
+    ).toEqual(
+      execProps([
+        {
+          type: 'JSON',
+          value: {
+            test: 'execProp',
+          },
+        },
+      ])
+    );
   });
 });

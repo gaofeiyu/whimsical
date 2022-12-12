@@ -5,7 +5,7 @@ import {
   IWExpression,
   IWNodePropsValue,
 } from '../types';
-import { getCustomExpressions } from './expressionManager';
+import { getCustomExpression } from './expressionManager';
 import { getJSONData } from './json';
 import { execLogic } from './logic';
 import { getFunctionArguments, getLoopStateData, getNormalData } from './state';
@@ -66,11 +66,8 @@ export function execProp(prop: IWNodePropsValue, options?: IPropsGeneratorOption
       break;
     default:
       if (expressionProp.type) {
-        const customExpressions = getCustomExpressions();
-        if (
-          customExpressions[expressionProp.type] &&
-          typeof customExpressions[expressionProp.type]
-        ) {
+        const customExpressions = getCustomExpression(expressionProp.type);
+        if (customExpressions) {
           // 事件的实现类型不确定
           // eslint-disable-next-line @typescript-eslint/no-explicit-any
           result = (customExpressions as any)[expressionProp.type](expressionProp, options);

@@ -1,6 +1,9 @@
 const expressions: { [key: string]: unknown } = {};
 
-export const getCustomExpressions = () => {
+export const getCustomExpression = (name?: string): unknown | Record<string, unknown> => {
+  if (name) {
+    return expressions[name];
+  }
   return expressions || {};
 };
 
