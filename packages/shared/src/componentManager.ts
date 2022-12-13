@@ -1,6 +1,9 @@
 const components: Record<string, unknown> = {};
 
-export const getComponents = () => {
+export const getComponent = (name?: string) => {
+  if (name) {
+    return components[name];
+  }
   return components;
 };
 

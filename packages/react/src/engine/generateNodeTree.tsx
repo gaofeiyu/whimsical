@@ -2,14 +2,14 @@ import { CSSProperties, ReactElement } from 'react';
 import {
   IWNode,
   ergodicNode,
-  getComponents,
+  getComponent,
   execProp,
   BodyStateType,
   IRuntimeContext,
   generatorEvents,
 } from 'whimsical-shared';
 
-const components = getComponents();
+const components = getComponent();
 
 function filterStyles(styles: React.CSSProperties, state: BodyStateType): React.CSSProperties {
   const style: React.CSSProperties = {};
