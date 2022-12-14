@@ -16,5 +16,5 @@ export type IPropsGeneratorOptions = {
 
 export type IActionModule = (
   actionItem: IWActionExpression,
-  options: IPropsGeneratorOptions
+  options?: IPropsGeneratorOptions
 ) => Promise<unknown> | void;

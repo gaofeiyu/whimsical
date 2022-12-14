@@ -16,7 +16,7 @@ export const execEvent = (
 ) => {
   return (...funcArgs) => {
     const { action = [] } = eventExpression;
-    if (eventExpression.name === 'onClick') {
+    if (eventExpression.name === 'onClick' && funcArgs && funcArgs[0]) {
       try {
         funcArgs[0].stopPropagation();
       } catch (err) {
@@ -37,7 +37,7 @@ export const execEvent = (
       }
       const actionItem = actionList[index];
       let actionModuleResult;
-      const actionValue = actionItem.value && execProp(actionItem.value, scopExtend);
+      const actionValue = actionItem.actionName && execProp(actionItem.actionName, scopExtend);
 
       if (
         actionItem.type === 'Action' &&
@@ -52,7 +52,7 @@ export const execEvent = (
       if (!(actionModuleResult instanceof Promise)) {
         actionModuleResult = Promise.resolve({
           type: 'Action',
-          name: actionItem.value,
+          actionName: actionItem.actionName,
           status: 'success',
           target: actionItem,
           options: {

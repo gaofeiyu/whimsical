@@ -24,9 +24,9 @@ export interface IWNodeNodeDataType {
 export interface IWActionExpression extends IWExpression {
   type: 'Action';
   actionName: string | IWExpression;
-  success: IWActionExpression[];
-  fail: IWActionExpression[];
-  finally: IWActionExpression[];
+  success?: IWActionExpression[];
+  fail?: IWActionExpression[];
+  finally?: IWActionExpression[];
 }
 
 export type WDataSourceEnum = 'API' | 'Store' | 'LoopState';

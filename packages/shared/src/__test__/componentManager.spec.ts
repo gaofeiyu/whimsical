@@ -5,7 +5,7 @@ const testExpression = () => {
   return null;
 };
 
-describe('expressionManager', () => {
+describe('componentManager', () => {
   test('registerComponents', () => {
     registerComponents({
       Test: testExpression,
