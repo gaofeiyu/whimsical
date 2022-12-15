@@ -2,27 +2,40 @@ import { describe, expect, test } from 'vitest';
 import { execEvent, registerActionModule } from '../eventManager';
 import { IWActionExpression, IActionModule } from '../types';
 
-const TestAction: IActionModule = () => {
+const TestAction: IActionModule = (actionItem: IWActionExpression) => {
   return new Promise((resolve) => {
-    return resolve('TestAction');
+    resolve({
+      type: 'Action',
+      actionName: 'TestAction',
+      status: 'success',
+      target: actionItem,
+      value: 'TestAction',
+    });
   });
 };
 
-const TestActionSuccess: IActionModule = () => {
+const TestActionSuccess: IActionModule = (actionItem: IWActionExpression) => {
   return new Promise((resolve) => {
-    return resolve('TestActionSuccess');
+    console.log('-------TestActionSuccess');
+    resolve({
+      type: 'Action',
+      actionName: 'TestActionSuccess',
+      status: 'success',
+      target: actionItem,
+      value: 'TestActionSuccess',
+    });
   });
 };
 
 const TestActionFail: IActionModule = () => {
   return new Promise((resolve) => {
-    return resolve('TestActionFail');
+    resolve('TestActionFail');
   });
 };
 
 const TestActionFinaly: IActionModule = () => {
   return new Promise((resolve) => {
-    return resolve('TestActionFinaly');
+    resolve('TestActionFinaly');
   });
 };
 
@@ -50,8 +63,28 @@ describe('eventManager', () => {
       action: [testAction],
     })();
     expect(actionInstance instanceof Promise).toBe(true);
-    actionInstance.then((res) => {
-      expect(res).toBe('TestAction');
-    });
+    actionInstance
+      .then((res) => {
+        // 这里是当前事件中所有流程正常走完后执行
+        expect(res).toEqual({
+          type: 'Action',
+          actionName: 'TestAction',
+          status: 'success',
+          target: {
+            type: 'Action',
+            actionName: 'TestAction',
+            success: [
+              {
+                type: 'Action',
+                actionName: 'TestActionSuccess',
+              },
+            ],
+          },
+          value: 'TestAction',
+        });
+      })
+      .then((res) => {
+        console.log(res);
+      });
   });
 });
