@@ -1,4 +1,4 @@
-import { describe, expect, test } from 'vitest';
+import { describe, expect, test, vi } from 'vitest';
 import { execEvent, registerActionModule } from '../eventManager';
 import { IWActionExpression, IActionModule } from '../types';
 
@@ -16,7 +16,6 @@ const TestAction: IActionModule = (actionItem: IWActionExpression) => {
 
 const TestActionSuccess: IActionModule = (actionItem: IWActionExpression) => {
   return new Promise((resolve) => {
-    console.log('-------TestActionSuccess');
     resolve({
       type: 'Action',
       actionName: 'TestActionSuccess',
@@ -50,41 +49,40 @@ const testAction: IWActionExpression = {
   ],
 };
 
+const actionModule = {
+  TestAction: TestAction,
+  TestActionSuccess: TestActionSuccess,
+  TestActionFail: TestActionFail,
+  TestActionFinaly: TestActionFinaly,
+};
 describe('eventManager', () => {
   test('registerActionModule', () => {
-    registerActionModule({
-      TestAction: TestAction,
-      TestActionSuccess: TestActionSuccess,
-      TestActionFail: TestActionFail,
-      TestActionFinaly: TestActionFinaly,
-    });
+    const TestActionSuccessSpy = vi.spyOn(actionModule, 'TestActionSuccess');
+    registerActionModule(actionModule);
     const actionInstance = execEvent({
       name: 'onClick',
       action: [testAction],
     })();
-    expect(actionInstance instanceof Promise).toBe(true);
-    actionInstance
-      .then((res) => {
-        // 这里是当前事件中所有流程正常走完后执行
-        expect(res).toEqual({
+    expect(actionInstance).toBeInstanceOf(Promise);
+    actionInstance.then((res) => {
+      // 这里是当前事件中所有流程正常走完后执行
+      expect(res).toEqual({
+        type: 'Action',
+        actionName: 'TestAction',
+        status: 'success',
+        target: {
           type: 'Action',
           actionName: 'TestAction',
-          status: 'success',
-          target: {
-            type: 'Action',
-            actionName: 'TestAction',
-            success: [
-              {
-                type: 'Action',
-                actionName: 'TestActionSuccess',
-              },
-            ],
-          },
-          value: 'TestAction',
-        });
-      })
-      .then((res) => {
-        console.log(res);
+          success: [
+            {
+              type: 'Action',
+              actionName: 'TestActionSuccess',
+            },
+          ],
+        },
+        value: 'TestAction',
       });
+      expect(TestActionSuccessSpy).toHaveBeenCalledTimes(1);
+    });
   });
 });

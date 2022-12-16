@@ -6,6 +6,7 @@ import {
   IPropsGeneratorOptions,
   IActionModule,
 } from './types';
+import { ACTION_RESPONSE_STATUS, IActionResponse } from './types/action';
 
 let actionModule: { [key: string]: IActionModule } = {};
 
@@ -24,7 +25,7 @@ export const execEvent = (
       }
     }
     // 同步执行中，缓存因事件执行变化的options，来保证后面的事件可以继承前面事件产生的结果
-    let scopExtend = {
+    let scopExtend: IPropsGeneratorOptions = {
       ...options,
       funcArgs: isEmpty(funcArgs) ? options?.funcArgs : funcArgs,
     };
@@ -53,7 +54,7 @@ export const execEvent = (
         actionModuleResult = Promise.resolve({
           type: 'Action',
           actionName: actionItem.actionName,
-          status: 'success',
+          status: ACTION_RESPONSE_STATUS.SUCCESS,
           target: actionItem,
           options: {
             ...scopExtend,
@@ -65,7 +66,7 @@ export const execEvent = (
       return new Promise((resolve, reject) => {
         let extraResult;
         actionModuleResult
-          .then((res: any) => {
+          .then((res: IActionResponse) => {
             const { status = '', options = {}, value } = res;
             const newScopExtend = { ...options };
             scopExtend = { ...options };
@@ -76,7 +77,7 @@ export const execEvent = (
               newScopExtend.funcArgs = [value, ...funcArgs];
             }
             // 当前回调行为和update是异步处理，后面可以根据需要改成同步，或者在参数中配置同步或异步
-            if (status === 'success') {
+            if (status === ACTION_RESPONSE_STATUS.SUCCESS) {
               if (actionItem.success?.length) {
                 extraResult = execEvent(
                   {
@@ -86,7 +87,7 @@ export const execEvent = (
                   newScopExtend
                 )();
               }
-            } else if (status === 'fail') {
+            } else if (status === ACTION_RESPONSE_STATUS.FAIL) {
               isReject = true;
               if (actionItem.fail?.length) {
                 extraResult = execEvent(
