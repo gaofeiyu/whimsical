@@ -10,6 +10,135 @@ import { ACTION_RESPONSE_STATUS, IActionResponse } from './types/action';
 
 let actionModule: { [key: string]: IActionModule } = {};
 
+const runActionResultBySync = (props) => {
+  let actionResultPromise;
+  const {
+    status: promiseStatus,
+    response,
+    funcArgs,
+    actionList,
+    resolve,
+    index,
+    actionItem,
+  } = props;
+  const { status = promiseStatus, options = {}, value } = response;
+  // 只有顶层事件给的入参是透传的，其他层级只有回调extra里面的行为可以调用到父级作用域的返回值
+  const newFuncArgs = isEmpty(funcArgs) ? [value] : [value, ...funcArgs];
+  const syncPromiseOptions = {
+    ...options,
+    funcArgs,
+  };
+  const newOptions = {
+    ...options,
+    funcArgs: newFuncArgs,
+  };
+  // 当前回调行为和update是异步处理，后面可以根据需要改成同步，或者在参数中配置同步或异步
+  if (status === promiseStatus) {
+    if (actionItem[status]?.length) {
+      actionResultPromise = execEvent(
+        {
+          name: status === ACTION_RESPONSE_STATUS.SUCCESS ? 'onSuccess' : 'onFail',
+          action: actionItem[status],
+        },
+        newOptions
+      )();
+    }
+  }
+  // 此处是为了保证整体调用链是同步的，根据回调的结果判断是否需要继续进行回调处理
+  // 注：同步的设计是为了保证流程可控，未来可能需要增加配置来控制同步或者异步，来满足性能需要
+  if (!(actionResultPromise instanceof Promise)) {
+    actionResultPromise = Promise.resolve(actionResultPromise);
+  }
+  // 不关心回调返回的promise状态，仅做同步处理
+  actionResultPromise.finally(() => {
+    if (actionItem['finally']?.length) {
+      syncPromise(actionItem['finally'], 0, newOptions).then(() => {
+        if (actionList[index + 1]) {
+          syncPromise(actionList, index + 1, syncPromiseOptions).then(() => {
+            resolve(newOptions);
+          });
+        } else {
+          resolve(newOptions);
+        }
+      });
+    } else {
+      if (actionList[index + 1]) {
+        syncPromise(actionList, index + 1, syncPromiseOptions).then(() => {
+          resolve(newOptions);
+        });
+      } else {
+        resolve(newOptions);
+      }
+    }
+  });
+
+  return actionResultPromise;
+};
+
+const syncPromise = (actionList: IWActionExpression[], index, options: IPropsGeneratorOptions) => {
+  const { funcArgs } = options;
+  if (!actionList[index]) {
+    return new Promise<void>((resolve) => {
+      resolve();
+    });
+  }
+  const actionItem = actionList[index];
+  let actionModuleResult;
+  const actionValue = actionItem.actionName && execProp(actionItem.actionName, options);
+
+  if (actionItem.type === 'Action' && typeof actionModule[actionValue as string] === 'function') {
+    actionModuleResult = actionModule[actionValue as string](actionItem, options);
+  } else if (actionItem.type !== 'Action') {
+    // 不是行为或者行为不是方法，按照属性解析数据，非promise
+    actionModuleResult = execProp(actionItem, options);
+  }
+
+  if (!(actionModuleResult instanceof Promise)) {
+    actionModuleResult = Promise.resolve({
+      type: 'Action',
+      actionName: actionItem.actionName,
+      status: ACTION_RESPONSE_STATUS.SUCCESS,
+      target: actionItem,
+      options: {
+        ...options,
+      },
+      value: actionModuleResult,
+    });
+  }
+
+  return new Promise((resolve) => {
+    actionModuleResult
+      .then((res: IActionResponse) => {
+        return runActionResultBySync({
+          status: ACTION_RESPONSE_STATUS.SUCCESS,
+          response: res,
+          funcArgs,
+          actionList,
+          resolve,
+          index,
+          actionItem,
+        });
+      })
+      .catch((errRes) => {
+        return runActionResultBySync({
+          status: ACTION_RESPONSE_STATUS.FAIL,
+          response: errRes,
+          funcArgs,
+          actionList,
+          resolve,
+          index,
+          actionItem,
+        });
+      });
+  });
+};
+
+/**
+ * 一个事件下的行为数组的入参是当前事件的输出的值，如点击事件中的e onClick((e) => console.log(e))
+ * 行为流转会根据事件执行的顺序依次继承
+ * 行为流转会带入上一个行为的函数出参
+ */
+
 // 当前事件执行仅允许执行里面的Action，不允许执行其他类型表达式
 export const execEvent = (
   eventExpression: EventExpressionType,
@@ -17,6 +146,9 @@ export const execEvent = (
 ) => {
   return (...funcArgs) => {
     const { action = [] } = eventExpression;
+    const newFuncArgs = isEmpty(funcArgs)
+      ? options?.funcArgs || []
+      : [...funcArgs, ...(options?.funcArgs || [])];
     if (eventExpression.name === 'onClick' && funcArgs && funcArgs[0]) {
       try {
         funcArgs[0].stopPropagation();
@@ -25,132 +157,12 @@ export const execEvent = (
       }
     }
     // 同步执行中，缓存因事件执行变化的options，来保证后面的事件可以继承前面事件产生的结果
-    let scopExtend: IPropsGeneratorOptions = {
-      ...options,
-      funcArgs: isEmpty(funcArgs) ? options?.funcArgs : funcArgs,
-    };
-
-    const asyncPromise = (actionList: IWActionExpression[], index) => {
-      if (!actionList[index]) {
-        return new Promise<void>((resolve) => {
-          resolve();
-        });
-      }
-      const actionItem = actionList[index];
-      let actionModuleResult;
-      const actionValue = actionItem.actionName && execProp(actionItem.actionName, scopExtend);
-
-      if (
-        actionItem.type === 'Action' &&
-        typeof actionModule[actionValue as string] === 'function'
-      ) {
-        actionModuleResult = actionModule[actionValue as string](actionItem, scopExtend);
-      } else if (actionItem.type !== 'Action') {
-        // 不是行为或者行为不是方法，按照属性解析数据，非promise
-        actionModuleResult = execProp(actionItem, scopExtend);
-      }
-
-      if (!(actionModuleResult instanceof Promise)) {
-        actionModuleResult = Promise.resolve({
-          type: 'Action',
-          actionName: actionItem.actionName,
-          status: ACTION_RESPONSE_STATUS.SUCCESS,
-          target: actionItem,
-          options: {
-            ...scopExtend,
-          },
-          value: actionModuleResult,
-        });
-      }
-
-      return new Promise((resolve, reject) => {
-        let extraResult;
-        actionModuleResult
-          .then((res: IActionResponse) => {
-            const { status = '', options = {}, value } = res;
-            const newScopExtend = { ...options };
-            scopExtend = { ...options };
-            // 用来标记当前是成功的请求还是失败的，如果是失败的则运行reject
-            let isReject = false;
-            // 只有顶层事件给的入参是透传的，其他层级只有回调extra里面的行为可以调用到父级作用域的返回值
-            if (funcArgs) {
-              newScopExtend.funcArgs = [value, ...funcArgs];
-            }
-            // 当前回调行为和update是异步处理，后面可以根据需要改成同步，或者在参数中配置同步或异步
-            if (status === ACTION_RESPONSE_STATUS.SUCCESS) {
-              if (actionItem.success?.length) {
-                extraResult = execEvent(
-                  {
-                    name: 'onSuccess',
-                    action: actionItem.success,
-                  },
-                  newScopExtend
-                )();
-              }
-            } else if (status === ACTION_RESPONSE_STATUS.FAIL) {
-              isReject = true;
-              if (actionItem.fail?.length) {
-                extraResult = execEvent(
-                  {
-                    name: 'onFail',
-                    action: actionItem.fail,
-                  },
-                  newScopExtend
-                )();
-              }
-            }
-            // 此处是为了保证整体调用链是同步的，根据回调的结果判断是否需要继续进行回调处理
-            // 注：同步的设计是为了保证流程可控，未来可能需要增加配置来控制同步或者异步，来满足性能需要
-            if (!(extraResult instanceof Promise)) {
-              extraResult = Promise.resolve(extraResult);
-            }
-            // 不关心回调返回的promise状态，仅做同步处理
-            extraResult.finally(() => {
-              if (actionList[index + 1]) {
-                asyncPromise(actionList, index + 1).then(() => {
-                  isReject ? reject(res) : resolve(res);
-                });
-              } else {
-                isReject ? reject(res) : resolve(res);
-              }
-            });
-          })
-          .catch((errRes) => {
-            const newScopExtend = { ...options };
-            const { value = errRes } = errRes || {};
-            // 只有顶层事件给的入参是透传的，其他层级只有回调extra里面的行为可以调用到父级作用域的返回值
-            if (funcArgs) {
-              newScopExtend.funcArgs = [value, ...funcArgs];
-            }
-            if (actionItem.fail) {
-              extraResult = execEvent(
-                {
-                  name: 'onFail',
-                  action: actionItem.fail,
-                },
-                newScopExtend
-              )();
-            }
-            if (!(extraResult instanceof Promise)) {
-              extraResult = Promise.resolve(extraResult);
-            }
-            extraResult.finally(() => {
-              if (actionList[index + 1]) {
-                asyncPromise(actionList, index + 1)
-                  .then(() => {
-                    reject(errRes);
-                  })
-                  .catch(() => reject(errRes));
-              } else {
-                reject(errRes);
-              }
-            });
-          });
-      });
-    };
 
     // 因为返回的事件执行可能是promise，而事件执行的第一步不会对返回的promise进行处理，在出错时会抛出Uncaught的错误，如果影响上报，需要组件侧在事件执行的时候忽略这个错误
-    return asyncPromise(action, 0);
+    return syncPromise(action, 0, {
+      ...options,
+      funcArgs: newFuncArgs,
+    });
   };
 };
 
