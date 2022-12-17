@@ -10,7 +10,17 @@ import { ACTION_RESPONSE_STATUS, IActionResponse } from './types/action';
 
 let actionModule: { [key: string]: IActionModule } = {};
 
-const runActionResultBySync = (props) => {
+interface RunActionResultBySyncProps {
+  status: ACTION_RESPONSE_STATUS;
+  response: IActionResponse;
+  funcArgs: unknown[];
+  actionList: IWActionExpression[];
+  resolve: (value: unknown) => void;
+  index: number;
+  actionItem: IWActionExpression;
+}
+
+const runActionResultBySync = (props: RunActionResultBySyncProps) => {
   let actionResultPromise;
   const {
     status: promiseStatus,
@@ -23,12 +33,12 @@ const runActionResultBySync = (props) => {
   } = props;
   const { status = promiseStatus, options = {}, value } = response;
   // 只有顶层事件给的入参是透传的，其他层级只有回调extra里面的行为可以调用到父级作用域的返回值
-  const newFuncArgs = isEmpty(funcArgs) ? [value] : [value, ...funcArgs];
-  const syncPromiseOptions = {
+  const newFuncArgs = isEmpty(options.funcArgs) ? [value] : [value, ...(options.funcArgs || [])];
+  const syncPromiseOptions: IPropsGeneratorOptions = {
     ...options,
     funcArgs,
   };
-  const newOptions = {
+  const newOptions: IPropsGeneratorOptions = {
     ...options,
     funcArgs: newFuncArgs,
   };
@@ -76,13 +86,13 @@ const runActionResultBySync = (props) => {
 };
 
 const syncPromise = (actionList: IWActionExpression[], index, options: IPropsGeneratorOptions) => {
-  const { funcArgs } = options;
+  const { funcArgs = [] } = options;
   if (!actionList[index]) {
     return new Promise<void>((resolve) => {
       resolve();
     });
   }
-  const actionItem = actionList[index];
+  const actionItem: IWActionExpression = actionList[index];
   let actionModuleResult;
   const actionValue = actionItem.actionName && execProp(actionItem.actionName, options);
 
@@ -99,9 +109,7 @@ const syncPromise = (actionList: IWActionExpression[], index, options: IPropsGen
       actionName: actionItem.actionName,
       status: ACTION_RESPONSE_STATUS.SUCCESS,
       target: actionItem,
-      options: {
-        ...options,
-      },
+      options,
       value: actionModuleResult,
     });
   }
@@ -159,6 +167,10 @@ export const execEvent = (
     // 同步执行中，缓存因事件执行变化的options，来保证后面的事件可以继承前面事件产生的结果
 
     // 因为返回的事件执行可能是promise，而事件执行的第一步不会对返回的promise进行处理，在出错时会抛出Uncaught的错误，如果影响上报，需要组件侧在事件执行的时候忽略这个错误
+    console.log({
+      ...options,
+      funcArgs: newFuncArgs,
+    });
     return syncPromise(action, 0, {
       ...options,
       funcArgs: newFuncArgs,

@@ -10,6 +10,12 @@ const TestAction: IActionModule = (actionItem: IWActionExpression) => {
       status: 'success',
       target: actionItem,
       options: {
+        state: {
+          store: {
+            test: 'TestAction',
+          },
+          api: {},
+        },
         funcArgs: ['start'],
       },
       value: 'TestAction',
@@ -104,9 +110,14 @@ describe('eventManager', () => {
     expect(actionInstance).toBeInstanceOf(Promise);
     actionInstance.then((res) => {
       // 这里是当前事件中所有流程正常走完后执行
-      console.log('res', res);
       expect(res).toEqual({
-        funcArgs: ['TestAction', 'onTest'],
+        state: {
+          store: {
+            test: 'TestAction',
+          },
+          api: {},
+        },
+        funcArgs: ['TestAction', 'start'],
       });
       expect(TestActionSuccessSpy).toHaveBeenCalledTimes(1);
       expect(TestActionFailSpy).toHaveBeenCalledTimes(1);
