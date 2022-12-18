@@ -167,10 +167,6 @@ export const execEvent = (
     // 同步执行中，缓存因事件执行变化的options，来保证后面的事件可以继承前面事件产生的结果
 
     // 因为返回的事件执行可能是promise，而事件执行的第一步不会对返回的promise进行处理，在出错时会抛出Uncaught的错误，如果影响上报，需要组件侧在事件执行的时候忽略这个错误
-    console.log({
-      ...options,
-      funcArgs: newFuncArgs,
-    });
     return syncPromise(action, 0, {
       ...options,
       funcArgs: newFuncArgs,
