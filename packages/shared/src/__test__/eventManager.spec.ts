@@ -1,5 +1,5 @@
 import { describe, expect, test, vi } from 'vitest';
-import { execEvent, generatorEvents, registerActionModule } from '../eventManager';
+import { execEvent, generatorEvents, registerActionModule } from '../action';
 import { IWActionExpression, IActionModule } from '../types';
 
 const testAction: IWActionExpression = {
@@ -159,7 +159,7 @@ const testRun = (type, done) => {
   const actionInstance = generatorInstance(type);
   expect(actionInstance).toBeInstanceOf(Promise);
   actionInstance.then((res) => {
-    // 这里是当前事件中所有流程正常走完后执行
+    // 这里是当前行为中所有流程正常走完后执行
     expect(res).toEqual({
       state: {
         store: {

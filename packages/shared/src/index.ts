@@ -1,6 +1,6 @@
 export * from './componentManager';
 export * from './ergodicNode';
-export * from './eventManager';
+export * from './action';
 export * from './getDOMElement';
 export * from './loadStatic';
 export * from './expressions';

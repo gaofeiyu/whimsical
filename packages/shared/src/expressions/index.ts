@@ -9,7 +9,7 @@ import { getCustomExpression } from './expressionManager';
 import { getJSONData } from './json';
 import { execLogic } from './logic';
 import { getFunctionArguments, getLoopStateData, getNormalData } from './state';
-import { execEvent } from '../eventManager';
+import { execEvent } from '../action';
 
 export function execProps(props: IWExpression[], options?: IPropsGeneratorOptions): any {
   if (!isArray(props)) return [];
