@@ -19,7 +19,10 @@
     "publish:canary": "lerna publish --canary --yes",
     "publish:release": "lerna publish --yes",
     "test": "lerna run --parallel test",
-    "test:shared": "pnpm --filter=whimsical-shared run test"
+    "test:shared": "pnpm --filter=whimsical-shared run test",
+    "docs:dev": "vitepress dev docs",
+    "docs:build": "vitepress build docs",
+    "docs:preview": "vitepress preview docs"
   },
   "repository": {
     "type": "git",
