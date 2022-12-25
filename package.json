@@ -11,6 +11,7 @@
   "scripts": {
     "preinstall": "node ./scripts/preinstall.js",
     "build": "pnpm --filter=whimsical* run build",
+    "build:shared": "pnpm --filter=whimsical-shared run build",
     "clean": "lerna clean --yes",
     "dev": "pnpm --filter=whimsical run dev",
     "dev:shared": "pnpm --filter=whimsical-shared run dev",

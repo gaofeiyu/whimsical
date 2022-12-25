@@ -1,0 +1,15 @@
+{
+  "compilerOptions": {
+    "declaration": true,
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Node",
+    "strict": true,
+    "sourceMap": true,
+    "noUnusedLocals": true,
+    "esModuleInterop": true,
+    "noImplicitAny": false
+  },
+  "include": ["src/types"],
+  "exclude": ["node_modules"]
+}
