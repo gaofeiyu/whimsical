@@ -1,4 +1,20 @@
-# WHIMSICAL
-这是一个低代码引擎。
-它将为您提供一个简单的可以接入任何前端UI组件库的低代码页面搭建的编辑器。
-本仓库短期内不会是一个完整的产品，主要是用于个人积累、讨论、供需要的人学习的实验性原型。
+---
+layout: home
+
+title: Whimsical
+titleTemplate: 跨技术栈低代码编辑器引擎
+
+hero:
+  name: Whimsical
+  text: 跨技术栈低代码编辑器引擎
+  tagline: 简易、轻便、灵活
+  image:
+    src: /logo.svg
+    alt: Vite
+  actions:
+    - theme: brand
+      text: Get Started
+      link: /guide/
+    - theme: alt
+      text: View on GitHub
+      link: https://github.com/gaofeiyu/whimsical
