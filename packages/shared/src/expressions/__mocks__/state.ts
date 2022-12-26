@@ -29,7 +29,7 @@ export const mockState = {
     getUserInfo: {
       method: 'GET',
       url: 'api/getUserInfo',
-      data: {
+      body: {
         code: '0',
         message: 'success',
         data: {
