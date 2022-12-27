@@ -72,7 +72,7 @@ export default defineConfig(({ command, mode }) => {
     build: {
       lib,
       rollupOptions: {
-        // 确保外部化处理那些你不想打包进库的依赖
+        // 确保外部化处理那些您不想打包进库的依赖
         external: ['react', 'react-dom'],
         output: {
           ...rollupOptions.output,

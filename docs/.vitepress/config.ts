@@ -40,8 +40,8 @@ export default {
       {
         text: '开发文档',
         items: [
-          { text: '编辑器', link: '/editor/' },
-          { text: '前端组件库', link: '/components/' }
+          { text: '编辑器接入及开发', link: '/editor/' },
+          { text: '组件库接入及开发', link: '/components/' }
         ]
       },
       {

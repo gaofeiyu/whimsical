@@ -5,7 +5,7 @@ A low code editor across technology stacks
   - [http://www.gaofeiyu.com/blog/982.html](http://www.gaofeiyu.com/blog/982.html)
 
 ## 简介
-这是一个低代码引擎的个人的练习项目，关注该项目你将会见证一个从零开始的低代码项目的成长。
+这是一个低代码引擎的个人的练习项目，关注该项目您将会见证一个从零开始的低代码项目的成长。
 该项目当前的核心思路是实现一个可以导入任何前端组件库的跨技术栈低代码编辑引擎。
 
 ## 目标功能
