@@ -1,8 +1,13 @@
 import { execEvent } from '.';
 import { execProp } from '../expressions';
 import { isEmpty } from '../typeof';
-import { IWActionExpression, IPropsGeneratorOptions, IActionModule } from '../types';
-import { ACTION_RESPONSE_STATUS, IActionResponse } from '../types/action';
+import {
+  IWActionExpression,
+  IPropsGeneratorOptions,
+  IActionModule,
+  ACTION_RESPONSE_STATUS,
+  IActionResponse,
+} from '../types';
 
 export interface ISyncActionFlowProps {
   // 当前行为的状态

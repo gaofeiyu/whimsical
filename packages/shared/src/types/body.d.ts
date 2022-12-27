@@ -1,4 +1,4 @@
-import { EventExpressionType, IWNode } from './node';
+import { EventExpressionType, IWNode } from './node.d';
 
 export type BodyStateType = {
   store?: Record<string, unknown>;

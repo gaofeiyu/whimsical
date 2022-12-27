@@ -1,20 +1,20 @@
 import { ComponentLibInfoResourceType } from './types';
 
-type PromiseItemType = Promise<any> | (() => any) | undefined;
+type PromiseItemType = Promise<unknown> | (() => unknown) | undefined;
 export const syncPromise = (
   promiseList: PromiseItemType[],
   index = 0,
-  callback = (_value?: any) => null
-): Promise<any> => {
+  callback = (_value?: unknown) => null
+): Promise<unknown> => {
   if (!promiseList[index])
     return new Promise<void>((resolve) => {
       resolve();
     });
   const promiseItem: PromiseItemType = promiseList[index];
   if (typeof promiseItem === 'function') {
-    const promiseItemResult = promiseItem();
-    if ((promiseItemResult as any) instanceof Promise) {
-      return promiseItemResult.then((res: any) => {
+    const promiseItemResult: unknown = promiseItem();
+    if (promiseItemResult instanceof Promise) {
+      return promiseItemResult.then((res: unknown) => {
         callback(res);
         return syncPromise(promiseList, index + 1);
       });
@@ -26,12 +26,12 @@ export const syncPromise = (
 
 export const asyncPromise = (
   promiseList: PromiseItemType[],
-  callback = (_value?: any) => null
-): Promise<any> => {
+  callback = (_value?: unknown) => null
+): Promise<unknown> => {
   const promiseTotalCount = promiseList.length;
   let promiseCount = 0;
   return new Promise((resolve, reject) => {
-    function promisesFinally(res?: any) {
+    function promisesFinally(res?: unknown) {
       promiseCount++;
       callback(res);
       if (promiseCount >= promiseTotalCount) {
@@ -43,10 +43,10 @@ export const asyncPromise = (
       if (!promiseItem || typeof promiseItem !== 'function') {
         promisesFinally(promiseItem);
       } else {
-        const promiseItemResult = promiseItem();
-        if ((promiseItemResult as any) instanceof Promise) {
+        const promiseItemResult: unknown = promiseItem();
+        if (promiseItemResult instanceof Promise) {
           promiseItemResult
-            .then((res: any) => {
+            .then((res: unknown) => {
               promisesFinally(res);
             })
             .catch((err: Error) => {
@@ -129,6 +129,6 @@ export function loadStatic(config: loadStaticProps) {
     cssPromiseList = css.map((item: string) => loadCSS(item, container));
   }
   return async
-    ? asyncPromise([...cssPromiseList, ...scriptPromiseList], () => null)
+    ? asyncPromise([...cssPromiseList, ...scriptPromiseList])
     : syncPromise([...cssPromiseList, ...scriptPromiseList]);
 }
