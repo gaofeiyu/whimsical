@@ -9,7 +9,7 @@ import {
   generatorEvents,
 } from 'whimsical-shared';
 
-const components = getComponent();
+const components: Record<string, unknown> = getComponent();
 
 function filterStyles(styles: React.CSSProperties, state: BodyStateType): React.CSSProperties {
   const style: React.CSSProperties = {};

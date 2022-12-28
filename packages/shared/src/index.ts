@@ -4,6 +4,7 @@ export * from './action';
 export * from './getDOMElement';
 export * from './loadStatic';
 export * from './expressions';
+export * from './typeof';
 
 export type {
   ACTION_RESPONSE_STATUS,
