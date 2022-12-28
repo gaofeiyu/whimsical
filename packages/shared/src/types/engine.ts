@@ -1,4 +1,4 @@
-import { IWBody } from './body.d';
+import { IWBody } from './body';
 import { IWActionExpression, BodyStateType, LoopCacheType } from '.';
 
 export interface IRuntimeContext<T = unknown> {
