@@ -11,13 +11,13 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:vsc-extension.helloWorld"
+    "onCommand:extension.helloWorld"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "vsc-extension.helloWorld",
+        "command": "extension.helloWorld",
         "title": "Hello World"
       }
     ]
