@@ -1,7 +1,6 @@
 {
   "name": "whimsical-vsc-extension",
   "displayName": "whimsical",
-  "private": true,
   "description": "",
   "version": "0.0.1",
   "engines": {
@@ -11,14 +10,39 @@
     "Other"
   ],
   "activationEvents": [
-    "onCommand:extension.helloWorld"
+    "onCommand:whim.helloWorld"
   ],
   "main": "./out/extension.js",
   "contributes": {
     "commands": [
       {
-        "command": "extension.helloWorld",
+        "command": "whim.helloWorld",
         "title": "Hello World"
+      }
+    ],
+    "languages": [
+      {
+        "id": "whim",
+        "aliases": [
+            "Whim",
+            "Whimsical",
+            "whimsical",
+            "whim"
+        ],
+        "extensions": [
+          ".whim.js",
+          ".whim.ts"
+        ]
+      }
+    ],
+    "snippets": [
+      {
+        "language": "javascript",
+        "path": "./snippets/javascript.json"
+      },
+      {
+        "language": "typescript",
+        "path": "./snippets/javascript.json"
       }
     ]
   },

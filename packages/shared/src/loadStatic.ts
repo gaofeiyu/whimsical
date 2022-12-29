@@ -4,7 +4,7 @@ type PromiseItemType = Promise<unknown> | (() => unknown) | undefined;
 export const syncPromise = (
   promiseList: PromiseItemType[],
   index = 0,
-  callback = (_value?: unknown) => null
+  callback?: (value: unknown) => void
 ): Promise<unknown> => {
   if (!promiseList[index])
     return new Promise<void>((resolve) => {
@@ -15,7 +15,7 @@ export const syncPromise = (
     const promiseItemResult: unknown = promiseItem();
     if (promiseItemResult instanceof Promise) {
       return promiseItemResult.then((res: unknown) => {
-        callback(res);
+        callback && callback(res);
         return syncPromise(promiseList, index + 1);
       });
     }
@@ -26,14 +26,14 @@ export const syncPromise = (
 
 export const asyncPromise = (
   promiseList: PromiseItemType[],
-  callback = (_value?: unknown) => null
+  callback?: (value: unknown) => void
 ): Promise<unknown> => {
   const promiseTotalCount = promiseList.length;
   let promiseCount = 0;
   return new Promise((resolve, reject) => {
     function promisesFinally(res?: unknown) {
       promiseCount++;
-      callback(res);
+      callback && callback(res);
       if (promiseCount >= promiseTotalCount) {
         resolve(null);
       }
