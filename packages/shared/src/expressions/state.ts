@@ -100,7 +100,7 @@ export function getLoopStateData(props: IWExpression, options?: any): any {
   const { value } = props || {};
   const { loopCache } = options;
   const fullPath = value ? execProp(value, options).split('.') : null;
-  if (!fullPath || loopCache.length === 0) return {};
+  if (!fullPath || !loopCache || loopCache.length === 0) return {};
   const from = fullPath[0];
   const path = fullPath.slice(1).join('.');
   const loopCacheItem = from === '$' ? loopCache[0] : loopCache.find((item) => from === item.from);

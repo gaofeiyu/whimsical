@@ -3,10 +3,12 @@
   "displayName": "whimsical",
   "description": "",
   "version": "0.0.1",
+  "private": true,
   "engines": {
     "vscode": "^1.74.0"
   },
   "categories": [
+    "Snippets",
     "Other"
   ],
   "activationEvents": [
@@ -28,10 +30,6 @@
             "Whimsical",
             "whimsical",
             "whim"
-        ],
-        "extensions": [
-          ".whim.js",
-          ".whim.ts"
         ]
       }
     ],

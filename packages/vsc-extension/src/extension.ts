@@ -1,9 +1,3 @@
-/*
- * @Author       : feiyu.gao@gmail.com
- * @Date         : 2022-12-28 18:59:37
- * @LastEditTime : 2022-12-29 20:29:31
- * @LastEditors  : feiyu.gao@gmail.com
- */
 // The module 'vscode' contains the VS Code extensibility API
 // Import the module and reference it with the alias vscode in your code below
 import * as vscode from 'vscode';

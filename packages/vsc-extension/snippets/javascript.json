@@ -1,0 +1,25 @@
+{
+	"Quick Create Whimsical Component Declare": {
+		"scope": "javascript,typescript",
+		"prefix": "declare",
+		"body": [
+      "import { IComponentDeclare } from 'whimsical-shared'",
+      "",
+      "const declare: IComponentDeclare = {",
+      "  name: '$1',",
+      "  cname: '$2',",
+      "  icon: '$3',",
+      "  type: '$4',",
+      "  props: {",
+      "    ${5:propName}: {",
+      "      type: 'string',",
+      "    },",
+      "  },",
+      "}",
+      "",
+      "export default declare",
+      ""
+		],
+		"description": "Quick Create Whimsical Component Declare"
+	}
+}
