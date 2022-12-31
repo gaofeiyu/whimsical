@@ -12,38 +12,90 @@ export default {
     sidebar: {
       '/guide/': [
         {
-          text: '编辑器',
+          text: '指南',
           items: [
             {
-              text: 'DSL约定',
-              items: [
-                {
-                  text: '节点',
-                  link: '/guide/dsl/node'
-                },
-                {
-                  text: '表达式',
-                  link: '/guide/dsl/expression'
-                },
-                {
-                  text: '数据',
-                  link: '/guide/dsl/state'
-                },
-              ]
+              text: '简介',
+              link: '/guide/'
+            },
+            {
+              text: '快速开始',
+              link: '/guide/start'
             }
+          ]
+        },
+        {
+          text: '组件库封装',
+          items: [
+            {
+              text: '简介',
+              link: '/component/'
+            },
+            {
+              text: '渲染引擎',
+              link: '/component/engine'
+            },
+            {
+              text: '表达式',
+              link: '/component/expression'
+            },
+            {
+              text: 'action(行为)',
+              link: '/component/action'
+            },
+            {
+              text: '继承已封装的组件库',
+              link: '/component/api'
+            }
+          ]
+        },
+        {
+          text: '编辑器开发',
+          items: [
+            {
+              text: '简介',
+              link: '/editor/'
+            },
+          ]
+        },
+        {
+          text: '相关概念',
+          items: [
+            {
+              text: 'DSL',
+              link: '/guide/dsl/'
+            },
+            {
+              text: '渲染引擎',
+              link: '/guide/render-engine'
+            },
+            {
+              text: '事件',
+              link: '/guide/event'
+            },
+          ]
+        },
+        {
+          text: 'DSL规范',
+          items: [
+            {
+              text: '节点',
+              link: '/guide/dsl/node'
+            },
+            {
+              text: '表达式',
+              link: '/guide/dsl/expression'
+            },
+            {
+              text: '数据',
+              link: '/guide/dsl/state'
+            },
           ]
         }
       ],
     },
     nav: [
-      { text: '开始', link: '/guide/' },
-      {
-        text: '开发文档',
-        items: [
-          { text: '编辑器接入及开发', link: '/editor/' },
-          { text: '组件库接入及开发', link: '/components/' }
-        ]
-      },
+      { text: '指南', link: '/guide/' },
       {
         text: '组件库资源',
         items: [
