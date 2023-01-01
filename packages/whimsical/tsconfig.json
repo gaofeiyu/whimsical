@@ -15,6 +15,7 @@
     "downlevelIteration": true,
     "emitDeclarationOnly": true,
     "declarationDir": "dist/types",
+    "resolveJsonModule": true,
     "baseUrl": ".",
     "outDir": "./dist",
     "paths": {
