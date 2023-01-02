@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import MonacoEditor, { useMonaco } from '@monaco-editor/react';
 import { IWNode } from 'whimsical-shared';
-import schema from './schema.json';
+import schema from 'whimsical-shared/dist/schema.json';
 
 type Props = {
   value: string;
@@ -12,7 +12,7 @@ type Props = {
 
 const DSLEditor = React.forwardRef((props: Props, ref) => {
   const { value, displayAction = false, onChange = () => null } = props;
-  const editorRef = useMonaco();
+  const monacoEditor = useMonaco();
   const [state, setState] = useState<string>('');
 
   const handleChange = useCallback(
@@ -26,17 +26,17 @@ const DSLEditor = React.forwardRef((props: Props, ref) => {
   );
 
   useEffect(() => {
-    editorRef?.languages.json.jsonDefaults.setDiagnosticsOptions({
+    monacoEditor?.languages.json.jsonDefaults.setDiagnosticsOptions({
       validate: true,
       schemas: [
         {
-          uri: 'whim-json-schema.json',
+          uri: 'http://whim-json-schema',
           fileMatch: ['*'],
           schema: schema,
         },
       ],
     });
-  }, [editorRef]);
+  }, [monacoEditor]);
 
   useEffect(() => {
     setState(value);

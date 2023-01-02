@@ -13,6 +13,10 @@
     ".": {
       "import": "./dist/index.es.js",
       "require": "./dist/index.umd.js"
+    },
+    "./dist/schema.json": {
+      "import": "./dist/schema.json",
+      "require": "./dist/schema.json"
     }
   },
   "scripts": {

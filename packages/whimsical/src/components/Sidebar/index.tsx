@@ -4,6 +4,7 @@ import { HistoryOutlined, BuildOutlined, CodeOutlined } from '@ant-design/icons'
 import { useCallback, useMemo, useState } from 'react';
 import EditorHistory from '../EditorHistory';
 import ComponentList from 'src/widgets/ComponentList';
+import { useEWDrag } from 'src/hooks';
 import SidebarContent from './SidebarContent';
 import DSLEditor from '../DSLEditor';
 
@@ -23,6 +24,10 @@ const items: MenuItemType[] = [
 const Sidebar = () => {
   const [selectKey, setSelectKey] = useState('0');
   const [showPanel, setShowPanel] = useState(true);
+  const [contentRef, ewMouseDown] = useEWDrag<HTMLDivElement>({
+    needSave: true,
+    id: 'sidebar',
+  });
 
   const selectIndex = useMemo(() => {
     let result = 0;
@@ -57,7 +62,7 @@ const Sidebar = () => {
         inlineCollapsed={true}
         onClick={onChangeMenu}
       />
-      <div className={showPanel ? 'block' : 'hidden'}>
+      <div ref={contentRef} className={`w-[600px] ${showPanel ? 'block' : 'hidden'}`}>
         <SidebarContent
           index={selectIndex}
           title={items[selectIndex].title}
@@ -67,6 +72,10 @@ const Sidebar = () => {
           <EditorHistory />
           <DSLEditor value="" />
         </SidebarContent>
+        <div
+          onMouseDown={ewMouseDown}
+          className="absolute top-0 right-0 w-1 h-full cursor-ew-resize"
+        ></div>
       </div>
     </div>
   );
