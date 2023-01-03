@@ -1,7 +1,13 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import MonacoEditor, { useMonaco } from '@monaco-editor/react';
+import MonacoEditor, { useMonaco, loader } from '@monaco-editor/react';
 import { IWNode } from 'whimsical-shared';
 import schema from 'whimsical-shared/dist/schema.json';
+
+loader.config({
+  paths: {
+    vs: '/lib/monaco-editor/vs',
+  },
+});
 
 type Props = {
   value: string;
@@ -30,7 +36,7 @@ const DSLEditor = React.forwardRef((props: Props, ref) => {
       validate: true,
       schemas: [
         {
-          uri: 'http://whim-json-schema',
+          uri: 'whim-json-schema',
           fileMatch: ['*'],
           schema: schema,
         },
