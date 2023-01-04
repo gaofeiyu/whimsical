@@ -1,0 +1,832 @@
+{
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "test",
+    "allOf": [
+        {
+            "$ref": "#/definitions/IWBody"
+        }
+    ],
+    "definitions": {
+        "ACTION_RESPONSE_STATUS": {
+            "enum": [
+                "fail",
+                "finally",
+                "success"
+            ],
+            "type": "string"
+        },
+        "BodyStateType": {
+            "properties": {
+                "api": {
+                    "$ref": "#/definitions/Record<string,unknown>"
+                },
+                "store": {
+                    "$ref": "#/definitions/Record<string,unknown>"
+                }
+            },
+            "type": "object"
+        },
+        "ComponentLibInfoResourceType": {
+            "properties": {
+                "component": {
+                    "properties": {
+                        "css": {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        "script": {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "type": "object"
+                },
+                "dep": {
+                    "properties": {
+                        "css": {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        "script": {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "type": "object"
+                },
+                "editor": {
+                    "properties": {
+                        "css": {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        "script": {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "type": "object"
+                },
+                "other": {
+                    "properties": {
+                        "css": {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        },
+                        "script": {
+                            "items": {
+                                "type": "string"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "ComponentLibInfoType": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "resource": {
+                    "properties": {
+                        "component": {
+                            "properties": {
+                                "css": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "script": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "dep": {
+                            "properties": {
+                                "css": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "script": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "editor": {
+                            "properties": {
+                                "css": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "script": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "other": {
+                            "properties": {
+                                "css": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                },
+                                "script": {
+                                    "items": {
+                                        "type": "string"
+                                    },
+                                    "type": "array"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "EventExpressionType": {
+            "description": "Event类型声明",
+            "properties": {
+                "action": {
+                    "items": {
+                        "$ref": "#/definitions/IWActionExpression"
+                    },
+                    "type": "array"
+                },
+                "name": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IActionModule": {
+            "type": "object"
+        },
+        "IActionResponse": {
+            "properties": {
+                "name": {
+                    "type": "string"
+                },
+                "options": {
+                    "properties": {
+                        "context": {
+                            "$ref": "#/definitions/IRuntimeContext<unknown>"
+                        },
+                        "funcArgs": {
+                            "items": {},
+                            "type": "array"
+                        },
+                        "loopCache": {
+                            "items": {
+                                "properties": {
+                                    "from": {
+                                        "type": "string"
+                                    },
+                                    "index": {
+                                        "type": "number"
+                                    },
+                                    "loopDataSource": {
+                                        "$ref": "#/definitions/IWDataSourceExpression"
+                                    }
+                                },
+                                "type": "object"
+                            },
+                            "type": "array"
+                        },
+                        "state": {
+                            "properties": {
+                                "api": {
+                                    "$ref": "#/definitions/Record<string,unknown>"
+                                },
+                                "store": {
+                                    "$ref": "#/definitions/Record<string,unknown>"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                },
+                "status": {
+                    "$ref": "#/definitions/ACTION_RESPONSE_STATUS"
+                },
+                "target": {
+                    "$ref": "#/definitions/IWActionExpression"
+                },
+                "type": {
+                    "enum": [
+                        "Action"
+                    ],
+                    "type": "string"
+                },
+                "value": {}
+            },
+            "type": "object"
+        },
+        "IComponentDeclare": {
+            "properties": {
+                "cname": {
+                    "type": "string"
+                },
+                "icon": {
+                    "type": "string"
+                },
+                "inlineType": {
+                    "type": "boolean"
+                },
+                "isContainer": {
+                    "type": "boolean"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "props": {
+                    "$ref": "#/definitions/Record<string,IComponentDeclareProp>"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IComponentDeclareProp": {
+            "properties": {
+                "component": {
+                    "type": "string"
+                },
+                "componentProps": {
+                    "$ref": "#/definitions/Record<string,unknown>"
+                },
+                "decorator": {
+                    "type": "string"
+                },
+                "decoratorProps": {
+                    "$ref": "#/definitions/Record<string,unknown>"
+                },
+                "title": {
+                    "type": "string"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IPropsGeneratorOptions": {
+            "properties": {
+                "context": {
+                    "$ref": "#/definitions/IRuntimeContext<unknown>"
+                },
+                "funcArgs": {
+                    "items": {},
+                    "type": "array"
+                },
+                "loopCache": {
+                    "items": {
+                        "properties": {
+                            "from": {
+                                "type": "string"
+                            },
+                            "index": {
+                                "type": "number"
+                            },
+                            "loopDataSource": {
+                                "$ref": "#/definitions/IWDataSourceExpression"
+                            }
+                        },
+                        "type": "object"
+                    },
+                    "type": "array"
+                },
+                "state": {
+                    "properties": {
+                        "api": {
+                            "$ref": "#/definitions/Record<string,unknown>"
+                        },
+                        "store": {
+                            "$ref": "#/definitions/Record<string,unknown>"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "IRuntimeContext": {
+            "properties": {
+                "runtimeContext": {
+                    "$ref": "#/definitions/T"
+                },
+                "wBody": {
+                    "properties": {
+                        "lifeCycle": {
+                            "properties": {
+                                "onCreate": {
+                                    "items": {
+                                        "$ref": "#/definitions/EventExpressionType",
+                                        "description": "Event类型声明"
+                                    },
+                                    "type": "array"
+                                },
+                                "onMounted": {
+                                    "items": {
+                                        "$ref": "#/definitions/EventExpressionType",
+                                        "description": "Event类型声明"
+                                    },
+                                    "type": "array"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "node": {
+                            "$ref": "#/definitions/IWNode"
+                        },
+                        "state": {
+                            "properties": {
+                                "api": {
+                                    "$ref": "#/definitions/Record<string,unknown>"
+                                },
+                                "store": {
+                                    "$ref": "#/definitions/Record<string,unknown>"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "IRuntimeContext<unknown>": {
+            "properties": {
+                "runtimeContext": {},
+                "wBody": {
+                    "properties": {
+                        "lifeCycle": {
+                            "properties": {
+                                "onCreate": {
+                                    "items": {
+                                        "$ref": "#/definitions/EventExpressionType",
+                                        "description": "Event类型声明"
+                                    },
+                                    "type": "array"
+                                },
+                                "onMounted": {
+                                    "items": {
+                                        "$ref": "#/definitions/EventExpressionType",
+                                        "description": "Event类型声明"
+                                    },
+                                    "type": "array"
+                                }
+                            },
+                            "type": "object"
+                        },
+                        "node": {
+                            "$ref": "#/definitions/IWNode"
+                        },
+                        "state": {
+                            "properties": {
+                                "api": {
+                                    "$ref": "#/definitions/Record<string,unknown>"
+                                },
+                                "store": {
+                                    "$ref": "#/definitions/Record<string,unknown>"
+                                }
+                            },
+                            "type": "object"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "IWActionExpression": {
+            "properties": {
+                "actionName": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/IWExpression"
+                        },
+                        {
+                            "type": "string"
+                        }
+                    ]
+                },
+                "fail": {
+                    "items": {
+                        "$ref": "#/definitions/IWActionExpression"
+                    },
+                    "type": "array"
+                },
+                "finally": {
+                    "items": {
+                        "$ref": "#/definitions/IWActionExpression"
+                    },
+                    "type": "array"
+                },
+                "params": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/IWExpression"
+                        },
+                        {
+                            "$ref": "#/definitions/Record<string,unknown>"
+                        }
+                    ]
+                },
+                "success": {
+                    "items": {
+                        "$ref": "#/definitions/IWActionExpression"
+                    },
+                    "type": "array"
+                },
+                "type": {
+                    "enum": [
+                        "Action"
+                    ],
+                    "type": "string"
+                },
+                "value": {
+                    "anyOf": [
+                        {
+                            "maxItems": 0,
+                            "minItems": 0,
+                            "type": "array"
+                        },
+                        {
+                            "$ref": "#/definitions/IWExpression"
+                        },
+                        {
+                            "$ref": "#/definitions/EventExpressionType",
+                            "description": "Event类型声明"
+                        },
+                        {
+                            "$ref": "#/definitions/Record<string,unknown>"
+                        },
+                        {
+                            "$ref": "#/definitions/IWActionExpression"
+                        },
+                        {
+                            "items": {
+                                "$ref": "#/definitions/IWExpression"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "items": {
+                                "$ref": "#/definitions/IWActionExpression"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "type": [
+                                "string",
+                                "number",
+                                "boolean"
+                            ]
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "IWBody": {
+            "properties": {
+                "lifeCycle": {
+                    "properties": {
+                        "onCreate": {
+                            "items": {
+                                "$ref": "#/definitions/EventExpressionType",
+                                "description": "Event类型声明"
+                            },
+                            "type": "array"
+                        },
+                        "onMounted": {
+                            "items": {
+                                "$ref": "#/definitions/EventExpressionType",
+                                "description": "Event类型声明"
+                            },
+                            "type": "array"
+                        }
+                    },
+                    "type": "object"
+                },
+                "node": {
+                    "$ref": "#/definitions/IWNode"
+                },
+                "state": {
+                    "properties": {
+                        "api": {
+                            "$ref": "#/definitions/Record<string,unknown>"
+                        },
+                        "store": {
+                            "$ref": "#/definitions/Record<string,unknown>"
+                        }
+                    },
+                    "type": "object"
+                }
+            },
+            "type": "object"
+        },
+        "IWDataSourceExpression": {
+            "properties": {
+                "params": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/IWExpression"
+                        },
+                        {
+                            "$ref": "#/definitions/Record<string,unknown>"
+                        }
+                    ]
+                },
+                "type": {
+                    "$ref": "#/definitions/WDataSourceEnum"
+                },
+                "value": {
+                    "anyOf": [
+                        {
+                            "maxItems": 0,
+                            "minItems": 0,
+                            "type": "array"
+                        },
+                        {
+                            "$ref": "#/definitions/IWExpression"
+                        },
+                        {
+                            "$ref": "#/definitions/EventExpressionType",
+                            "description": "Event类型声明"
+                        },
+                        {
+                            "$ref": "#/definitions/Record<string,unknown>"
+                        },
+                        {
+                            "$ref": "#/definitions/IWActionExpression"
+                        },
+                        {
+                            "items": {
+                                "$ref": "#/definitions/IWExpression"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "items": {
+                                "$ref": "#/definitions/IWActionExpression"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "type": [
+                                "string",
+                                "number",
+                                "boolean"
+                            ]
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "IWExpression": {
+            "properties": {
+                "params": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/IWExpression"
+                        },
+                        {
+                            "$ref": "#/definitions/Record<string,unknown>"
+                        }
+                    ]
+                },
+                "type": {
+                    "type": "string"
+                },
+                "value": {
+                    "anyOf": [
+                        {
+                            "maxItems": 0,
+                            "minItems": 0,
+                            "type": "array"
+                        },
+                        {
+                            "$ref": "#/definitions/IWExpression"
+                        },
+                        {
+                            "$ref": "#/definitions/EventExpressionType",
+                            "description": "Event类型声明"
+                        },
+                        {
+                            "$ref": "#/definitions/Record<string,unknown>"
+                        },
+                        {
+                            "$ref": "#/definitions/IWActionExpression"
+                        },
+                        {
+                            "items": {
+                                "$ref": "#/definitions/IWExpression"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "items": {
+                                "$ref": "#/definitions/IWActionExpression"
+                            },
+                            "type": "array"
+                        },
+                        {
+                            "type": [
+                                "string",
+                                "number",
+                                "boolean"
+                            ]
+                        }
+                    ]
+                }
+            },
+            "type": "object"
+        },
+        "IWNode": {
+            "properties": {
+                "aliasId": {
+                    "type": "string"
+                },
+                "children": {
+                    "items": {
+                        "$ref": "#/definitions/IWNode"
+                    },
+                    "type": "array"
+                },
+                "data": {
+                    "properties": {
+                        "loopDataSource": {
+                            "$ref": "#/definitions/IWDataSourceExpression"
+                        }
+                    },
+                    "type": "object"
+                },
+                "events": {
+                    "items": {
+                        "$ref": "#/definitions/EventExpressionType",
+                        "description": "Event类型声明"
+                    },
+                    "type": "array"
+                },
+                "hidden": {
+                    "anyOf": [
+                        {
+                            "$ref": "#/definitions/IWExpression"
+                        },
+                        {
+                            "type": "boolean"
+                        }
+                    ]
+                },
+                "id": {
+                    "type": "string"
+                },
+                "name": {
+                    "type": "string"
+                },
+                "props": {
+                    "$ref": "#/definitions/Record<string,unknown>"
+                },
+                "style": {
+                    "$ref": "#/definitions/Record<string,unknown>"
+                },
+                "type": {
+                    "type": "string"
+                }
+            },
+            "type": "object"
+        },
+        "IWNodeNodeDataType": {
+            "properties": {
+                "loopDataSource": {
+                    "$ref": "#/definitions/IWDataSourceExpression"
+                }
+            },
+            "type": "object"
+        },
+        "IWNodePropsValue": {
+            "anyOf": [
+                {
+                    "maxItems": 0,
+                    "minItems": 0,
+                    "type": "array"
+                },
+                {
+                    "$ref": "#/definitions/IWExpression"
+                },
+                {
+                    "$ref": "#/definitions/EventExpressionType",
+                    "description": "Event类型声明"
+                },
+                {
+                    "$ref": "#/definitions/Record<string,unknown>"
+                },
+                {
+                    "$ref": "#/definitions/IWActionExpression"
+                },
+                {
+                    "items": {
+                        "$ref": "#/definitions/IWExpression"
+                    },
+                    "type": "array"
+                },
+                {
+                    "items": {
+                        "$ref": "#/definitions/IWActionExpression"
+                    },
+                    "type": "array"
+                },
+                {
+                    "type": [
+                        "string",
+                        "number",
+                        "boolean"
+                    ]
+                }
+            ]
+        },
+        "LoopCacheType": {
+            "properties": {
+                "from": {
+                    "type": "string"
+                },
+                "index": {
+                    "type": "number"
+                },
+                "loopDataSource": {
+                    "$ref": "#/definitions/IWDataSourceExpression"
+                }
+            },
+            "type": "object"
+        },
+        "Record<string,IComponentDeclareProp>": {
+            "type": "object"
+        },
+        "Record<string,unknown>": {
+            "type": "object"
+        },
+        "T": {
+            "type": "object"
+        },
+        "WDataSourceEnum": {
+            "enum": [
+                "API",
+                "LoopState",
+                "Store"
+            ],
+            "type": "string"
+        },
+        "WNodeDataType": {
+            "properties": {
+                "loopDataSource": {
+                    "$ref": "#/definitions/IWDataSourceExpression"
+                }
+            },
+            "type": "object"
+        }
+    },
+    "type": "object"
+}
+
