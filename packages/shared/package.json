@@ -23,6 +23,7 @@
     "dev": "npx concurrently -c \"bgBlue.bold,bgMagenta.bold\" -p \"{time}-{pid}-{name}\" -t \"HH:mm:ss\" --handle-input \"tsc -w\" \"vite build --mode dev --watch\"",
     "build": "rimraf -rf dist && tsc --emitDeclarationOnly && vite build && pnpm run generateSchema",
     "test": "vitest",
+    "test-once": "vitest run",
     "test:ui": "vitest --ui",
     "coverage": "vitest run --coverage",
     "generateSchema": "npx ts-node --esm ./scripts/type2JsonSchema.ts"

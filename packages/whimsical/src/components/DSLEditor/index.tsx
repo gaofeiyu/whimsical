@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback } from 'react';
 import MonacoEditor, { useMonaco, loader } from '@monaco-editor/react';
 import { IWNode } from 'whimsical-shared';
-import schema from 'whimsical-shared/dist/schema.json';
+import schema from './schema.json';
 
 loader.config({
   paths: {

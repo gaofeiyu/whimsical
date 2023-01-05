@@ -1,9 +1,8 @@
 {
     "$schema": "http://json-schema.org/draft-07/schema#",
-    "title": "test",
     "allOf": [
         {
-            "$ref": "#/definitions/IWBody"
+            "$ref": "#/definitions/IWNode"
         }
     ],
     "definitions": {
@@ -826,7 +825,6 @@
             },
             "type": "object"
         }
-    },
-    "type": "object"
+    }
 }
 

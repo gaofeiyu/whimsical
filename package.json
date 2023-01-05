@@ -19,8 +19,9 @@
     "example:react": "pnpm --filter=whimsical-react run example",
     "publish:canary": "lerna publish --canary --yes",
     "publish:release": "lerna publish --yes",
-    "test": "lerna run --parallel test",
+    "test": "pnpm --filter=whimsical* run test-once",
     "test:shared": "pnpm --filter=whimsical-shared run test",
+    "test:whimsical": "pnpm --filter=whimsical run test",
     "docs:dev": "vitepress dev docs",
     "docs:build": "vitepress build docs",
     "docs:preview": "vitepress preview docs"

@@ -45,8 +45,18 @@ export default class EventManagement {
 
   on(name: string | string[], cb) {
     const names = typeof name === 'string' ? [name] : name;
-    const eventsRemove: (Subscription | (() => null))[] = names.map((name) => {
-      if (!this.checkEventName(name)) return () => null;
+    const eventsRemove: (
+      | Subscription
+      | {
+          unsubscribe: () => void;
+        }
+    )[] = names.map((name) => {
+      if (!this.checkEventName(name))
+        return {
+          unsubscribe: () => {
+            return;
+          },
+        };
       return this.eventStore.get(name).subscribe({
         next: (value) => {
           cb({
@@ -57,13 +67,21 @@ export default class EventManagement {
       });
     });
     return () => {
-      eventsRemove.forEach((remove) => {
-        if (typeof remove === 'function') {
-          // 类型 "Subscription" 没有调用签名。
-          // eslint-disable-next-line @typescript-eslint/no-explicit-any
-          (remove as any)();
+      eventsRemove.forEach(
+        (
+          subscribe:
+            | Subscription
+            | {
+                unsubscribe: () => void;
+              }
+        ) => {
+          if (subscribe && subscribe.unsubscribe && typeof subscribe.unsubscribe === 'function') {
+            // 类型 "Subscription" 没有调用签名。
+            // eslint-disable-next-line @typescript-eslint/no-explicit-any
+            (subscribe as any).unsubscribe();
+          }
         }
-      });
+      );
     };
   }
 }
