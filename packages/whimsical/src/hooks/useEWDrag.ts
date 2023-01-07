@@ -1,4 +1,5 @@
 import { MouseEventHandler, MutableRefObject, useEffect, useRef } from 'react';
+import { EDITOR_EVENTS$ } from 'src/editor-flow';
 
 export interface EWDragProps {
   id: string | number;
@@ -12,6 +13,7 @@ export interface EWDragProps {
 export const useEWDrag = <T>(props: EWDragProps): [MutableRefObject<T>, MouseEventHandler] => {
   const { needSave = false, id, defaultWidth = 300, direction = 'e' } = props;
   const contentRef = useRef(null);
+  const resizeRaf = useRef(null);
   const isMouseDown = useRef(false);
   const startX = useRef(0);
   const startWidth = useRef(0);
@@ -31,6 +33,11 @@ export const useEWDrag = <T>(props: EWDragProps): [MutableRefObject<T>, MouseEve
     const offset = direction === 'e' ? e.pageX - startX.current : startX.current - e.pageX;
     contentRef.current.style &&
       (contentRef.current.style.width = `${startWidth.current + offset}px`);
+
+    resizeRaf.current = requestAnimationFrame(() => {
+      cancelAnimationFrame(resizeRaf.current);
+      EDITOR_EVENTS$.emit('canvas:resize');
+    });
   };
   const ewMouseUp = () => {
     if (!isMouseDown.current) return;

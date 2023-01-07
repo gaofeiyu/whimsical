@@ -5,11 +5,7 @@ const declare: IComponentDeclare = {
   cname: '容器',
   icon: 'Container',
   type: 'Common',
-  props: {
-    text: {
-      type: 'string',
-    },
-  },
+  props: {},
 };
 
 export default declare;
