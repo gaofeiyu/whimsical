@@ -16,7 +16,6 @@ class LibManager {
   name: string;
   resource?: ComponentLibInfoResourceType;
   componentsDeclare?: Record<string, IComponentDeclare>;
-  componentsSettingsFormConfig?: Record<string, ISchema>;
   engine?: IEngine;
 
   constructor(props: LibManagerProps) {

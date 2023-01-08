@@ -48,4 +48,6 @@ export interface IComponentDeclare {
   isContainer?: boolean;
   // 组件可以传入的属性定义
   props?: Record<string, IComponentDeclareProp>;
+  // Todo 组件在编辑器中的配置
+  editor?: any;
 }

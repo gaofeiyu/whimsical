@@ -1,10 +1,9 @@
+import { useEffect, useMemo, useState } from 'react';
 import { createForm, onFieldChange, onFormInit, onFormMount } from '@formily/core';
 import { observer } from 'mobx-react-lite';
 import { Form } from '@formily/antd';
 import cls from 'classnames';
 import { SchemaField } from './SchemaField';
-import { settingsSchema } from './defaultSettingsSchema';
-import { useEffect, useMemo, useState } from 'react';
 import { useCurrentNode, useLibInfo, usePrefix } from 'src/hooks';
 import { ISettingFormProps } from './types';
 import { SettingsFormContext } from './context';
@@ -12,8 +11,8 @@ import './index.less';
 
 export const SettingsForm: React.FC<ISettingFormProps> = observer((props) => {
   const node = useCurrentNode();
+  const [settingsSchema, setSettingsSchema] = useState();
   const LibInfo = useLibInfo();
-  const [, focusUpdate] = useState({});
   const prefix = usePrefix('settings-form');
 
   const form = useMemo(() => {
@@ -50,12 +49,9 @@ export const SettingsForm: React.FC<ISettingFormProps> = observer((props) => {
 
   useEffect(() => {
     if (node?.name) {
-      settingsSchema.properties.properties.properties =
-        LibInfo.componentsSettingsFormConfig[node.name] || {};
-      console.log('settingsSchema.properties.properties', settingsSchema.properties.properties);
-      focusUpdate({});
+      setSettingsSchema(LibInfo.componentsDeclare[node.name].editor);
     }
-  }, [node, LibInfo.componentsSettingsFormConfig]);
+  }, [node]);
 
   return (
     <>

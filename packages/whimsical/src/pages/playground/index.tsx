@@ -12,7 +12,6 @@ import WTreeNode from 'src/core/WNode';
 import { EditorHistory } from 'src/editor-flow';
 import Workbench, { IWorkbenchProps } from 'src/core/Workbench';
 import LibManager from 'src/core/LibManager';
-import { generatorComponentsSettingsFormConfig } from 'src/utils/generatorSettingsFormConfig';
 import { WorkbenchContext } from './context';
 import ImportDSL from './components/ImportDSL';
 import ExportDSL from './components/ExportDSL';
@@ -65,9 +64,6 @@ const Playground = (props: PlaygroundProps) => {
       const lib = window[`${LibInfo.name}`].default || window[`${LibInfo.name}`];
       if (!lib) return;
       LibInfo.componentsDeclare = lib?.editor?.libConfig?.componentsDeclare || {};
-      LibInfo.componentsSettingsFormConfig = generatorComponentsSettingsFormConfig(
-        LibInfo.componentsDeclare
-      );
       LibInfo.engine = lib?.editor;
     });
   }, []);
