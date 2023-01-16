@@ -1,6 +1,6 @@
 {
   "name": "whimsical-shared",
-  "version": "0.0.1-alpha.0",
+  "version": "0.0.1-alpha.107+d178de3",
   "license": "MIT",
   "type": "module",
   "main": "dist/index.umd.js",
@@ -37,5 +37,6 @@
   },
   "dependencies": {
     "json-logic-js": "2.0.2"
-  }
+  },
+  "gitHead": "d178de3e15cb4ccdd389ebc3fa909b170e70721a"
 }
