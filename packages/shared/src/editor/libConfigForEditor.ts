@@ -1,4 +1,4 @@
-import { IComponentDeclare } from 'whimsical-shared';
+import { IComponentDeclare } from '../types';
 import { DEFAULT_EDITOR_CONFIG } from './libDefaultConfig';
 
 // 根据组件的属性描述，获取属性操作菜单配置
