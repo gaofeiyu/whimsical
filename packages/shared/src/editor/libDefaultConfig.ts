@@ -1,27 +1,3 @@
-const events = {
-  type: 'void',
-  title: '事件',
-  'x-component': 'CollapseItem',
-  properties: {
-    'x-component-event': {
-      type: 'array',
-      'x-component': 'CEventsSetting',
-    },
-  },
-};
-
-const loop = {
-  type: 'void',
-  title: '循环系统',
-  'x-component': 'CollapseItem',
-  properties: {
-    'x-component-data.loopDataSource': {
-      type: 'object',
-      'x-component': 'CLoopSetting',
-    },
-  },
-};
-
 const styles = {
   type: 'void',
   title: '样式',
@@ -90,21 +66,7 @@ const base = {
   },
 };
 
-const senior = {
-  type: 'void',
-  title: '高级设置',
-  'x-component': 'CollapseItem',
-  properties: {
-    edit: {
-      'x-component': 'CToEditChild',
-    },
-  },
-};
-
 export const DEFAULT_EDITOR_CONFIG = {
   base,
   styles,
-  // events,
-  // senior,
-  // loop,
 };
