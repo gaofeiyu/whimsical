@@ -15,8 +15,8 @@
     "clean": "lerna clean --yes",
     "dev": "pnpm --filter=whimsical run dev",
     "dev:shared": "pnpm --filter=whimsical-shared run dev",
-    "dev:react": "pnpm --filter=whimsical-react run dev",
-    "example:react": "pnpm --filter=whimsical-react run example",
+    "dev:react": "pnpm --filter=whimsical-react-engine run dev",
+    "example:react": "pnpm --filter=whimsical-react-engine run example",
     "publish:canary": "lerna publish --canary --yes",
     "publish:release": "lerna publish --yes",
     "test": "pnpm --filter=whimsical* run test-once",
@@ -85,7 +85,7 @@
   },
   "dependencies": {
     "whimsical": "workspace:*",
-    "whimsical-react": "workspace:*",
+    "whimsical-react-engine": "workspace:*",
     "whimsical-shared": "workspace:*"
   },
   "workspaces": {

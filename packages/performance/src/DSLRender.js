@@ -1,4 +1,4 @@
-import { engine } from 'whimsical-react';
+import { engine } from 'whimsical-react-engine';
 import testDSL from './DSLTest.json';
 
 const num = 100;

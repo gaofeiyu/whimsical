@@ -49,11 +49,11 @@ importers:
       vitepress: 1.0.0-alpha.17
       vitest: 0.23.4
       whimsical: workspace:*
-      whimsical-react: workspace:*
+      whimsical-react-engine: workspace:*
       whimsical-shared: workspace:*
     dependencies:
       whimsical: link:packages/whimsical
-      whimsical-react: link:packages/react
+      whimsical-react-engine: link:packages/react
       whimsical-shared: link:packages/shared
     devDependencies:
       '@commitlint/cli': 17.0.3
@@ -104,15 +104,21 @@ importers:
   packages/create:
     specifiers:
       '@types/prompts': ^2.4.2
+      '@types/shelljs': ^0.8.11
       esbuild: ^0.17.0
       esbuild-plugin-license: ^1.2.2
+      minimist: ^1.2.7
       prompts: ^2.4.2
+      shelljs: ^0.8.5
       zx: ^7.1.1
     devDependencies:
       '@types/prompts': 2.4.2
+      '@types/shelljs': 0.8.11
       esbuild: 0.17.0
       esbuild-plugin-license: 1.2.2_esbuild@0.17.0
+      minimist: 1.2.7
       prompts: 2.4.2
+      shelljs: 0.8.5
       zx: 7.1.1
 
   packages/performance:
@@ -215,7 +221,7 @@ importers:
       tsc-alias: 1.7.1
       typescript: 4.6.4
       vite: 4.0.0-beta.0
-      whimsical-react: workspace:*
+      whimsical-react-engine: workspace:*
       whimsical-shared: workspace:*
     dependencies:
       '@ant-design/icons': 4.7.0_biqbaboplfbrettd7655fr4n2y
@@ -237,7 +243,7 @@ importers:
       react-dnd-html5-backend: 16.0.1
       react-dom: 18.2.0_react@18.2.0
       rxjs: 7.5.7
-      whimsical-react: link:../react
+      whimsical-react-engine: link:../react
       whimsical-shared: link:../shared
     devDependencies:
       '@types/react': 18.0.17
@@ -2632,7 +2638,7 @@ packages:
     resolution: {integrity: sha512-l6NQsDDyQUVeoTynNpC9uRvCUint/gSUXQA2euwmTuWGvPY5LSDUu6tkCtJB2SvGQlJQzLaKqcGZP4//7EDveA==}
     dependencies:
       '@types/minimatch': 5.1.2
-      '@types/node': 16.18.11
+      '@types/node': 18.11.18
     dev: true
 
   /@types/istanbul-lib-coverage/2.0.4:
@@ -2761,6 +2767,13 @@ packages:
 
   /@types/scheduler/0.16.2:
     resolution: {integrity: sha512-hppQEBDmlwhFAXKJX2KnWLYu5yMfi91yazPb2l+lbJiwW+wdo1gNeRA+3RgNSO39WYX2euey41KEwnqesU2Jew==}
+
+  /@types/shelljs/0.8.11:
+    resolution: {integrity: sha512-x9yaMvEh5BEaZKeVQC4vp3l+QoFj3BXcd4aYfuKSzIIyihjdVARAadYy3SMNIz0WCCdS2vB9JL/U6GQk5PaxQw==}
+    dependencies:
+      '@types/glob': 8.0.0
+      '@types/node': 18.11.18
+    dev: true
 
   /@types/unist/2.0.6:
     resolution: {integrity: sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==}
@@ -6830,6 +6843,11 @@ packages:
       side-channel: 1.0.4
     dev: true
 
+  /interpret/1.4.0:
+    resolution: {integrity: sha512-agE4QfB2Lkp9uICn7BAqoscw4SZP9kTE2hxiFI3jBPmXJfdqiahTbUuKGsMoN2GtqL9AxhYioAcVvgsb1HvRbA==}
+    engines: {node: '>= 0.10'}
+    dev: true
+
   /invariant/2.2.4:
     resolution: {integrity: sha512-phJfQVBuaJM5raOpJjSfkiD6BpbCE4Ns//LaXl6wGYtUBY83nWS6Rf9tXm2e8VaK60JEjYldbPif/A2B1C2gNA==}
     dependencies:
@@ -10559,6 +10577,13 @@ packages:
       picomatch: 2.3.1
     dev: true
 
+  /rechoir/0.6.2:
+    resolution: {integrity: sha512-HFM8rkZ+i3zrV+4LQjwQ0W+ez98pApMGM3HUrN04j3CqzPOzl9nmP15Y8YXNm8QHGv/eacOVEjqhmWpkRV0NAw==}
+    engines: {node: '>= 0.10'}
+    dependencies:
+      resolve: 1.22.1
+    dev: true
+
   /redent/1.0.0:
     resolution: {integrity: sha512-qtW5hKzGQZqKoh6JNSD+4lfitfPKGz42e6QwiRmPM5mmKtR0N41AbJRYu0xJi7nhOJ4WDgRkKvAk6tw4WIwR4g==}
     engines: {node: '>=0.10.0'}
@@ -10994,6 +11019,16 @@ packages:
 
   /shell-quote/1.7.4:
     resolution: {integrity: sha512-8o/QEhSSRb1a5i7TFR0iM4G16Z0vYB2OQVs4G3aAFXjn3T6yEx8AZxy1PgDF7I00LZHYA3WxaSYIf5e5sAX8Rw==}
+    dev: true
+
+  /shelljs/0.8.5:
+    resolution: {integrity: sha512-TiwcRcrkhHvbrZbnRcFYMLl30Dfov3HKqzp5tO5b4pt6G/SezKcYhmDg15zXVBswHmctSAQKznqNW2LO5tTDow==}
+    engines: {node: '>=4'}
+    hasBin: true
+    dependencies:
+      glob: 7.2.3
+      interpret: 1.4.0
+      rechoir: 0.6.2
     dev: true
 
   /shiki/0.11.1:

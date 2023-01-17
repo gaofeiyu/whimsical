@@ -46,7 +46,7 @@
     "vite": "4.0.0-beta.0"
   },
   "peerDependencies": {
-    "whimsical-react": "workspace:*"
+    "whimsical-react-engine": "workspace:*"
   },
   "gitHead": "d178de3e15cb4ccdd389ebc3fa909b170e70721a"
 }

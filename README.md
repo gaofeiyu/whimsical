@@ -31,7 +31,7 @@ A low code editor across technology stacks
 
 当前仓库提供3个包，分别是：
 1. 低代码引擎的playground：whimsical
-2. 一个基于react的组件库及组件库渲染引擎示例：whimsical-react
+2. 一个基于react的组件库及组件库渲染引擎示例：whimsical-react-engine
 3. 工具包：whimsical-shared
 
 后续会提供：
