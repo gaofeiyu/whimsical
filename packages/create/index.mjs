@@ -1,23 +1,24 @@
 #!/usr/bin/env node
 import prompts from 'prompts';
 import minimist from 'minimist';
-// const shell = require('shelljs');
-
-// shell.pushd(__dirname);
-// shell.exec(`git status`);
-// shell.popd();
 
 async function init() {
   console.log(process.stdout.isTTY, process.stdout.getColorDepth() > 8);
 
   const cwd = process.cwd();
-  const argv = minimist(process.argv.slice(2), {
+  const {
+    app: modelRoomAppName,
+    _: localAppName,
+    git: gitUrl,
+  } = minimist(process.argv.slice(2), {
     string: ['_'],
     // all arguments are treated as booleans
     boolean: true,
   });
 
-  console.log('argv:', argv);
+  console.log('modelRoomAppName:', modelRoomAppName);
+  console.log('localAppName:', localAppName);
+  console.log('gitUrl:', gitUrl);
   let result = {};
   try {
     result = await prompts([

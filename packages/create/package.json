@@ -7,6 +7,7 @@
     "create-whimsical": "index.mjs"
   },
   "scripts": {
+    "dev": "node index.mjs test --git=git@git@github.com:gaofeiyu/whimsical.git --app=react",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
