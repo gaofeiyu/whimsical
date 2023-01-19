@@ -17,5 +17,5 @@ export function copyModel(modelDir, targetDir) {
     console.log('当前项目已有需要拷贝的文件夹，请更换文件夹或删除原有文件夹');
     return;
   }
-  shell.cp('-R', modelDir, path.join(targetDir, '..'));
+  shell.cp('-R', modelDir, path.join(targetDir));
 }

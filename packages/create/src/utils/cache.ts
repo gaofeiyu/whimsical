@@ -20,6 +20,7 @@ export async function createCacheDir(git, cachePath) {
 
   if (fs.existsSync(cacheProjectName)) {
     shell.cd(cacheProjectName);
+    log('正在操作仓库：');
     if (git === shell.exec('git config remote.origin.url').toString().replace('\n', '')) {
       log('正在同步仓库最新代码...');
       shell.exec('git pull >/dev/null');
