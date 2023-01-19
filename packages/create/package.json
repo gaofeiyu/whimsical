@@ -2,20 +2,24 @@
   "name": "create-whimsical",
   "version": "0.0.1-alpha.0",
   "description": "",
-  "type": "module",
   "bin": {
-    "create-whimsical": "index.mjs"
+    "create-whimsical": "lib/index.js"
   },
+  "files": [
+    "lib"
+  ],
   "scripts": {
-    "dev": "node index.mjs test --git=git@git@github.com:gaofeiyu/whimsical.git --app=react",
+    "dev": "node ./lib/index.js test --git=git@github.com:gaofeiyu/shell-play.git --app=node",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "devDependencies": {
+  "dependencies": {
+    "chalk": "^5.2.0",
     "minimist": "^1.2.7",
     "prompts": "^2.4.2",
-    "shelljs": "^0.8.5"
+    "shelljs": "^0.8.5",
+    "single-line-log": "^1.1.2"
   }
 }
