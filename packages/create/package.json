@@ -9,7 +9,9 @@
     "lib"
   ],
   "scripts": {
-    "dev": "node ./lib/index.js test --git=git@github.com:gaofeiyu/shell-play.git --app=node",
+    "example": "node ./lib/index.js test --git=git@github.com:gaofeiyu/shell-play.git --app=node",
+    "build": "tsc",
+    "dev": "tsc -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
