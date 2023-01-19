@@ -3,7 +3,7 @@ import path from 'node:path';
 
 import shell from 'shelljs';
 import { stdout as log } from 'single-line-log';
-import { getGitProjectName } from './getGitProjectName.js';
+import { getGitProjectName } from './getGitProjectName';
 
 /**
  * 缓存目录在node_modules/.whim

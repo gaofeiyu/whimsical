@@ -2,8 +2,8 @@
   "compilerOptions": {
     "esModuleInterop": true,
     "moduleResolution": "node",
-    "module": "commonjs",
-    "target": "esnext",
+    "module": "CommonJS",
+    "target": "ESNext",
     "allowJs": false,
     "preserveConstEnums": true,
     "sourceMap": false,

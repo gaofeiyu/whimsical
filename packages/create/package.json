@@ -17,11 +17,15 @@
   "license": "ISC",
   "dependencies": {
     "chalk": "^5.2.0",
-    "inquirer": "^9.1.4",
+    "inquirer": "7",
     "minimist": "^1.2.7",
     "ora": "^6.1.2",
     "prompts": "^2.4.2",
     "shelljs": "^0.8.5",
     "single-line-log": "^1.1.2"
+  },
+  "devDependencies": {
+    "@types/inquirer": "^9.0.3",
+    "@types/shelljs": "^0.8.11"
   }
 }

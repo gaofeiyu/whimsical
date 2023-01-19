@@ -2,7 +2,7 @@
 import path from 'node:path';
 
 import minimist from 'minimist';
-import prompts from 'prompts';
+import inquirer from 'inquirer';
 
 import { createCacheDir } from './utils/cache';
 import { copyModel } from './utils/copyModel';
@@ -32,7 +32,7 @@ async function init() {
       message: 'What is your modelRoomAppName?',
     },
   ];
-  const promptsParams = await prompts(questions);
+  const promptsParams = await inquirer.prompt(questions);
   const params = {
     localAppName: argv._,
     gitUrl: argv.git,
