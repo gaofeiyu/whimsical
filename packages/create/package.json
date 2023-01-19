@@ -1,6 +1,6 @@
 {
   "name": "create-whimsical",
-  "version": "0.0.1",
+  "version": "0.0.3",
   "description": "",
   "bin": {
     "create-whimsical": "lib/index.js"

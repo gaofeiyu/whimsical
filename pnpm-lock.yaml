@@ -149,7 +149,7 @@ importers:
       react-dom: 18.2.0
       rimraf: 3.0.2
       vite: 4.0.0-beta.0
-      whimsical-shared: ^0.0.1
+      whimsical-shared: ^0.0.3
     dependencies:
       axios: 0.27.2
       react: 18.2.0
@@ -224,7 +224,7 @@ importers:
       typescript: 4.6.4
       vite: 4.0.0-beta.0
       whimsical-react-engine: workspace:*
-      whimsical-shared: ^0.0.1
+      whimsical-shared: ^0.0.3
     dependencies:
       '@ant-design/icons': 4.7.0_biqbaboplfbrettd7655fr4n2y
       '@formily/antd': 2.2.10_mmjvjpsnjpv7ku7xcxjy6sl7bm
