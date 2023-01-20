@@ -8,7 +8,12 @@ import shell from 'shelljs';
  * 3. 进行复制
  */
 
-export function copyModel(modelDir, targetDir) {
+/**
+ * 复制模板到目标目录
+ * @param modelDir 相对模板仓库模板所在位置
+ * @param targetDir 要存到本地的目标位置
+ */
+export function copyModel(modelDir: string, targetDir: string) {
   if (!fs.existsSync(modelDir)) {
     console.log('缺少需要复制的文件夹');
     return;
@@ -17,5 +22,6 @@ export function copyModel(modelDir, targetDir) {
     console.log('当前项目已有需要拷贝的文件夹，请更换文件夹或删除原有文件夹');
     return;
   }
+  // Todo 递归创建目录结构中不存在的目录
   shell.cp('-R', modelDir, path.join(targetDir));
 }
