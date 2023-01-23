@@ -15,8 +15,13 @@ describe('AppController', () => {
   });
 
   describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
+    it('should return tracker object', () => {
+      expect(appController.tracker()).toBe({
+        projectId: '1',
+        actionId: '1',
+        type: 'count',
+        params: {},
+      });
     });
   });
 });
