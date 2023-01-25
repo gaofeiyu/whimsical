@@ -5,7 +5,7 @@ export type TrackerBody = {
   projectId: string;
   actionId: string;
   type: string;
-  params: unknown;
+  extend?: unknown;
 };
 
 @Controller()
@@ -20,7 +20,7 @@ export class AppController {
       projectId: '1',
       actionId: '1',
       type: 'count',
-      params: {},
+      extend: {},
     });
   }
 }

@@ -4,9 +4,10 @@ import { DataSource } from 'typeorm';
 import sql from './sql';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
+import { TrackerModule } from './module/tracker/index.module';
 
 @Module({
-  imports: [TypeOrmModule.forRoot(sql as TypeOrmModuleOptions)],
+  imports: [TypeOrmModule.forRoot(sql as TypeOrmModuleOptions), TrackerModule],
   controllers: [AppController],
   providers: [AppService],
 })
