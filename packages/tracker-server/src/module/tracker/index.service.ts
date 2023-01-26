@@ -1,8 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import { Repository } from 'typeorm';
+import { getManager, InsertResult, Repository } from 'typeorm';
 import { Tracker } from './index.entity';
-
 @Injectable()
 export class TrackerService {
   constructor(
@@ -14,5 +13,22 @@ export class TrackerService {
 
   async findAll(): Promise<Tracker[]> {
     return await this.trackerRepository.find();
+  }
+
+  async insert(): Promise<InsertResult> {
+    console.log(this.trackerRepository);
+    const data = this.trackerRepository.create();
+    console.log(data);
+    return await this.trackerRepository
+      .createQueryBuilder()
+      .insert()
+      .into(Tracker)
+      .values({
+        actionId: `test1`,
+        projectId: `0`,
+        type: 'count',
+        extend: '{}',
+      })
+      .execute();
   }
 }

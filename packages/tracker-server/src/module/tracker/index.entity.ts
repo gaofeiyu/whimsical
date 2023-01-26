@@ -16,5 +16,5 @@ export class Tracker extends BaseEntity {
   type: string;
 
   @Column('text', { name: 'extend' })
-  extends: string;
+  extend: string;
 }
