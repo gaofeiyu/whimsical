@@ -4,11 +4,11 @@ import path from 'node:path';
 import minimist from 'minimist';
 import inquirer from 'inquirer';
 
-import { CACHE_PATH, MODEL_BASE_PATH, LOCAL_BASE_PATH } from './config';
-
-import { createCacheDir } from './utils/cache';
-import { copyModel } from './utils/copyModel';
-import { getGitProjectName } from './utils/getGitProjectName';
+import { CACHE_PATH, MODEL_BASE_PATH, LOCAL_BASE_PATH, CONFIG__FILE } from './config.mjs';
+import { createCacheDir } from './utils/cache.mjs';
+import { copyModel } from './utils/copyModel.mjs';
+import { getGitProjectName } from './utils/getGitProjectName.mjs';
+import { outputmodelInfo } from './utils/outputInfo.mjs';
 
 const cachePath = path.resolve(process.cwd(), CACHE_PATH);
 
@@ -32,8 +32,8 @@ async function init() {
     },
     {
       type: 'text',
-      name: 'modelRoomAppName',
-      message: 'What is your modelRoomAppName?',
+      name: 'modelAppName',
+      message: 'What is your modelAppName?',
       when: !argv.app,
     },
   ];
@@ -41,17 +41,22 @@ async function init() {
   const params = {
     localAppName,
     gitUrl: argv.git,
-    modelRoomAppName: argv.app,
+    modelAppName: argv.app,
     ...promptsParams,
   };
   const projectName = getGitProjectName(params.gitUrl);
-  const modelDir = path.join(cachePath, projectName, MODEL_BASE_PATH, params.modelRoomAppName);
+  const modelDir = path.join(cachePath, projectName, MODEL_BASE_PATH, params.modelAppName);
   const targetDir = path.join(process.cwd(), LOCAL_BASE_PATH, params.localAppName);
-
-  await createCacheDir(params.gitUrl, cachePath);
-  await copyModel(modelDir, targetDir);
+  const modelInfoFilePath = path.join(targetDir, CONFIG__FILE);
+  try {
+    await createCacheDir(params.gitUrl, cachePath);
+    await copyModel(modelDir, targetDir);
+    await outputmodelInfo(modelInfoFilePath);
+  } catch (err) {
+    console.log(err.message);
+  }
 }
 
-init().catch((e) => {
-  console.error(e);
+init().catch((err) => {
+  console.error(err);
 });

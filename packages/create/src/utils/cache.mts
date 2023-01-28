@@ -2,10 +2,10 @@ import fs from 'node:fs';
 import path from 'node:path';
 
 import shell from 'shelljs';
-
 import { stdout as log } from 'single-line-log';
-import { getGitProjectName } from './getGitProjectName';
-import { loading } from './loading';
+
+import { getGitProjectName } from './getGitProjectName.mjs';
+import { loading } from './loading.mjs';
 
 /**
  * 缓存目录在node_modules/.whim
@@ -38,14 +38,14 @@ export async function createCacheDir(git: string, cachePath: string) {
   }
 
   if (fs.existsSync(cacheProjectName)) {
-    shell.cd(cacheProjectName);
-    log('正在操作仓库：');
+    await shell.cd(cacheProjectName);
+    log('目标仓库：');
     if (git === shell.exec('git config remote.origin.url').toString().replace('\n', '')) {
       console.log();
       await loading('同步仓库最新代码', gitPull());
     }
   } else {
-    shell.cd(cachePath);
+    await shell.cd(cachePath);
     await loading('克隆模板仓库', gitClone(git));
   }
 }
