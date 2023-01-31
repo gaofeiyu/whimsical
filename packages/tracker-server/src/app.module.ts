@@ -6,6 +6,7 @@ import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { TrackerModule } from './module/tracker/index.module';
 
+// Why not ormconfig https://typeorm.io/changelog#deprecations
 @Module({
   imports: [TypeOrmModule.forRoot(sql as TypeOrmModuleOptions), TrackerModule],
   controllers: [AppController],
