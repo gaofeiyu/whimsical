@@ -23,8 +23,6 @@
   },
   "dependencies": {
     "axios": "0.27.2",
-    "react": "18.2.0",
-    "react-dom": "18.2.0",
     "whimsical-shared": "^0.0.3"
   },
   "peerDependencies": {
@@ -33,8 +31,12 @@
     "whimsical-shared": "workspace:*"
   },
   "devDependencies": {
+    "@types/react": "18.0.17",
+    "@types/react-dom": "18.0.6",
     "@vitejs/plugin-react": "2.1.0",
     "fast-glob": "^3.2.12",
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
     "rimraf": "3.0.2",
     "vite": "4.0.0-beta.0"
   },

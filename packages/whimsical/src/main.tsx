@@ -5,7 +5,7 @@ import { wBodyMock, componentInfoMock } from './mock/wNode';
 import './index.less';
 
 ReactDOM.createRoot(document.getElementById('root') as HTMLElement).render(
-  <React.StrictMode>
+  (<React.StrictMode>
     <Playground bodySchema={wBodyMock} componentInfo={componentInfoMock} />
-  </React.StrictMode>
+  </React.StrictMode>) as any
 );
