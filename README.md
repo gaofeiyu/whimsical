@@ -39,9 +39,32 @@ A low code editor across technology stacks
 为了承载全新的 AI 对话和指令式修改机制，项目正处于重构阶段。当前仓库提供以下主要包：
 
 1. **`editor-new` (Active)**：全新的轻量级 Vite + React 18 核心编辑器。采用了 MobX 驱动的纯数据 `NodeTree` 模型，并内置了 Command 模式 (`executeCommand`)，原生支持 AI Chatbot 发送的节点修改指令。
-2. `whimsical` (Legacy)：早期的低代码引擎 playground。
-3. `whimsical-react-engine` (Legacy)：基于 react 的组件库及渲染引擎示例。
-4. `whimsical-shared` (Legacy)：早期的工具包和 DSL 类型定义。
+2. `whimsical` (Legacy)：早期的低代码引擎 playground，用于展示旧版架构的跨框架渲染能力。
+3. `whimsical-react-engine` (Legacy)：基于 React 的组件库及渲染引擎示例，用于将旧版 DSL 解析为 React 组件。
+4. `whimsical-shared` (Legacy)：早期的工具包和 DSL 类型的公共定义库。
+
+## 如何开发和启动
+
+本项目使用 Monorepo 结构，推荐使用 `pnpm` 进行依赖管理。
+
+1. **安装依赖：**
+   在项目根目录下执行安装命令（这会自动处理子包之间的依赖关联）：
+   ```bash
+   pnpm install
+   ```
+
+2. **启动全新 AI 核心编辑器 (推荐)：**
+   当前所有的开发重心都已经转移至全新的轻量级核心包 `editor-new`。
+   ```bash
+   cd packages/editor-new
+   pnpm dev
+   ```
+
+3. **启动旧版本 Playground (Legacy)：**
+   如果您想体验早期的低代码引擎跨栈渲染功能：
+   ```bash
+   pnpm dev
+   ```
 
 ## 交流
 
