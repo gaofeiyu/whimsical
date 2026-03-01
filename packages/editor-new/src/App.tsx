@@ -2,6 +2,8 @@ import React, { type DragEvent, useState } from 'react';
 import { observer } from 'mobx-react-lite';
 import { editorRoot, NodeTree } from './store/NodeTree';
 import { globalHistory } from './store/HistoryManager';
+import { componentRegistry } from './registry/ComponentRegistry';
+import { PropertiesPanel } from './panels/PropertiesPanel';
 
 const App = observer(() => {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
@@ -48,9 +50,12 @@ const App = observer(() => {
       return;
     }
 
+    const registration = componentRegistry.get(componentType);
+    const defaultProps = registration ? { ...registration.defaultProps } : {};
+
     const payload = {
       type: componentType,
-      props: { style: { padding: '10px', margin: '5px', border: '1px solid #ccc', display: componentType === 'FlexBox' ? 'flex' : 'block' } }
+      props: defaultProps
     };
 
     if (dropIndicator.position === 'top') {
@@ -80,110 +85,126 @@ const App = observer(() => {
     const isSelected = selectedNodeId === node.id;
     const isDropTarget = dropIndicator?.id === node.id;
 
-    let borderStyle = node.props.style?.border || '1px dashed #aaa';
-    if (isSelected) borderStyle = '2px solid blue';
-    if (isDropTarget && dropIndicator.position === 'inside') borderStyle = '2px solid green';
+    const registration = componentRegistry.get(node.type);
+    const isContainer = registration?.isContainer;
+
+    const outlineColor = isSelected ? 'blue' : (isDropTarget && dropIndicator.position === 'inside' ? 'green' : 'transparent');
+    const outlineStyle = (isSelected || (isDropTarget && dropIndicator.position === 'inside')) ? `2px solid ${outlineColor}` : '2px solid transparent';
 
     const topBorder = isDropTarget && dropIndicator.position === 'top' ? '4px solid green' : undefined;
     const bottomBorder = isDropTarget && dropIndicator.position === 'bottom' ? '4px solid green' : undefined;
+
+    // Render inner component
+    const ComponentToRender = registration?.component || 'div';
+    const componentProps = { ...node.props };
 
     return (
       <div
         key={node.id}
         style={{
-          ...node.props.style,
-          border: borderStyle,
-          borderTop: topBorder || borderStyle.split(' ')[0] === '0px' ? undefined : topBorder,
-          borderBottom: bottomBorder || borderStyle.split(' ')[0] === '0px' ? undefined : bottomBorder,
-          minHeight: '40px',
-          backgroundColor: node.type === 'Page' ? '#fff' : '#fafafa',
-          transition: 'all 0.2s'
+          position: 'relative',
+          outline: outlineStyle,
+          borderTop: topBorder,
+          borderBottom: bottomBorder,
+          minHeight: isContainer ? '40px' : undefined,
+          transition: 'all 0.1s',
+          cursor: 'pointer',
         }}
         onDragOver={(e) => handleDragOver(e, node.id)}
         onDragLeave={handleDragLeave}
         onDrop={(e) => handleDrop(e, node.id)}
         onClick={(e) => handleNodeClick(e, node.id)}
       >
-        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '5px' }}>
-          <strong>{node.type} {node.type === 'FlexBox' ? '(Container)' : ''}</strong>
-          {node.id !== 'root' && (
-            <button onClick={(e) => { e.stopPropagation(); handleDelete(node.id); }} style={{ fontSize: '10px' }}>
-              Del
+        {/* Overlay for non-containers to catch drag and click events instead of the component itself consuming them */}
+        {!isContainer && (
+          <div style={{ position: 'absolute', top: 0, left: 0, right: 0, bottom: 0, zIndex: 10 }} />
+        )}
+
+        {/* Floating actions for selected node */}
+        {isSelected && node.id !== 'root' && (
+          <div style={{ position: 'absolute', top: '-20px', right: 0, background: 'blue', color: 'white', padding: '2px 6px', fontSize: '10px', borderRadius: '4px', zIndex: 20 }}>
+            {node.type}
+            <button onClick={(e) => { e.stopPropagation(); handleDelete(node.id); }} style={{ marginLeft: '5px', background: 'transparent', border: 'none', color: 'white', cursor: 'pointer' }}>
+              ×
             </button>
-          )}
-        </div>
-        {node.children.map(child => renderNode(child))}
+          </div>
+        )}
+
+        {/* The actual component */}
+        <ComponentToRender {...componentProps}>
+          {isContainer ? (
+            node.children.length > 0 ? (
+               node.children.map(child => renderNode(child))
+            ) : (
+               <div style={{ padding: '20px', textAlign: 'center', color: '#ccc', fontSize: '12px' }}>Drag components here</div>
+            )
+          ) : undefined}
+        </ComponentToRender>
+
       </div>
     );
   };
 
-  const selectedNode = selectedNodeId ? editorRoot.findNodeById(selectedNodeId) : null;
+
+  const registeredComponents = componentRegistry.getAll().filter(c => c.type !== 'Page');
 
   return (
-    <div style={{ display: 'flex', height: '100vh', width: '100vw', fontFamily: 'sans-serif' }}>
+    <div className="editor-container" style={{ display: 'flex', height: '100vh', width: '100vw', fontFamily: 'sans-serif' }}>
       {/* Sidebar Component Library */}
       <section style={{ width: '250px', borderRight: '1px solid #ccc', padding: '10px', backgroundColor: '#f9f9f9', display: 'flex', flexDirection: 'column' }}>
-        <h3>Components</h3>
-        {['Button', 'Input', 'FlexBox', 'Text'].map(comp => (
+        <h3>组件库 (Components)</h3>
+        {registeredComponents.map(comp => (
           <div
-            key={comp}
+            key={comp.type}
             draggable
-            onDragStart={(e) => handleDragStart(e, comp)}
+            onDragStart={(e) => handleDragStart(e, comp.type)}
             style={{ padding: '8px', border: '1px dashed #999', marginBottom: '8px', cursor: 'grab', backgroundColor: '#fff' }}
           >
-            {comp}
+            {comp.name}
           </div>
         ))}
       </section>
 
       {/* Main Canvas Area */}
       <section style={{ flex: 1, padding: '20px', backgroundColor: '#e0e0e0', overflowY: 'auto' }}>
-        <h3 style={{ marginBottom: '10px' }}>Canvas</h3>
+        <h3 style={{ marginBottom: '10px' }}>画布 (Canvas)</h3>
         {renderNode(editorRoot)}
       </section>
 
-      {/* Property Settings Panel */}
-      <section style={{ width: '300px', borderLeft: '1px solid #ccc', padding: '10px', backgroundColor: '#f9f9f9', display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        <div style={{ padding: '10px', borderBottom: '1px solid #ccc' }}>
-          <h4>History</h4>
-          <button
-            disabled={!globalHistory.canUndo()}
-            onClick={() => {
-              const state = globalHistory.undo(JSON.stringify(editorRoot.serialize()));
-              if (state) editorRoot.loadFromData(JSON.parse(state));
-            }}>Undo</button>
-          <button
-            disabled={!globalHistory.canRedo()}
-            onClick={() => {
-              const state = globalHistory.redo(JSON.stringify(editorRoot.serialize()));
-              if (state) editorRoot.loadFromData(JSON.parse(state));
-            }}>Redo</button>
+      {/* Right Properties & History Panel */}
+      <section style={{ width: '300px', borderLeft: '1px solid #ccc', padding: '10px', backgroundColor: '#f9f9f9', display: 'flex', flexDirection: 'column', overflowY: 'auto' }}>
+        <div style={{ marginBottom: '20px' }}>
+          <h3>历史记录 (History)</h3>
+          <div style={{ display: 'flex', gap: '10px' }}>
+            <button
+              disabled={!globalHistory.canUndo()}
+              onClick={() => {
+                const state = globalHistory.undo(JSON.stringify(editorRoot.serialize()));
+                if (state) editorRoot.loadFromData(JSON.parse(state));
+              }}
+              style={{ cursor: globalHistory.canUndo() ? 'pointer' : 'not-allowed', color: globalHistory.canUndo() ? '#000' : '#ccc', padding: '5px 10px', border: '1px solid #ccc', background: '#fff' }}
+            >
+              撤销 (Undo)
+            </button>
+            <button
+              disabled={!globalHistory.canRedo()}
+              onClick={() => {
+                const state = globalHistory.redo(JSON.stringify(editorRoot.serialize()));
+                if (state) editorRoot.loadFromData(JSON.parse(state));
+              }}
+              style={{ cursor: globalHistory.canRedo() ? 'pointer' : 'not-allowed', color: globalHistory.canRedo() ? '#000' : '#ccc', padding: '5px 10px', border: '1px solid #ccc', background: '#fff' }}
+            >
+              重做 (Redo)
+            </button>
+          </div>
         </div>
 
-        <h3>Settings</h3>
-        {selectedNode ? (
-          <div>
-            <p><strong>ID:</strong> {selectedNode.id}</p>
-            <p><strong>Type:</strong> {selectedNode.type}</p>
-            <div style={{ marginTop: '20px' }}>
-              <button onClick={() => {
-                editorRoot.executeCommand('updateProps', selectedNode.id, {
-                  style: { ...selectedNode.props.style, backgroundColor: '#d4edda' }
-                });
-              }}>
-                Set Green Background
-              </button>
-            </div>
-            <div style={{ marginTop: '20px' }}>
-              <h4>Schema Output:</h4>
-              <pre style={{ fontSize: '10px', background: '#333', color: '#fff', padding: '10px', overflowX: 'auto' }}>
-                {JSON.stringify(selectedNode.serialize(), null, 2)}
-              </pre>
-            </div>
-          </div>
-        ) : (
-          <p>Select a node to view settings.</p>
-        )}
+        <hr style={{ border: 'none', borderTop: '1px solid #ccc', margin: '20px 0' }} />
+
+        <div style={{ flex: 1 }}>
+          <h3>属性配置 (Properties)</h3>
+          <PropertiesPanel selectedNodeId={selectedNodeId} />
+        </div>
       </section>
     </div>
   );

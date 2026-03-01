@@ -167,6 +167,6 @@ export class NodeTree {
 export const editorRoot = new NodeTree({
   id: 'root',
   type: 'Page',
-  props: { style: { minHeight: '100%', padding: '20px' } },
+  props: { backgroundColor: '#f0f2f5', padding: '24px', margin: '0' },
   children: []
 });
