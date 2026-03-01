@@ -1,73 +1,30 @@
-# React + TypeScript + Vite
+# @whimsical/editor-new
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+AI驱动的低代码编辑器核心引擎（重构版）。
 
-Currently, two official plugins are available:
+## 核心目标
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+1. **AI Native**: 原生支持通过自然语言（Chatbot）直接驱动页面构建。所有底层数据模型（NodeTree）的变更通过 `executeCommand` 指令体系执行，便于直接对接大模型输出的 JSON。
+2. **双向引擎 (Bidirectional)**:
+   - **DSL 到 代码**: 将可视化的页面组装结构（DSL）结合组件库产出高质量的可维护代码。
+   - **代码 到 DSL**: 通过 `data-w-id` 等标记机制，允许开发者对生成的代码进行二次修改后，能重新反向解析回 DSL 并更新至可视化画布。
+3. **轻量与现代**: 使用 React 19, Vite, MobX 和原生的 HTML5 拖拽 API 构建，摒弃了沉重的三方拖拽依赖。
 
-## React Compiler
+## 模块架构
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **DSL 模型 (`NodeTree`)**: 响应式的树形结构数据模型，基于 MobX，支持快速序列化和反序列化。
+- **历史记录 (`HistoryManager`)**: 基于快照（Snapshot）和指令（Command）的撤销/重做机制，完美支持 AI 批量变更。
+- **拖拽引擎**: 基于 HTML5 原生拖拽，提供精准的插入位置（前/后/内部）可视化反馈。
 
-## Expanding the ESLint configuration
+## 开发指南
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+```bash
+# 启动开发服务器
+npm run dev
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
+# 构建产物
+npm run build
 
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
+# 类型检查
+npm run type-check
 ```

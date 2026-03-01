@@ -12,8 +12,10 @@ A low code editor across technology stacks
 ## 设计文档
 
 在推进 AI Native 重构的过程中，我们将核心架构设计沉淀在 `docs/design` 目录下：
-- [01 - DSL Model (NodeTree)](./docs/design/01-dsl-model.md)：详细描述了用于双向绑定和流式布局的轻量级 JSON 抽象。
-- [02 - Action History Engine](./docs/design/02-action-history-engine.md)：描述了用于对接 AI 指令的 Command 模式以及基于快照的撤销/重做引擎。
+- [01 - DSL 数据模型设计](./docs/design/01-dsl-model.md)：详细描述了用于双向绑定和流式布局的轻量级 JSON 抽象。
+- [02 - 指令与历史状态引擎](./docs/design/02-action-history-engine.md)：描述了用于对接 AI 指令的指令模式以及基于快照的撤销与重做引擎。
+- [03 - 编辑器验收标准](./docs/design/03-acceptance-criteria.md)：详细规定了评判低代码引擎排版与代码生成能力的标准，并确定了验证基准页面。
+- [04 - 核心架构实施阶段计划](./docs/design/04-implementation-phases.md)：为实现极其复杂的双向绑定和组件解耦目标，制定的四个渐进式开发与验证阶段。
 
 ## 目标功能
 

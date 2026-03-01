@@ -1,11 +1,11 @@
-# 01 - DSL Model (NodeTree)
+# 01 - DSL 数据模型设计
 
 ## 核心设计理念
 
 为了支持 AI 生成、自然语言交互以及双向代码转换，我们需要一个极其规范且轻量的 DSL 模型。
 当前系统的 DSL 由 `INode` 接口定义，它抛弃了旧版复杂的业务绑定，回归纯粹的树状 JSON 结构。
 
-## 数据结构 (INode)
+## 数据结构定义
 
 ```typescript
 export interface INode {
@@ -18,13 +18,13 @@ export interface INode {
 
 ### 节点分类
 
-1. **容器节点 (Container Nodes)**:
+1. **容器节点**:
    - 比如 `Page`, `Container`, `FlexBox`。
-   - 这类节点专门用于控制布局和排版，允许包含 `children`。
-   - AI 在生成布局时，应优先使用这些节点来控制元素的流式排列 (基于 Flexbox)。
-2. **内容节点 (Content Nodes)**:
+   - 这类节点专门用于控制布局和排版，允许包含 `children` 子节点。
+   - AI 在生成布局时，应优先使用这些节点来控制元素的流式排列（基于弹性布局）。
+2. **内容节点**:
    - 比如 `Button`, `Text`, `Input`。
-   - 这类节点负责具体的 UI 展现和交互，通常不包含（或不需要包含）`children`。
+   - 这类节点负责具体的 UI 展现和交互，通常不包含（或不需要包含）子节点。
 
 ## 代码双向绑定机制
 
