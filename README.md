@@ -9,10 +9,16 @@ A low code editor across technology stacks
 
 除了核心的通过 DSL 描述页面并绑定组件库实现跨栈渲染外，当前的核心愿景是：**实现一个可以通过自然语言与 AI 对话，直接绘制和修改页面的低代码编辑器，并支持 DSL 与代码的双向生成和还原机制。**
 
+## 设计文档
+
+在推进 AI Native 重构的过程中，我们将核心架构设计沉淀在 `docs/design` 目录下：
+- [01 - DSL Model (NodeTree)](./docs/design/01-dsl-model.md)：详细描述了用于双向绑定和流式布局的轻量级 JSON 抽象。
+- [02 - Action History Engine](./docs/design/02-action-history-engine.md)：描述了用于对接 AI 指令的 Command 模式以及基于快照的撤销/重做引擎。
+
 ## 目标功能
 
 - 基本的编辑器界面
-- DSL设计
+- 规范且轻量的 DSL 设计
 - 组件库接入能力
 - 流式布局的画布
 - 可跨技术栈的编辑能力

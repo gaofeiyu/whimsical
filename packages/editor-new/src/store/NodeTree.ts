@@ -1,4 +1,5 @@
 import { makeAutoObservable } from 'mobx';
+import { globalHistory } from './HistoryManager';
 
 export interface INode {
   id: string;
@@ -10,6 +11,8 @@ export interface INode {
 
 export type EditorAction =
   | 'append'
+  | 'insertBefore'
+  | 'insertAfter'
   | 'remove'
   | 'updateProps';
 
@@ -37,6 +40,24 @@ export class NodeTree {
     return newNode;
   }
 
+  insertBefore(node: INode) {
+    if (!this.parent) return;
+    const index = this.parent.children.findIndex(child => child.id === this.id);
+    if (index > -1) {
+      const newNode = new NodeTree(node, this.parent);
+      this.parent.children.splice(index, 0, newNode);
+    }
+  }
+
+  insertAfter(node: INode) {
+    if (!this.parent) return;
+    const index = this.parent.children.findIndex(child => child.id === this.id);
+    if (index > -1) {
+      const newNode = new NodeTree(node, this.parent);
+      this.parent.children.splice(index + 1, 0, newNode);
+    }
+  }
+
   remove() {
     if (this.parent) {
       this.parent.children = this.parent.children.filter(child => child.id !== this.id);
@@ -57,8 +78,18 @@ export class NodeTree {
     return null;
   }
 
+  loadFromData(nodeData: INode) {
+    this.id = nodeData.id;
+    this.type = nodeData.type;
+    this.props = nodeData.props || {};
+    this.children = (nodeData.children || []).map(child => new NodeTree(child, this));
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   executeCommand(action: EditorAction, targetId: string | null, payload?: any) {
+    // Capture state before mutation for history
+    const preMutationState = JSON.stringify(this.serialize());
+
     // If a targetId is provided, we route the command to that specific node.
     // If no targetId is provided (or if it matches the root), the command applies to the root.
     const targetNode = targetId ? this.findNodeById(targetId) : this;
@@ -68,24 +99,58 @@ export class NodeTree {
       return;
     }
 
+    let mutationOccurred = true;
+
     switch (action) {
       case 'append':
         if (!payload || !payload.type) {
           console.warn('Append requires a valid node payload');
-          return;
+          mutationOccurred = false;
+        } else {
+          targetNode.append(payload);
         }
-        targetNode.append(payload);
+        break;
+      case 'insertBefore':
+        if (!payload || !payload.type) {
+          mutationOccurred = false;
+        } else {
+          targetNode.insertBefore(payload);
+        }
+        break;
+      case 'insertAfter':
+        if (!payload || !payload.type) {
+          mutationOccurred = false;
+        } else {
+          targetNode.insertAfter(payload);
+        }
         break;
       case 'remove':
         targetNode.remove();
         break;
       case 'updateProps':
-        if (!payload) return;
-        targetNode.updateProps(payload);
+        if (!payload) {
+          mutationOccurred = false;
+        } else {
+          targetNode.updateProps(payload);
+        }
         break;
       default:
         console.warn(`Unsupported action: ${action}`);
+        mutationOccurred = false;
     }
+
+    if (mutationOccurred) {
+      // For now we assume executeCommand is called on the root
+      globalHistory.push(preMutationState, `${action} on ${targetId || 'root'}`);
+    }
+  }
+
+  getRoot(): NodeTree {
+    let current: NodeTree = this;
+    while (current.parent) {
+      current = current.parent;
+    }
+    return current;
   }
 
   serialize(): INode {
