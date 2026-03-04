@@ -1,7 +1,8 @@
 
-export const Button = ({ text, color, backgroundColor, padding, onClick }: any) => {
+export const Button = ({ text, children, color, backgroundColor, padding, onClick, ...rest }: any) => {
   return (
     <button
+      {...rest}
       style={{
         color: color || '#fff',
         backgroundColor: backgroundColor || '#1890ff',
@@ -9,10 +10,11 @@ export const Button = ({ text, color, backgroundColor, padding, onClick }: any) 
         border: 'none',
         borderRadius: '4px',
         cursor: 'pointer',
+        ...rest.style
       }}
       onClick={onClick}
     >
-      {text || 'Button'}
+      {children || text || 'Button'}
     </button>
   );
 };

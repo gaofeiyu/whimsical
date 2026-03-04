@@ -2,23 +2,34 @@ import { parse } from '@babel/parser';
 import traverse from '@babel/traverse';
 import * as t from '@babel/types';
 import generate from '@babel/generator';
-import { type INode, NodeTree } from '../store/NodeTree';
+import { JSONNode } from '../core/types';
 
 export class CodeParser {
-  private baseState: NodeTree;
+  private baseState: JSONNode;
 
-  constructor(baseState: NodeTree) {
+  constructor(baseState: JSONNode) {
     this.baseState = baseState;
   }
 
-  parseCode(code: string): INode | null {
+  private findNodeById(id: string, currentNode: JSONNode): JSONNode | null {
+    if (currentNode.id === id) return currentNode;
+    if (currentNode.children) {
+      for (const child of currentNode.children) {
+        const found = this.findNodeById(id, child);
+        if (found) return found;
+      }
+    }
+    return null;
+  }
+
+  parseCode(code: string): JSONNode | null {
     try {
       const ast = parse(code, {
         sourceType: 'module',
         plugins: ['jsx', 'typescript']
       });
 
-      let rootNode: INode | null = null;
+      let rootNode: JSONNode | null = null;
 
       // Find the return statement of the default export function
       traverse(ast, {
@@ -37,7 +48,7 @@ export class CodeParser {
     }
   }
 
-  private parseJSXElement(element: t.JSXElement): INode {
+  private parseJSXElement(element: t.JSXElement): JSONNode {
     const openingElement = element.openingElement;
     const elementName = t.isJSXIdentifier(openingElement.name) ? openingElement.name.name : 'div';
 
@@ -92,12 +103,12 @@ export class CodeParser {
     }
 
     // Check if this node exists in base tree to preserve original type if heuristic fails
-    const existingNode = this.baseState.findNodeById(id);
+    const existingNode = this.findNodeById(id, this.baseState);
     if (existingNode) {
        type = existingNode.type;
     }
 
-    const children: INode[] = [];
+    const children: JSONNode[] = [];
 
     // Parse children
     for (const child of element.children) {

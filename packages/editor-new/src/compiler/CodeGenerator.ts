@@ -1,7 +1,7 @@
-import { NodeTree } from '../store/NodeTree';
+import { JSONNode } from '../core/types';
 
 export class CodeGenerator {
-  generateCode(node: NodeTree): string {
+  generateCode(node: JSONNode): string {
     const componentCode = this.generateNodeCode(node, 4);
 
     return `import React from 'react';
@@ -14,7 +14,7 @@ ${componentCode}
 `;
   }
 
-  private generateNodeCode(node: NodeTree, indentLevel: number): string {
+  private generateNodeCode(node: JSONNode, indentLevel: number): string {
     const indent = ' '.repeat(indentLevel);
     const propsString = this.generatePropsString(node);
 
@@ -33,8 +33,12 @@ ${componentCode}
 
 
     // Self-closing tags if no children
-    if (node.children.length === 0 && node.type !== 'Page') {
-      return `${indent}<${componentName}${propsString} />`;
+    if (!node.children || node.children.length === 0) {
+      if (node.type !== 'Page') {
+        return `${indent}<${componentName}${propsString} />`;
+      } else {
+        return `${indent}<${componentName}${propsString}></${componentName}>`;
+      }
     }
 
     const childrenCode = node.children.map(child => this.generateNodeCode(child, indentLevel + 2)).join('\n');
@@ -42,7 +46,7 @@ ${componentCode}
     return `${indent}<${componentName}${propsString}>\n${childrenCode}\n${indent}</${componentName}>`;
   }
 
-  private generatePropsString(node: NodeTree): string {
+  private generatePropsString(node: JSONNode): string {
     const propsList: string[] = [];
 
     // Always inject the tracking ID for bidirectional syncing
