@@ -2,15 +2,19 @@ import { JSONNode } from '../core/types';
 
 export class CodeGenerator {
   generateCode(node: JSONNode): string {
-    const componentCode = this.generateNodeCode(node, 4);
+    const templateCode = this.generateNodeCode(node, 2);
 
-    return `import React from 'react';
+    return `<template>
+${templateCode}
+</template>
 
-export default function GeneratedPage() {
-  return (
-${componentCode}
-  );
-}
+<script setup lang="ts">
+import { ref } from 'vue';
+</script>
+
+<style scoped>
+/* Scoped styles here */
+</style>
 `;
   }
 
@@ -18,32 +22,26 @@ ${componentCode}
     const indent = ' '.repeat(indentLevel);
     const propsString = this.generatePropsString(node);
 
-    // Special handling for Text component (it renders raw text content)
-    if (node.type === 'Text') {
-      const textProps = node.props as { content?: string };
-      const textContent = textProps.content || '';
-      return `${indent}<span${propsString}>\n${indent}  ${textContent}\n${indent}</span>`;
+    // Tag name
+    const tagName = node.type;
+
+    // Self-closing tags if no children and no text
+    if ((!node.children || node.children.length === 0) && !node.text) {
+        return `${indent}<${tagName}${propsString}></${tagName}>`;
     }
 
-    // Map internal types to HTML or specific React component tags
-    const componentName = node.type === 'FlexBox' ? 'div' :
-                          node.type === 'Page' ? 'div' :
-                          node.type === 'Button' ? 'button' :
-                          node.type === 'Input' ? 'input' : 'div';
+    let innerContent = '';
 
-
-    // Self-closing tags if no children
-    if (!node.children || node.children.length === 0) {
-      if (node.type !== 'Page') {
-        return `${indent}<${componentName}${propsString} />`;
-      } else {
-        return `${indent}<${componentName}${propsString}></${componentName}>`;
-      }
+    if (node.text) {
+        innerContent = `\n${indent}  ${node.text}`;
     }
 
-    const childrenCode = node.children.map(child => this.generateNodeCode(child, indentLevel + 2)).join('\n');
+    let childrenCode = '';
+    if (node.children && node.children.length > 0) {
+        childrenCode = '\n' + node.children.map(child => this.generateNodeCode(child, indentLevel + 2)).join('\n');
+    }
 
-    return `${indent}<${componentName}${propsString}>\n${childrenCode}\n${indent}</${componentName}>`;
+    return `${indent}<${tagName}${propsString}>${innerContent}${childrenCode}\n${indent}</${tagName}>`;
   }
 
   private generatePropsString(node: JSONNode): string {
@@ -55,15 +53,24 @@ ${componentCode}
     for (const [key, value] of Object.entries(node.props)) {
       if (value === undefined || value === null || value === '') continue;
 
-      if (node.type === 'Text' && key === 'content') continue; // Handled as inner children
-
-      if (typeof value === 'string') {
+      if (key === 'style' && typeof value === 'object') {
+        // Convert style object to inline CSS string
+        const styleEntries = Object.entries(value);
+        if (styleEntries.length > 0) {
+            const styleString = styleEntries.map(([k, v]) => {
+                // simple camelCase to kebab-case
+                const kebabKey = k.replace(/([a-z0-9]|(?=[A-Z]))([A-Z])/g, '$1-$2').toLowerCase();
+                return `${kebabKey}: ${v}`;
+            }).join('; ');
+            propsList.push(`style="${styleString}"`);
+        }
+      } else if (typeof value === 'string') {
         propsList.push(`${key}="${value}"`);
       } else if (typeof value === 'boolean') {
         if (value) propsList.push(`${key}`);
-        else propsList.push(`${key}={false}`);
       } else {
-        propsList.push(`${key}={${JSON.stringify(value)}}`);
+        // Vue dynamic binding for numbers/objects
+        propsList.push(`:${key}="${JSON.stringify(value).replace(/"/g, "'")}"`);
       }
     }
 
