@@ -4,10 +4,16 @@ import { editorRoot, NodeTree } from './store/NodeTree';
 import { globalHistory } from './store/HistoryManager';
 import { componentRegistry } from './registry/ComponentRegistry';
 import { PropertiesPanel } from './panels/PropertiesPanel';
+import { CodeGenerator } from './compiler/CodeGenerator';
+import { CodeParser } from './compiler/CodeParser';
+
+const codeGen = new CodeGenerator();
 
 const App = observer(() => {
   const [selectedNodeId, setSelectedNodeId] = useState<string | null>(null);
   const [dropIndicator, setDropIndicator] = useState<{ id: string, position: 'top' | 'bottom' | 'inside' } | null>(null);
+  const [showCode, setShowCode] = useState(false);
+  const [generatedCode, setGeneratedCode] = useState('');
 
   const handleDragStart = (e: DragEvent<HTMLDivElement>, componentType: string) => {
     e.dataTransfer.setData('componentType', componentType);
@@ -166,9 +172,39 @@ const App = observer(() => {
       </section>
 
       {/* Main Canvas Area */}
-      <section style={{ flex: 1, padding: '20px', backgroundColor: '#e0e0e0', overflowY: 'auto' }}>
-        <h3 style={{ marginBottom: '10px' }}>画布 (Canvas)</h3>
-        {renderNode(editorRoot)}
+      <section style={{ flex: 1, padding: '20px', backgroundColor: '#e0e0e0', overflowY: 'auto', display: 'flex', flexDirection: 'column' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '10px' }}>
+          <h3>画布 (Canvas) {showCode ? '- Code Export Mode' : ''}</h3>
+          <button onClick={() => {
+            if (!showCode) {
+              setGeneratedCode(codeGen.generateCode(editorRoot));
+            } else {
+              // Parse back to tree
+              const parser = new CodeParser(editorRoot);
+              const newTree = parser.parseCode(generatedCode);
+              if (newTree) {
+                globalHistory.push(JSON.stringify(editorRoot.serialize()), 'Sync from Code');
+                editorRoot.loadFromData(newTree);
+              }
+            }
+            setShowCode(!showCode);
+          }} style={{ padding: '5px 10px', cursor: 'pointer', background: '#fff', border: '1px solid #ccc' }}>
+            {showCode ? '应用代码并返回 (Apply & Return)' : '查看代码 (View Code)'}
+          </button>
+        </div>
+
+        {showCode ? (
+          <textarea
+            style={{ flex: 1, backgroundColor: '#1e1e1e', color: '#d4d4d4', padding: '20px', fontFamily: 'monospace', fontSize: '14px', border: 'none', resize: 'none' }}
+            value={generatedCode}
+            onChange={(e) => setGeneratedCode(e.target.value)}
+            spellCheck={false}
+          />
+        ) : (
+          <div style={{ flex: 1 }}>
+            {renderNode(editorRoot)}
+          </div>
+        )}
       </section>
 
       {/* Right Properties & History Panel */}
