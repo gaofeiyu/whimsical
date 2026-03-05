@@ -7,6 +7,14 @@
         <p>Describe what you want to build in Vue.</p>
       </div>
       <div class="pane-content">
+        <!-- AI Settings -->
+        <div class="settings-box">
+          <div class="settings-title">LLM Configuration</div>
+          <el-input v-model="llmBaseUrl" placeholder="Base URL (e.g. https://api.openai.com/v1)" size="small" style="margin-bottom: 8px;" />
+          <el-input v-model="llmApiKey" type="password" placeholder="API Key" size="small" show-password />
+          <el-input v-model="llmModel" placeholder="Model (e.g. gpt-4o)" size="small" style="margin-top: 8px;" />
+        </div>
+
         <!-- Chat history placeholder -->
       </div>
       <div class="chat-input-area">
@@ -14,11 +22,11 @@
           v-model="prompt"
           type="textarea"
           :rows="3"
-          placeholder="E.g. Add a red primary Element button"
+          placeholder="E.g. Build a beautiful login card using Element Plus components"
           resize="none"
         />
-        <el-button type="primary" class="generate-btn" @click="handleAiSimulate">
-          Generate
+        <el-button type="primary" :loading="isGenerating" class="generate-btn" @click="handleAiGenerate">
+          Generate with AI
         </el-button>
       </div>
     </div>
@@ -35,12 +43,24 @@
 
     <!-- Right Pane: Code Editor -->
     <div class="pane right-pane">
-      <div class="pane-header bg-white">
-        <h3>Vue SFC Code (Bidirectional)</h3>
+      <div class="pane-header bg-white" style="display: flex; justify-content: space-between; align-items: center;">
+        <h3 style="margin: 0;">Code Editor</h3>
+        <el-radio-group v-model="codeMode" size="small">
+          <el-radio-button label="vue">Vue SFC</el-radio-button>
+          <el-radio-button label="json">Raw JSON</el-radio-button>
+        </el-radio-group>
       </div>
       <textarea
+        v-if="codeMode === 'vue'"
         v-model="code"
         @input="handleCodeChange"
+        class="code-editor"
+        spellcheck="false"
+      ></textarea>
+      <textarea
+        v-else
+        v-model="jsonCode"
+        @input="handleJsonChange"
         class="code-editor"
         spellcheck="false"
       ></textarea>
@@ -50,32 +70,53 @@
 
 <script setup lang="ts">
 import { ref, watch, onMounted } from 'vue';
+import { ElMessage } from 'element-plus';
 import { JSONNode, createInitialState } from './core/types';
 import JsonRenderer from './core/JsonRenderer.vue';
 import { CodeGenerator } from './compiler/CodeGenerator';
 import { CodeParser } from './compiler/CodeParser';
 
 const dsl = ref<JSONNode>(createInitialState());
+const codeMode = ref<'vue' | 'json'>('vue');
 const code = ref<string>('');
+const jsonCode = ref<string>('');
+
+// AI state
 const prompt = ref<string>('');
+const isGenerating = ref(false);
+const llmApiKey = ref('');
+const llmBaseUrl = ref('https://api.openai.com/v1');
+const llmModel = ref('gpt-4o');
 
 const codeGen = new CodeGenerator();
 
-// Initialize code on mount
+// Initial sync
 onMounted(() => {
-  code.value = codeGen.generateCode(dsl.value);
+  syncEditors(dsl.value);
 });
 
-// Sync code when DSL changes from AI
+// Sync code when DSL changes visually or by AI
 watch(dsl, (newDsl) => {
-  code.value = codeGen.generateCode(newDsl);
+  syncEditors(newDsl);
 }, { deep: true });
+
+const syncEditors = (node: JSONNode) => {
+  if (codeMode.value === 'vue') {
+    code.value = codeGen.generateCode(node);
+  } else {
+    jsonCode.value = JSON.stringify(node, null, 2);
+  }
+};
+
+// Re-sync when switching tabs
+watch(codeMode, () => {
+  syncEditors(dsl.value);
+});
 
 const handleCodeChange = (e: Event) => {
   const newCode = (e.target as HTMLTextAreaElement).value;
   code.value = newCode;
 
-  // Parse Vue code back to DSL
   const parser = new CodeParser(dsl.value);
   const newDsl = parser.parseCode(newCode);
   if (newDsl) {
@@ -83,25 +124,96 @@ const handleCodeChange = (e: Event) => {
   }
 };
 
-const handleAiSimulate = () => {
+const handleJsonChange = (e: Event) => {
+  const newJsonStr = (e.target as HTMLTextAreaElement).value;
+  jsonCode.value = newJsonStr;
+  try {
+    const parsed = JSON.parse(newJsonStr);
+    if (parsed && parsed.type) {
+      dsl.value = parsed;
+    }
+  } catch (err) {
+    // Ignore parse errors while typing
+  }
+};
+
+const handleAiGenerate = async () => {
   if (!prompt.value.trim()) return;
 
-  const simulatedDsl = JSON.parse(JSON.stringify(dsl.value));
+  if (!llmApiKey.value) {
+    ElMessage.warning('Please enter an API Key to use the real LLM.');
+    // Simulated fallback behavior
+    const simulatedDsl = JSON.parse(JSON.stringify(dsl.value));
+    if (!simulatedDsl.children) simulatedDsl.children = [];
+    simulatedDsl.children.push({
+      id: crypto.randomUUID(),
+      type: 'el-alert',
+      props: { type: 'success', title: `Simulated: ${prompt.value}` }
+    });
+    dsl.value = simulatedDsl;
+    prompt.value = '';
+    return;
+  }
 
-  if (!simulatedDsl.children) simulatedDsl.children = [];
+  isGenerating.value = true;
+  try {
+    const systemPrompt = `You are an expert Vue 3 and Element Plus low-code generator.
+Your task is to modify or completely replace the provided JSON DSL based on the user's natural language request.
 
-  // Simulate AI generating an Element Plus button
-  simulatedDsl.children.push({
-    id: crypto.randomUUID(),
-    type: 'el-button',
-    props: {
-      type: 'danger', // Use element plus semantic type
-    },
-    text: prompt.value
-  });
+The JSON DSL interface is:
+interface JSONNode {
+  id: string; // MUST be a UUID or "root"
+  type: string; // The HTML or Element Plus tag (e.g. 'div', 'el-button', 'el-card')
+  props: Record<string, any>; // Element props and styles. Keep style objects flat, map props to standard vue bindings.
+  children?: JSONNode[];
+  text?: string; // Inner text content of the element
+}
 
-  dsl.value = simulatedDsl;
-  prompt.value = '';
+Return ONLY a valid, minified JSON object matching this interface that represents the completely updated screen. Do NOT wrap it in markdown block quotes (\`\`\`json). Just return the raw JSON string starting with { and ending with }.`;
+
+    const response = await fetch(`${llmBaseUrl.value.replace(/\/$/, '')}/chat/completions`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${llmApiKey.value}`
+      },
+      body: JSON.stringify({
+        model: llmModel.value,
+        messages: [
+          { role: 'system', content: systemPrompt },
+          { role: 'user', content: `Current DSL: ${JSON.stringify(dsl.value)}\n\nUser Request: ${prompt.value}` }
+        ],
+        temperature: 0.2
+      })
+    });
+
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`);
+    }
+
+    const data = await response.json();
+    let content = data.choices[0].message.content.trim();
+
+    // Clean up potential markdown blocks if the LLM ignores instructions
+    if (content.startsWith('```json')) content = content.replace(/^```json/, '');
+    if (content.startsWith('```')) content = content.replace(/^```/, '');
+    if (content.endsWith('```')) content = content.replace(/```$/, '');
+
+    const newDsl = JSON.parse(content.trim());
+
+    if (newDsl && newDsl.type) {
+      dsl.value = newDsl;
+      prompt.value = '';
+      ElMessage.success('Generated successfully!');
+    } else {
+      throw new Error('LLM returned invalid JSON structure.');
+    }
+
+  } catch (error: any) {
+    ElMessage.error(error.message || 'Failed to generate UI.');
+  } finally {
+    isGenerating.value = false;
+  }
 };
 </script>
 
@@ -151,6 +263,20 @@ const handleAiSimulate = () => {
   flex: 1;
   padding: 16px;
   overflow-y: auto;
+}
+
+.settings-box {
+  background-color: #ebeef5;
+  padding: 12px;
+  border-radius: 4px;
+  margin-bottom: 16px;
+}
+
+.settings-title {
+  font-size: 12px;
+  font-weight: bold;
+  color: #606266;
+  margin-bottom: 8px;
 }
 
 .chat-input-area {
