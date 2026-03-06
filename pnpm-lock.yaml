@@ -194,9 +194,15 @@ importers:
         specifier: ^3.4.21
         version: 3.5.29(typescript@5.4.5)
     devDependencies:
+      '@types/http-proxy':
+        specifier: ^1.17.17
+        version: 1.17.17
       '@vitejs/plugin-vue':
         specifier: ^5.0.4
         version: 5.2.4(vite@5.2.8)(vue@3.5.29)
+      http-proxy:
+        specifier: ^1.18.1
+        version: 1.18.1
       typescript:
         specifier: 5.4.5
         version: 5.4.5
@@ -3899,6 +3905,12 @@ packages:
 
   /@types/graceful-fs@4.1.6:
     resolution: {integrity: sha512-Sig0SNORX9fdW+bQuTEovKj3uHcUL6LQKbCrrqb1X7J6/ReAbhCXRAhc+SMejhLELFj2QcyuxmUooZ4bt5ReSw==}
+    dependencies:
+      '@types/node': 16.18.11
+    dev: true
+
+  /@types/http-proxy@1.17.17:
+    resolution: {integrity: sha512-ED6LB+Z1AVylNTu7hdzuBqOgMnvG/ld6wGCG8wFnAzKX5uyW2K3WD52v0gnLCTK/VLpXtKckgWuyScYK6cSPaw==}
     dependencies:
       '@types/node': 16.18.11
     dev: true
@@ -8739,6 +8751,17 @@ packages:
       debug: 4.4.3
     transitivePeerDependencies:
       - supports-color
+    dev: true
+
+  /http-proxy@1.18.1:
+    resolution: {integrity: sha512-7mz/721AbnJwIVbnaSv1Cz3Am0ZLT/UBwkC92VlxhXv/k/BBQfM2fXElQNC27BVGr0uwUpplYPQM9LnaBMR5NQ==}
+    engines: {node: '>=8.0.0'}
+    dependencies:
+      eventemitter3: 4.0.7
+      follow-redirects: 1.15.2
+      requires-port: 1.0.0
+    transitivePeerDependencies:
+      - debug
     dev: true
 
   /http-response-object@3.0.2:

@@ -12,7 +12,8 @@
           <div class="settings-title">LLM Configuration</div>
           <el-input v-model="llmBaseUrl" placeholder="Base URL (e.g. https://api.openai.com/v1)" size="small" style="margin-bottom: 8px;" />
           <el-input v-model="llmApiKey" type="password" placeholder="API Key" size="small" show-password />
-          <el-input v-model="llmModel" placeholder="Model (e.g. gpt-4o)" size="small" style="margin-top: 8px;" />
+          <el-input v-model="llmModel" placeholder="Model (e.g. gpt-4o)" size="small" style="margin-top: 8px; margin-bottom: 8px;" />
+          <el-checkbox v-model="useCorsProxy" size="small">Use Local Proxy (Bypass CORS)</el-checkbox>
         </div>
 
         <!-- Chat history placeholder -->
@@ -87,6 +88,7 @@ const isGenerating = ref(false);
 const llmApiKey = ref('');
 const llmBaseUrl = ref('https://api.openai.com/v1');
 const llmModel = ref('gpt-4o');
+const useCorsProxy = ref(true);
 
 const codeGen = new CodeGenerator();
 
@@ -171,12 +173,21 @@ interface JSONNode {
 
 Return ONLY a valid, minified JSON object matching this interface that represents the completely updated screen. Do NOT wrap it in markdown block quotes (\`\`\`json). Just return the raw JSON string starting with { and ending with }.`;
 
-    const response = await fetch(`${llmBaseUrl.value.replace(/\/$/, '')}/chat/completions`, {
+    const targetUrl = `${llmBaseUrl.value.replace(/\/$/, '')}/chat/completions`;
+    const fetchUrl = useCorsProxy.value ? '/api/proxy' : targetUrl;
+
+    const headers: Record<string, string> = {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${llmApiKey.value}`
+    };
+
+    if (useCorsProxy.value) {
+      headers['x-target-url'] = targetUrl;
+    }
+
+    const response = await fetch(fetchUrl, {
       method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${llmApiKey.value}`
-      },
+      headers,
       body: JSON.stringify({
         model: llmModel.value,
         messages: [
@@ -192,12 +203,16 @@ Return ONLY a valid, minified JSON object matching this interface that represent
     }
 
     const data = await response.json();
+    if (!data.choices || !data.choices[0] || !data.choices[0].message) {
+      throw new Error(data.error?.message || 'Invalid response from LLM.');
+    }
+
     let content = data.choices[0].message.content.trim();
 
     // Clean up potential markdown blocks if the LLM ignores instructions
-    if (content.startsWith('```json')) content = content.replace(/^```json/, '');
-    if (content.startsWith('```')) content = content.replace(/^```/, '');
-    if (content.endsWith('```')) content = content.replace(/```$/, '');
+    if (content.startsWith('```json')) content = content.replace(/^```json\n?/, '');
+    else if (content.startsWith('```')) content = content.replace(/^```\n?/, '');
+    if (content.endsWith('```')) content = content.replace(/\n?```$/, '');
 
     const newDsl = JSON.parse(content.trim());
 
