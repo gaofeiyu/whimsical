@@ -38,7 +38,7 @@ export const DrawerSetter: React.FC<IDrawerSetterProps> = observer((props) => {
           })}
         >
           <div className={prefix + '-header'} onClick={handleClose}>
-            <Icon component={EditorIcons.Return} />
+            <Icon component={EditorIcons.Return as any} />
             <span className={prefix + '-header-text'}>{props.text || field.title}</span>
           </div>
           <div className={prefix + '-body'}>
@@ -53,7 +53,7 @@ export const DrawerSetter: React.FC<IDrawerSetterProps> = observer((props) => {
               {props.children}
             </FormLayout>
           </div>
-        </div>,
+        </div> as any,
         root
       );
     }
@@ -73,11 +73,11 @@ export const DrawerSetter: React.FC<IDrawerSetterProps> = observer((props) => {
   };
 
   return (
-    <Fragment>
+    <div style={{width: '100%'}} {...({} as any)}>
       <Button block onClick={handleOpen} {...props.triggerProps}>
         {props.text || field.title}
       </Button>
       {renderDrawer()}
-    </Fragment>
-  );
+    </div>
+  ) as any;
 });

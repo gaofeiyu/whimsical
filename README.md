@@ -5,13 +5,22 @@ A low code editor across technology stacks
   - [http://www.gaofeiyu.com/blog/982.html](http://www.gaofeiyu.com/blog/982.html)
 
 ## 简介
-这是一个低代码引擎的个人的练习项目，关注该项目您将会见证一个从零开始的低代码项目的成长。
-该项目当前的核心思路是实现一个可以导入任何前端组件库的跨技术栈低代码编辑引擎。
+这是一个向 **AI Native 演进的低代码引擎**项目，关注该项目您将会见证一个从零开始的、对接大模型的低代码项目的成长。
+
+除了核心的通过 DSL 描述页面并绑定组件库实现跨栈渲染外，当前的核心愿景是：**实现一个可以通过自然语言与 AI 对话，直接绘制和修改页面的低代码编辑器，并支持 DSL 与代码的双向生成和还原机制。**
+
+## 设计文档
+
+在推进 AI Native 重构的过程中，我们将核心架构设计沉淀在 `docs/design` 目录下：
+- [01 - DSL 数据模型设计](./docs/design/01-dsl-model.md)：详细描述了用于双向绑定和流式布局的轻量级 JSON 抽象。
+- [02 - 指令与历史状态引擎](./docs/design/02-action-history-engine.md)：描述了用于对接 AI 指令的指令模式以及基于快照的撤销与重做引擎。
+- [03 - 编辑器验收标准](./docs/design/03-acceptance-criteria.md)：详细规定了评判低代码引擎排版与代码生成能力的标准，并确定了验证基准页面。
+- [04 - 核心架构实施阶段计划](./docs/design/04-implementation-phases.md)：为实现极其复杂的双向绑定和组件解耦目标，制定的四个渐进式开发与验证阶段。
 
 ## 目标功能
 
 - 基本的编辑器界面
-- DSL设计
+- 规范且轻量的 DSL 设计
 - 组件库接入能力
 - 流式布局的画布
 - 可跨技术栈的编辑能力
@@ -26,17 +35,44 @@ A low code editor across technology stacks
   - 结构树多功能接口
 - 逻辑能力的支持
 - DSL直接编辑的能力
+- **Chatbot 接入能力（AI Copilot）**
+  - 支持通过自然语言对话生成页面
+  - 支持通过指令修改和调整 DSL 视图
+- **代码生成与反向还原机制**
+  - 基于指定的组件库将 DSL 转换为可二次开发的源码
+  - 通过代码标记机制将二次开发后的源码反向解析回 DSL
 
 ## 想尝试开发？
 
-当前仓库提供3个包，分别是：
-1. 低代码引擎的playground：whimsical
-2. 一个基于react的组件库及组件库渲染引擎示例：whimsical-react-engine
-3. 工具包：whimsical-shared
+为了承载全新的 AI 对话和指令式修改机制，项目正处于重构阶段。当前仓库提供以下主要包：
 
-后续会提供：
-1. vue的组件库及渲染引擎示例
-2. ant-design的组件库及渲染引擎示例
+1. **`editor-new` (Active)**：全新的轻量级 Vite + React 18 核心编辑器。采用了 MobX 驱动的纯数据 `NodeTree` 模型，并内置了 Command 模式 (`executeCommand`)，原生支持 AI Chatbot 发送的节点修改指令。
+2. `whimsical` (Legacy)：早期的低代码引擎 playground，用于展示旧版架构的跨框架渲染能力。
+3. `whimsical-react-engine` (Legacy)：基于 React 的组件库及渲染引擎示例，用于将旧版 DSL 解析为 React 组件。
+4. `whimsical-shared` (Legacy)：早期的工具包和 DSL 类型的公共定义库。
+
+## 如何开发和启动
+
+本项目使用 Monorepo 结构，推荐使用 `pnpm` 进行依赖管理。
+
+1. **安装依赖：**
+   在项目根目录下执行安装命令（这会自动处理子包之间的依赖关联）：
+   ```bash
+   pnpm install
+   ```
+
+2. **启动全新 AI 核心编辑器 (推荐)：**
+   当前所有的开发重心都已经转移至全新的轻量级核心包 `editor-new`。
+   ```bash
+   cd packages/editor-new
+   pnpm dev
+   ```
+
+3. **启动旧版本 Playground (Legacy)：**
+   如果您想体验早期的低代码引擎跨栈渲染功能：
+   ```bash
+   pnpm dev
+   ```
 
 ## 交流
 

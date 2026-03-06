@@ -32,21 +32,23 @@ export const render = (
 
   if (options.editor) {
     root.render(
-      <>
-        {options.isPreview ? (
-          <WView wBody={wBody}></WView>
-        ) : (
-          WNodeRenderComponent(
-            {
-              wBody,
-            },
-            wBody
-          )
-        )}
-      </>
+      (
+        <>
+          {options.isPreview ? (
+            <WView wBody={wBody}></WView>
+          ) : (
+            WNodeRenderComponent(
+              {
+                wBody,
+              },
+              wBody
+            )
+          )}
+        </>
+      ) as any
     );
   } else {
-    root.render(<WContainer wBody={wBody} empty={element?.innerHTML}></WContainer>);
+    root.render(<WContainer wBody={wBody} empty={element?.innerHTML}></WContainer> as any);
   }
 
   // https://github.com/reactwg/react-18/discussions/5
